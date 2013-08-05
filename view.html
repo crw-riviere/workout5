@@ -1,0 +1,146 @@
+<script src="../lib/jquery-2.0.3.min.js"></script>
+<script src="../lib/knockout-2.3.0.js"></script>
+<script src="viewmodel.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css" />
+
+<html>
+<head>
+    <title>Workout5</title>
+</head>
+
+<body>
+
+    <div>
+        <ul class="navHorizontalList" data-bind="foreach: crumbs">
+            <li class="navHorizontalListItem" data-bind="text: name, click: $root.gotoBreadCrumb"></li>
+        </ul>
+    </div>
+    <!-- Program List -->
+    <div data-bind="with: selectedWorkoutData">
+        <h1>Programs</h1>
+        <ul class="navVerticalList" data-bind="foreach: programs">
+            <li class="navVerticalListItem" data-bind="text: name, click: $root.gotoProgram"></li>
+        </ul>
+    </div>
+
+    <!--<button type="button" data-bind="click: addProgram">Add Program</button>-->
+
+    <!-- Session Type List -->
+    <div data-bind="with: selectedProgramData">
+        <h1>Session Types</h1>
+
+        <ul class="navHorizontalList" data-bind="foreach: sessionTypes">
+            <li class="navHorizontalListItem" data-bind="text: name, click: $root.gotoSessionType"></li>
+        </ul>
+    </div>
+
+    <!-- Exercise List -->
+    <div data-bind="with: selectedSessionTypeData">
+        <h1>Exercises</h1>
+        <ul class="navVerticalList" data-bind="foreach: exercises">
+            <li class="navVerticalListItem" data-bind="text: name, click: $root.gotoExercise"></li>
+        </ul>
+    </div>
+
+    <!-- Session List -->
+    <div data-bind="with: selectedExerciseData">
+        <h1>Sessions</h1>
+        <ul data-bind="foreach: sessions">
+            <li data-bind="text: date, click: $root.gotoSession">
+                <!-- Sets -->
+
+                <h1>Sets</h1>
+                <table>
+                    <thead>
+                        <tr>
+
+                            <th>Rep</th>
+                            <th>Weight</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: sets">
+                        <tr>
+                            <td data-bind="text: reps"></td>
+
+                            <td data-bind="text: weight"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
+
+<!-- Sets -->
+<div data-bind="with: $root.selectedSessionData">
+    <h1>Sets</h1>
+    <table>
+        <thead>
+            <tr>
+
+                <th>Rep</th>
+                <th>Weight</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: sets">
+            <tr>
+                <td data-bind="text: reps"></td>
+
+                <td data-bind="text: weight"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!--
+                <div id="selectedSets" data-bind="with: $root.selectedExerciseData">
+                    <table>
+                        <thead>
+                            <tr>
+
+                                <th>Rep</th>
+                                <th>Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: sets">
+                            <tr>
+                                <td data-bind="text: reps"></td>
+
+                                <td data-bind="text: weight"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <input name="weightMeasurement" type="radio" />
+                    KG
+                                    <input name="weightMeasurement" type="radio" />
+                    LBS
+                </div>
+
+                <div id="newSet" data-bind="with: $root.selectedExerciseData">
+                    <table>
+                        <thead>
+                            <tr>
+
+                                <th>Rep</th>
+                                <th>Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: sets">
+                            <tr>
+
+                                <td>
+                                    <input type="number" data-bind="value: reps" />
+                                </td>
+                                <td>
+                                    <input type="number" data-bind="value: weight" />
+                                </td>
+                                <td><a data-bind="click: $root.removeSet">Remove</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <button type="button" data-bind="click: $root.addSet">Add</button>
+                    <button type="button" data-bind="click: $root.saveSet">Save</button>
+                </div>-->

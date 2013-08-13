@@ -19,7 +19,7 @@
     <div data-bind="with: selectedWorkoutData">
         <h1>Programs</h1>
         <table>
-            <tbody class="" data-bind="foreach: programs">
+            <tbody class="" data-bind="foreach: listProgramVM">
                 <tr class="">
                     <td>
                         <label data-bind="text: name, hidden: editable, click: $root.gotoProgram"></label>
@@ -27,6 +27,7 @@
                     </td>
                     <td>
                         <button type="button" data-bind="visible: editable, click: $root.saveProgram">Save</button>
+                        <button type="button" data-bind="hidden: editable, click: function () { $data.editable(true) }">Edit</button>
                         <button type="button" data-bind="hidden: editable, click: $root.deleteProgram">Delete</button>
                     </td>
                 </tr>
@@ -35,19 +36,17 @@
         <button type="button" data-bind="click: addProgram">Add</button>
     </div>
 
-    <!--<button type="button" data-bind="click: addProgram">Add Program</button>-->
-
-    <!-- Session Type List -->
+    <!-- Day List -->
     <div data-bind="with: selectedProgramData">
-        <h1>Session Types</h1>
+        <h1>Day</h1>
 
-        <ul class="navHorizontalList" data-bind="foreach: sessionTypes">
-            <li class="navHorizontalListItem" data-bind="text: name, click: $root.gotoSessionType"></li>
+        <ul class="" data-bind="foreach: days">
+            <li class="" data-bind="text: name, click: $root.gotoDay"></li>
         </ul>
     </div>
 
     <!-- Exercise List -->
-    <div data-bind="with: selectedSessionTypeData">
+    <div data-bind="with: selectedDayData">
         <h1>Exercises</h1>
         <table>
             <tbody class="" data-bind="foreach: exercises">

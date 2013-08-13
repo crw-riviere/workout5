@@ -1,7 +1,8 @@
 $(document).ready(function () {
     var wo5 = {
         opReadWrite: 'readwrite',
-        tblProgramName: 'Program'
+        tblProgramName: 'tblProgramVM',
+        tblDayName: 'tblDayVM'
     };
 
     var BreadCrumbVM = function (data) {
@@ -41,19 +42,16 @@ $(document).ready(function () {
     };
 
     var DayVM = function (data) {
-        self = this;
-        self.id = data.id;
-        self.programId = data.programId;
-        self.type = ko.observable('DayData');
-        self.editable = ko.observable(data.editable);
-        self.name = ko.observable(data.name);
-        self.exercises = ko.observableArray(data.exercises);
+        this.id = data.id;
+        this.programId = data.programId;
+        this.type = ko.observable('DayData');
+        this.editable = ko.observable(data.editable);
+        this.name = ko.observable(data.name);
     };
 
-    var ProgramVM = function (data) {
-        self = this;
+    var ProgramVM = function ProgramVM(data) {
+        var self = this;
         self.id = data.id;
-        self.type = ko.observable('ProgramData');
         self.editable = ko.observable(data.editable);
         self.name = ko.observable(data.name);
     };
@@ -61,69 +59,65 @@ $(document).ready(function () {
     var Workout5VM = function () {
         var self = this;
 
-        self.programs = ko.observableArray();
+        self.listProgramVM = ko.observableArray();
+        self.listDayVM = ko.observableArray();
         self.crumbs = ko.observableArray();
 
         self.selectedWorkoutData = ko.observable(this);
         self.selectedProgramData = ko.observable();
-        self.selectedSessionTypeData = ko.observable();
+        self.selectedDayData = ko.observable();
         self.selectedSessionData = ko.observable();
         self.selectedExerciseData = ko.observable();
         self.selectedSetData = ko.observable();
 
         self.InitDB = function () {
-            var request = window.indexedDB.open("WO5", 1);
+            var request = window.indexedDB.open("WO5", 3);
 
             request.onupgradeneeded = function () {
                 console.log('Initiating upgrade...');
                 var db = request.result;
-                var storeBook = db.createObjectStore(wo5.tblProgramName, { keyPath: 'id', autoIncrement: true });
+                var storeProgram = db.createObjectStore(wo5.tblProgramName, { keyPath: 'id', autoIncrement: true });
+                var storeDay = db.createObjectStore(wo5.tblDayName, { keyPath: 'id', autoIncrement: true });
             };
 
             request.onerror = function (event) {
-                console.log('Error: ' + event.message);
+                console.log('Error: ' + event);
             };
 
             request.onsuccess = function (event) {
                 console.log('Success: ' + event);
                 wo5.db = request.result;
-                self.loadProjects();
+
+                self.loadTable(ProgramVM);
             };
         };
 
-        self.loadProjects = function () {
-            var txProgram = wo5.db.transaction(wo5.tblProgramName, wo5.opReadWrite);
-            var tblProgram = txProgram.objectStore(wo5.tblProgramName);
-            var csrProgram = tblProgram.openCursor();
+        self.loadTable = function (viewModel) {
+            var constructorName = new viewModel({}).constructor.name;
+            var tblName = 'tbl'.concat(constructorName);
+            console.log('Loading table ' + tblName);
 
-            csrProgram.onsuccess = function (event) {
+            var listViewModel = 'list'.concat(constructorName);
+
+            var tbl = wo5.db.transaction(tblName, wo5.opReadWrite).objectStore(tblName);
+
+            var csr = tbl.openCursor();
+
+            csr.onsuccess = function (event) {
                 var cursor = event.target.result;
 
                 if (cursor) {
-                    console.log('cursor ' + cursor.key + ': ' + cursor.value);
+                    self[listViewModel].push(new viewModel(cursor.value));
+                    console.log('Added ' + cursor.value.name + ' to ' + listViewModel);
 
-                    console.log(cursor.value);
-                    self.programs.push(new ProgramVM(cursor.value));
                     cursor.continue();
                 }
             };
         };
 
-        self.gotoProgram = function (program) {
-            self.selectedProgramData(program);
-            self.selectedWorkoutData(null);
-            self.addBreadCrumb(program);
-        };
-
-        self.gotoSessionType = function (sessionType) {
-            self.selectedSessionTypeData(sessionType);
-            self.selectedProgramData(null);
-            self.addBreadCrumb(sessionType);
-        };
-
         self.gotoExercise = function (exercise) {
             self.selectedExerciseData(exercise);
-            self.selectedSessionTypeData(null);
+            self.selectedDayData(null);
             self.addBreadCrumb(exercise);
         };
 
@@ -169,7 +163,12 @@ $(document).ready(function () {
         };
 
         self.addProgram = function () {
-            self.programs.push(new ProgramVM({ name: '', editable: true }));
+            var tblProgram = wo5.db.transaction(wo5.tblProgramName, wo5.opReadWrite).objectStore(wo5.tblProgramName);
+            var addResult = tblProgram.add({});
+
+            addResult.onsuccess = function (event) {
+                self.programs.push(new ProgramVM({ id: event.target.result, name: '', editable: true }));
+            };
         };
 
         self.deleteProgram = function (program) {
@@ -189,19 +188,31 @@ $(document).ready(function () {
         };
 
         self.saveProgram = function (program) {
-            var txProgram = wo5.db.transaction(wo5.tblProgramName, wo5.opReadWrite);
-            var tblProgram = txProgram.objectStore(wo5.tblProgramName);
+            program.editable(false);
+            var tblProgram = wo5.db.transaction(wo5.tblProgramName, wo5.opReadWrite).objectStore(wo5.tblProgramName);
 
-            var addRequest = tblProgram.add(ko.toJS(program));
+            var saveRequest = tblProgram.put(ko.toJS(program));
 
-            addRequest.onsuccess = function (event) {
-                console.log('Added program: ' + event.target.result);
-                program.editable(false);
+            saveRequest.onsuccess = function (event) {
+                console.log('Updated program: ' + event.target.result);
             };
 
-            addRequest.onerror = function (event) {
-                console.log('Error adding program: ' + event.message);
+            saveRequest.onerror = function (event) {
+                console.log('Error updating program: ' + event.message);
             };
+        };
+
+        self.gotoProgram = function (program) {
+            self.selectedProgramData(program);
+            self.selectedWorkoutData(null);
+            self.addBreadCrumb(program);
+            self.loadDays();
+        };
+
+        self.gotoDay = function (day) {
+            self.selectedDayData(day);
+            self.selectedProgramData(null);
+            self.addBreadCrumb(day);
         };
 
         self.addSession = function (session) {

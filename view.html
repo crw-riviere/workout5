@@ -16,79 +16,92 @@
         </ul>
     </div>
     <!-- Program List -->
-    <div data-bind="with: selectedWorkoutData">
+    <div data-bind="visible: selectedWorkoutVM">
         <h1>Programs</h1>
         <table>
-            <tbody class="" data-bind="foreach: listProgramVM">
+            <tbody data-bind="foreach: listProgramVM">
                 <tr class="">
                     <td>
-                        <label data-bind="text: name, hidden: editable, click: $root.gotoProgram"></label>
+                        <label data-bind="text: name, hidden: editable, click: function () { $root.gotoEntity('ProgramVM', $data) }"></label>
                         <input data-bind="value: name, visible: editable" />
                     </td>
                     <td>
-                        <button type="button" data-bind="visible: editable, click: $root.saveProgram">Save</button>
+                        <button type="button" data-bind="visible: editable, click: function () { $root.saveEntity('ProgramVM', $data) }">Save</button>
                         <button type="button" data-bind="hidden: editable, click: function () { $data.editable(true) }">Edit</button>
-                        <button type="button" data-bind="hidden: editable, click: $root.deleteProgram">Delete</button>
+                        <button type="button" data-bind="hidden: editable, click: function () { $root.deleteEntity('ProgramVM', $data) }">Delete</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <button type="button" data-bind="click: addProgram">Add</button>
+        <button type="button" data-bind="click: function () { addEntity('ProgramVM') }">Add</button>
     </div>
 
     <!-- Day List -->
-    <div data-bind="with: selectedProgramData">
+    <div data-bind="visible: selectedProgramVM">
         <h1>Day</h1>
 
-        <ul class="" data-bind="foreach: days">
-            <li class="" data-bind="text: name, click: $root.gotoDay"></li>
-        </ul>
-    </div>
-
-    <!-- Exercise List -->
-    <div data-bind="with: selectedDayData">
-        <h1>Exercises</h1>
         <table>
-            <tbody class="" data-bind="foreach: exercises">
-                <tr class="">
+            <tbody data-bind="foreach: listDayVM">
+                <tr>
                     <td>
-                        <label data-bind="text: name, click: $root.gotoExercise"></label>
-                        <input data-bind="visible: editable, value: name" />
+                        <label data-bind="text: name, hidden: editable, click: function () { $root.gotoEntity('DayVM', $data) }"></label>
+                        <input data-bind="value: name, visible: editable" />
+                    </td>
+                    <td>
+                        <button type="button" data-bind="visible: editable, click: function () { $root.saveEntity('DayVM', $data) }">Save</button>
+                        <button type="button" data-bind="hidden: editable, click: function () { $data.editable(true) }">Edit</button>
+                        <button type="button" data-bind="hidden: editable, click: function () { $root.deleteEntity('DayVM', $data) }">Delete</button>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <button type="button" data-bind="click: function () { addEntity('DayVM') }">Add</button>
+    </div>
+
+    <!--  Exercise List -->
+    <div data-bind="visible: selectedDayVM">
+        <h1>Exercises</h1>
+        <table>
+            <tbody class="" data-bind="foreach: listExerciseVM">
+                <tr>
+                    <td>
+                        <label data-bind="text: name, hidden: editable, click: function () { $root.gotoEntity('ExerciseVM', $data) }"></label>
+                        <input data-bind="value: name, visible: editable" />
+                    </td>
+                    <td>
+                        <button type="button" data-bind="visible: editable, click: function () { $root.saveEntity('ExerciseVM', $data) }">Save</button>
+                        <button type="button" data-bind="hidden: editable, click: function () { $data.editable(true) }">Edit</button>
+                        <button type="button" data-bind="hidden: editable, click: function () { $root.deleteEntity('ExerciseVM', $data) }">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" data-bind="click: function () { addEntity('ExerciseVM') }">Add</button>
     </div>
 
     <!-- Session List -->
-    <div data-bind="with: selectedExerciseData">
+    <div data-bind="visible: selectedExerciseVM">
         <h1>Sessions</h1>
         <table>
-            <tbody data-bind="foreach: sessions">
+            <tbody data-bind="foreach: listSessionVM">
                 <tr>
-                    <td class="tdColumn">
-                        <label class="lblText"
-                            data-bind="hidden: editable, text: name, click: $root.gotoSession">
-                        </label>
+                    <td>
+                        <label data-bind="text: name, hidden: editable, click: function () { $root.gotoEntity('SessionVM', $data) }"></label>
+                        <input data-bind="value: name, visible: editable" />
                     </td>
-                    <td class="tdColumn">
-                        <button type="button"
-                            data-bind="click: $root.deleteSession">
-                            Remove</button></td>
-                </tr>
-                <tr>
-                    <td class="tdColumn">
-                        <input data-bind="visible: editable, value: name" /></td>
-                    <td class="tdColumn">
-                        <button type="button" data-bind="visible: editable, click: $root.saveSession">Save</button></td>
+                    <td>
+                        <button type="button" data-bind="visible: editable, click: function () { $root.saveEntity('SessionVM', $data) }">Save</button>
+                        <button type="button" data-bind="hidden: editable, click: function () { $data.editable(true) }">Edit</button>
+                        <button type="button" data-bind="hidden: editable, click: function () { $root.deleteEntity('SessionVM', $data) }">Delete</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
-        <button type="button" data-bind="click: $root.addSession">Add</button>
+        <button type="button" data-bind="click: function () { addEntity('SessionVM') }">Add</button>
     </div>
 
     <!-- Sets -->
-    <div data-bind="with: selectedSessionData">
+    <div data-bind="visible: selectedSessionVM">
         <h1>Sets</h1>
         <table>
             <thead>
@@ -97,7 +110,7 @@
                     <th class="tdColumn">Weight</th>
                 </tr>
             </thead>
-            <tbody data-bind="foreach: sets">
+            <tbody data-bind="foreach: listSetVM">
                 <tr>
                     <td class="tdColumn">
                         <label data-bind="text: reps, hidden: editable"></label>
@@ -112,18 +125,17 @@
 
                     <td class="tdColumn">
                         <button type="button"
-                            data-bind="visible: editable, click: $root.saveSet">
+                            data-bind="visible: editable, click: function () { $root.saveEntity('SetVM', $data) }">
                             Save</button>
+
                         <button type="button"
-                            data-bind="hidden: editable, click: $root.deleteSet">
-                            Remove</button>
+                            data-bind="hidden: editable, click: function () { $root.saveEntity('SetVM', $data) }">
+                            Delete</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <button type="button" data-bind="click: $root.addSet">Add</button>
+        <button type="button" data-bind="click: function () { addEntity('SetVM', $data) }">Add</button>
     </div>
 </body>
 </html>
-
-<!--

@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <title>WO5A</title>
+</head>
+<body>
+    <div class="container">
+
+        <nav class="navbar" role="navigation">
+            <ul class="nav nav-tabs" data-tabs="tabs">
+                <li class="dropdown" data-bind="with: listProgram">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Programs <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" data-bind="foreach: childs">
+                        <li><a data-bind="text: name, click: $root.gotoEntity"></a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown" data-bind="with: selectedProgram">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Days <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" data-bind="foreach: childs">
+                        <li><a href="#exercises" data-toggle="tab" data-bind="text: name, click: $root.gotoEntity"></a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Options <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#programs" data-toggle="tab">Programs</a></li>
+                        <li><a href="#days" data-toggle="tab">Days</a></li>
+                        <li><a href="#settings" data-toggle="tab">Settings</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="tab-content">
+            <!-- Program -->
+            <div id="programs" class="tab-pane" data-bind="with: listProgram">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Programs
+                        <a class="btn btn-small" data-bind="click: $root.addProgram"><span class="glyphicon glyphicon-plus"></span>&nbsp;Program</a>
+                    </div>
+                    <div class="panel-body">
+                        <p>Use this page to create and edit existing programs</p>
+                    </div>
+                    <table class="table">
+                        <tbody data-bind="foreach: childs">
+                            <tr>
+                                <td>
+                                    <h4><a href="#days" data-toggle="tab" data-bind="text: name, hidden: editable, click: $root.gotoEntity"></a></h4>
+                                    <input class="form-control" data-bind="value: name, visible: editable" />
+                                </td>
+                                <td>
+                                    <a class="btn btn-link btn-large pull-left" data-bind="visible: editable, click: $root.setEditable"><span class="glyphicon glyphicon-ok"></span></a>
+                                    <a class="btn btn-link btn-large pull-left" data-bind="hidden: editable, click: $root.setEditable"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    <a class="btn btn-link btn-large pull-left" data-bind="hidden: editable, click: $root.deleteProgram"><span class="glyphicon glyphicon-remove"></span></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- End Program -->
+
+            <!-- Day -->
+            <div id="days" class="tab-pane" data-bind="with: selectedProgram">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Days
+                        <a class="btn btn-small" data-bind="click: function () { $root.addEntity($data, 'Day') }"><span class="glyphicon glyphicon-plus"></span>&nbsp;Day</a>
+                    </div>
+                    <div class="panel-body">
+                        <p>Use this page to create and edit existing days</p>
+                    </div>
+                    <table class="table">
+                        <tbody data-bind="foreach: childs">
+                            <tr>
+                                <td>
+                                    <h4 data-bind="text: name, hidden: editable, click: $root.gotoEntity"></h4>
+                                    <input class="form-control" data-bind="value: name, visible: editable" />
+                                </td>
+                                <td>
+                                    <a class="btn btn-link btn-large pull-left" data-bind="visible: editable, click: $root.setEditable"><span class="glyphicon glyphicon-ok"></span></a>
+                                    <a class="btn btn-link btn-large pull-left" data-bind="hidden: editable, click: $root.setEditable"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    <a class="btn btn-link btn-large pull-left" data-bind="hidden: editable, click: function () { $parent.childs.remove($data) }"><span class="glyphicon glyphicon-remove"></span></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- End Day -->
+
+            <!-- Exercise -->
+            <div id="exercises" class="tab-pane" data-bind="with: selectedDay">
+                <div class="row">
+                    <div class="tab-content pull-left col-xs-10" data-bind="foreach: childs">
+                        <!--<div class="panel panel-default">-->
+                        <div id="sessions" class="panel panel-default tab-pane" data-bind="with: $root.selectedExercise, attr: { id: name }">
+
+                            <div class="panel-heading">
+                                <h3 class="panel-title ">Sessions <a class="btn btn-large " data-bind="click: $root.addSession">
+                                    <span class="glyphicon glyphicon-plus"></span>&nbsp;Session
+                                </a></h3>
+                            </div>
+                            <!-- <div class="panel-body">
+                            </div>-->
+                            <!--<div id="sessions" class="tab-pane" data-bind="with: $root.selectedExercise, attr: { id: name }"> -->
+                            <!-- Session List -->
+
+                            <ul class="list-group" data-bind="foreach: childs">
+
+                                <li class="list-group-item">
+                                    <a class="" data-toggle="collapse" data-bind="attr: { href: '#'.concat(name().toString()) }">
+                                        <span data-bind="text: name"></span>
+                                    </a>
+                                    <input class="form-control " data-bind="value: name, visible: editable" />
+
+                                    <a class="btn btn-link btn-small" data-bind="visible: editable, click: $root.setEditable">
+                                        <span class="glyphicon glyphicon-ok"></span>&nbsp;Session
+                                    </a>
+                                    <a class="btn btn-link btn-small" data-bind="hidden: editable, click: $root.deleteEntity">
+                                        <span class="glyphicon glyphicon-remove"></span>&nbsp;Session
+                                    </a>
+                                    <a class="btn btn-large" data-bind="click: $root.addSet">
+                                        <span class="glyphicon glyphicon-plus"></span>&nbsp;Set
+                                    </a>
+
+                                    <div class="collapse in" data-bind="attr: { id: name }">
+                                        <div class="panel-body">
+                                            <table class="table" id="session">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            <label>Set</label>
+                                                        </th>
+                                                        <th>
+                                                            <label>Rep</label>
+                                                        </th>
+                                                        <th>
+                                                            <label>Weight</label>
+                                                        </th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody data-bind="foreach: $data.childs, attr: { id: name }">
+                                                    <tr>
+                                                        <td>
+                                                            <h4 data-bind="text: name, hidden: editable, click: $root.gotoEntity"></h4>
+                                                            <input class="form-control" data-bind="value: name, visible: editable" /></td>
+                                                        <td class="">
+                                                            <label data-bind="text: reps, hidden: editable"></label>
+                                                            <input class="form-control" type="number"
+                                                                data-bind="visible: editable, value: reps" />
+                                                        </td>
+                                                        <td class="">
+                                                            <label data-bind="text: weight, hidden: editable"></label>
+                                                            <input class="form-control" type="number"
+                                                                data-bind="visible: editable, value: weight" />
+                                                        </td>
+                                                        <td class="">
+                                                            <a class="btn btn-link btn-small pull-left"
+                                                                data-bind="visible: editable, click: $root.setEditable">
+                                                                <span class="glyphicon glyphicon-ok">&nbsp;Set</span>
+                                                            </a></td>
+                                                        <td>
+                                                            <a class="btn btn-link btn-small pull-left"
+                                                                data-bind="hidden: editable, click: $root.saveEntity">
+                                                                <span class="glyphicon glyphicon-remove">&nbsp;Set</span>
+                                                            </a>
+                                                        </td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <!-- End Selected Session -->
+                            <!--</div>-->
+                        </div>
+                    </div>
+
+                    <!-- Exercise Nav Bar -->
+                    <nav class="navbar navbar-right pull-right col-xs-2" role="navigation">
+                        <div class="navbar-header">
+                            <a class="btn btn-small" href="#Exercise" data-bind="click: $root.addExercise">
+                                <span class="glyphicon glyphicon-plus"></span>&nbsp;Exercise</a>
+                        </div>
+                        <ul class="nav nav-pills nav-stacked" data-bind="foreach: childs">
+                            <li><a data-toggle="tab" data-bind="text: name, click: $root.gotoEntity, attr: { href: '#'.concat(name().toString()) }"></a></li>
+                        </ul>
+                    </nav>
+                    <!-- End Exercise Nav Bar -->
+                </div>
+            </div>
+
+            <!-- Options -->
+            <div id="settings" class="tab-pane">
+
+                <a class="btn btn-small" data-bind="click: $root.savePrograms"><span class="glyphicon glyphicon-save"></span>&nbsp;Save</a>
+
+                <a class="btn btn-small" data-bind="click: $root.deleteDB"><span class="glyphicon glyphicon-delete"></span>&nbsp;Delete DB</a>
+            </div>
+            <!-- End Options -->
+        </div>
+        <!-- End Exercise -->
+    </div>
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/knockout-2.3.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/wo5a.js"></script>
+</body>
+</html>

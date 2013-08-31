@@ -5,28 +5,27 @@
         opReadWrite: 'readwrite',
     };
 
-    var GenericViewModel = function (data) {
-        this.id = data.id;
+    var BaseViewModel = function (data) {
+        this.id = ko.observable(data.id);
         this.name = ko.observable(data.name);
         this.childs = ko.observableArray(data.childs);
-        this.type = data.type;
+        this.type = ko.observable(data.type);
         this.editable = ko.observable(data.editable);
     };
 
     var SetViewModel = function (data) {
-        this.name = ko.observable(data.name);
+        BaseViewModel.call(this, data);
         this.reps = ko.observable(data.reps);
         this.weight = ko.observable(data.weight);
-        this.childs = ko.observableArray(data.childs);
-        this.type = data.type;
-        this.editable = ko.observable(data.editable);
     };
+
+    SetViewModel.prototype = Object.create(BaseViewModel.prototype);
 
     var WO5VM = function () {
         var self = this;
-        //var p1 = new GenericViewModel({type:'Program', name: 'One' });
+        //var p1 = new BaseViewModel({type:'Program', name: 'One' });
 
-        self.listProgram = ko.observable(new GenericViewModel({ type: 'Program', childs: [] }));
+        self.listProgram = ko.observable(new BaseViewModel({ type: 'Program', childs: [] }));
 
         self.selectedProgram = ko.observable(null);
         self.selectedDay = ko.observable(null);
@@ -87,11 +86,12 @@
                 if (cursor) {
                     console.log('Cursor entity: ' + cursor.key)
 
-                    var parsedVM = self.parseViewModel(cursor.value);
-                    parsedVM.id = cursor.key;
+                    //var parsedVM = self.parseViewModel(cursor.value);
+                    var parsedVM = ko.mapping.fromJS(cursor.value);
+                    parsedVM.id(cursor.key);
                     self[listName]().childs.push(parsedVM);
 
-                    console.log('Loaded viewmodel: ' + parsedVM.type + ' ' + parsedVM.id);
+                    console.log('Loaded viewmodel: ' + parsedVM.type() + ' ' + parsedVM.id());
 
                     cursor.continue();
                 }
@@ -112,7 +112,7 @@
 
                 default:
                     {
-                        var parsedVM = new GenericViewModel(entity);
+                        var parsedVM = new BaseViewModel(entity);
                         break;
                     }
             }
@@ -130,10 +130,11 @@
         };
 
         self.gotoEntity = function (entity) {
+            console.log('entity type: ' + entity.type());
             for (var prop in self) {
-                if (~prop.indexOf('selected'.concat(entity.type))) {
+                if (~prop.indexOf('selected'.concat(entity.type()))) {
                     self[prop](entity);
-                    console.log('Populated: ' + 'selected'.concat(entity.type));
+                    console.log('Populated: ' + 'selected'.concat(entity.type()));
                 }
             }
         };
@@ -160,10 +161,10 @@
         self.updateStoreEntity = function (entity) {
             var entityStore = wo5.db.transaction(wo5.tblProgramName, wo5.opReadWrite).objectStore(wo5.tblProgramName);
 
-            var updateResult = entityStore.put(ko.toJS(entity), entity.id);
+            var updateResult = entityStore.put(ko.mapping.toJS(entity), entity.id());
 
             updateResult.onsuccess = function (event) {
-                console.log('Updated entity: ' + entity.type + ' ' + entity.id);
+                console.log('Updated entity: ' + entity.type() + ' ' + entity.id());
             };
 
             updateResult.onerror = function (event) {
@@ -172,7 +173,7 @@
         };
 
         self.addEntity = function (entity, entityType) {
-            entity.childs.push(new GenericViewModel({ id: -1, name: entityType, type: entityType, editable: true }));
+            entity.childs.push(new BaseViewModel({ id: -1, name: entityType, type: entityType, editable: true }));
         };
 
         self.setEditable = function (entity) {
@@ -183,7 +184,7 @@
         };
 
         self.addProgram = function () {
-            var newProgram = new GenericViewModel({ type: 'Program', editable: true });
+            var newProgram = new BaseViewModel({ type: 'Program', editable: true });
             var entityStore = wo5.db.transaction(wo5.tblProgramName, wo5.opReadWrite).objectStore(wo5.tblProgramName);
             var addRequest = entityStore.put(ko.toJS(newProgram));
             addRequest.onsuccess = function (event) {
@@ -215,12 +216,18 @@
         };
 
         self.addExercise = function () {
-            var newExercise = new GenericViewModel({ name: 'Exercise', type: 'Exercise', editable: false })
+            var newExercise = new BaseViewModel({ name: 'Exercise', type: 'Exercise', editable: false })
             self.selectedDay().childs.push(newExercise);
             self.gotoEntity(newExercise);
         }
 
+        self.deleteExercise = function (exercise) {
+            self.selectedDay.childs().remove(exercise);
+            self.savePrograms();
+        };
+
         self.addSession = function () {
+            var sessionId;
             var today = new Date();
             var dd = today.getDate();
             var mm = today.getMonth() + 1;
@@ -233,17 +240,29 @@
             if (dd < 10) { dd = '0' + dd }
             if (mm < 10) { mm = '0' + mm }
 
-            today = dd + '' + mm + '' + yy + h + m + s;
+            sessiondId = dd + '' + mm + '' + yyyy + h + m + s;
+            today = dd + '/' + mm + '/' + yy;
 
-            var newSession = new GenericViewModel({ name: today, type: 'Session', editable: false });
-            self.selectedExercise().childs.push(newSession);
+            var newSession = new BaseViewModel({ id: sessiondId, name: today, type: 'Session', editable: true });
+            self.selectedExercise().childs.unshift(newSession);
             self.gotoEntity(newSession);
+        };
+
+        self.deleteSession = function (session) {
+            self.selectedExercise().childs.remove(session);
+            self.savePrograms();
         };
 
         self.addSet = function (session) {
             var newSet = new SetViewModel({ type: 'Set', editable: true, reps: 5, weight: 5 });
+            self.selectedSession(session);
             self.selectedSession().childs.push(newSet);
-            self.gotoEntity(newSet);
+            self.selectedSet(newSet);
+        };
+
+        self.deleteSet = function (set) {
+            self.selectedSession.childs().remove(set);
+            self.savePrograms();
         };
 
         self.savePrograms = function () {

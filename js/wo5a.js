@@ -2,28 +2,28 @@
     wo5 = {
         dbName: 'WO5A',
         tblProgramName: 'Program',
-        opReadWrite: 'readwrite',
+        opReadWrite: 'readwrite'
     };
-
-    var BaseViewModel = function (data) {
-        this.id = ko.observable(data.id);
-        this.name = ko.observable(data.name);
-        this.childs = ko.observableArray(data.childs);
-        this.type = ko.observable(data.type);
-        this.editable = ko.observable(data.editable);
-    };
-
-    var SetViewModel = function (data) {
-        BaseViewModel.call(this, data);
-        this.reps = ko.observable(data.reps);
-        this.weight = ko.observable(data.weight);
-    };
-
-    SetViewModel.prototype = Object.create(BaseViewModel.prototype);
 
     var WO5VM = function () {
         var self = this;
-        //var p1 = new BaseViewModel({type:'Program', name: 'One' });
+
+        var BaseViewModel = function (data) {
+            this.id = ko.observable(data.id);
+            this.name = ko.observable(data.name);
+            this.childs = ko.observableArray(data.childs);
+            this.type = ko.observable(data.type);
+            this.editable = ko.observable(data.editable);
+        };
+
+        var SetViewModel = function (data) {
+            BaseViewModel.call(this, data);
+            this.reps = ko.observable(data.reps);
+            this.weight = ko.observable(data.weight);
+            this.measurement = ko.observable(data.measurement);
+        };
+
+        SetViewModel.prototype = Object.create(BaseViewModel.prototype);
 
         self.listProgram = ko.observable(new BaseViewModel({ type: 'Program', childs: [] }));
 
@@ -32,6 +32,8 @@
         self.selectedExercise = ko.observable(null);
         self.selectedSession = ko.observable(null);
         self.selectedSet = ko.observable(null);
+
+        self.weightMeasurement = ko.observable('kg');
 
         self.initDB = function () {
             var request = window.indexedDB.open(wo5.dbName, 1);
@@ -173,7 +175,7 @@
         };
 
         self.addEntity = function (entity, entityType) {
-            entity.childs.push(new BaseViewModel({ id: -1, name: entityType, type: entityType, editable: true }));
+            entity.childs.push(new BaseViewModel({ id: -1, type: entityType, editable: true }));
         };
 
         self.setEditable = function (entity) {
@@ -191,7 +193,7 @@
                 var newEntityId = event.target.result;
                 console.log('Added entity: ' + newProgram.type + ' ' + newEntityId);
                 console.log('Updating entity id: ' + newProgram.type + ' ' + newEntityId);
-                newProgram.id = newEntityId;
+                newProgram.id(newEntityId);
                 self.updateStoreEntity(newProgram);
                 self.listProgram().childs.push(newProgram);
             };
@@ -243,7 +245,7 @@
             sessiondId = dd + '' + mm + '' + yyyy + h + m + s;
             today = dd + '/' + mm + '/' + yy;
 
-            var newSession = new BaseViewModel({ id: sessiondId, name: today, type: 'Session', editable: true });
+            var newSession = new BaseViewModel({ id: sessiondId, name: today, type: 'Session', editable: false });
             self.selectedExercise().childs.unshift(newSession);
             self.gotoEntity(newSession);
         };
@@ -254,19 +256,45 @@
         };
 
         self.addSet = function (session) {
-            var newSet = new SetViewModel({ type: 'Set', editable: true, reps: 5, weight: 5 });
+            var newSet = new SetViewModel({ type: 'Set', editable: true, reps: 5, weight: 5, measurement: self.weightMeasurement() });
             self.selectedSession(session);
             self.selectedSession().childs.push(newSet);
             self.selectedSet(newSet);
         };
 
         self.deleteSet = function (set) {
-            self.selectedSession.childs().remove(set);
+            self.selectedSession().childs.remove(set);
             self.savePrograms();
         };
 
         self.savePrograms = function () {
             ko.utils.arrayForEach(self.listProgram().childs(), function (program) { self.saveEntity(program) });
+        };
+
+        self.convertToKg = function () {
+            ko.utils.arrayForEach(self.selectedSession().childs(), function (set) {
+                if (set.measurement() === 'lbs') {
+                    var kgCalc = set.weight() * 0.45359237;
+                    var kgs = Math.round(kgCalc);
+                    console.log('Converted ' + set.weight() + 'lbs to ' + kgs + 'kg.');
+                    set.weight(kgs);
+                    set.measurement('kg');
+                }
+            });
+            self.weightMeasurement('kg');
+        };
+
+        self.convertToLbs = function () {
+            ko.utils.arrayForEach(self.selectedSession().childs(), function (set) {
+                if (set.measurement() === 'kg') {
+                    var kg = set.weight() / 0.45359237;
+                    var lbs = Math.floor(kg);
+                    console.log('Converted ' + set.weight() + 'kg to ' + lbs + 'lbs.');
+                    set.weight(lbs);
+                    set.measurement('lbs');
+                }
+            });
+            self.weightMeasurement('lbs');
         };
 
         self.initDB();

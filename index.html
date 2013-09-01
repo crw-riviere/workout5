@@ -11,7 +11,7 @@
 <body>
     <div class="container">
 
-        <nav class="navbar" role="navigation">
+        <!--    <nav class="navbar" role="navigation">
             <ul class="nav nav-pills" data-tabs="tabs">
                 <li class="dropdown" data-bind="with: listProgram">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">PROGRAM <span class="caret"></span>
@@ -54,6 +54,60 @@
 
                 <li class="dropdown"><a class="" href="#settings" data-toggle="tab">#    </a></li>
             </ul>
+        </nav>-->
+
+        <nav class="navbar" role="navigation">
+            <ul class="nav nav-pills">
+                <li class="dropdown" data-bind="with: listProgram">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#headerNav" href="#programDropDown">PROGRAM <span class="caret"></span>
+                    </a>
+                </li>
+                <li class="dropdown" data-bind="with: selectedProgram">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#headerNav" href="#dayDropDown">DAY <span class="caret"></span>
+                    </a>
+                </li>
+
+                <li class="dropdown" data-bind="with: selectedDay">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#headerNav" href="#exerciseDropDown">EXERCISE <span class="caret"></span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="panel-group" id="headerNav">
+
+                <div class="panel">
+                    <div id="programDropDown" class="panel panel-default collapse " data-bind="with: listProgram">
+
+                        <ul class="list-group" data-bind="template: { name: 'nav-program-template', foreach: childs }">
+                            <li class="list-group-item" data-toggle="collapse" data-target="#programDropDown"><a href="#listPrograms" data-toggle="tab">Add Program</a></li>
+                        </ul>
+                        <script type="text/html" id="nav-program-template">
+                            <li class="list-group-item" data-toggle="collapse" data-target="#programDropDown"><a data-toggle="tab" data-bind="text: name, click: $root.gotoEntity"></a></li>
+                        </script>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div id="dayDropDown" class="panel panel-default collapse " data-bind="with: selectedProgram">
+
+                        <ul class="list-group" data-bind="template: { name: 'nav-day-template', foreach: childs }">
+                            <li class="list-group-item" data-toggle="collapse" data-target="#dayDropDown"><a href="#listDays" data-toggle="tab">Add Day</a></li>
+                        </ul>
+                        <script type="text/html" id="nav-day-template">
+                            <li class="list-group-item" data-toggle="collapse" data-target="#dayDropDown"><a href="#exercises" data-toggle="tab" data-bind="text: name, click: $root.gotoEntity"></a></li>
+                        </script>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div id="exerciseDropDown" class="panel panel-default collapse " data-bind="with: selectedDay">
+                        <ul class="list-group" data-bind="template: { name: 'nav-exercise-template', foreach: childs }">
+                            <li class="list-group-item" data-toggle="collapse" data-target="#exerciseDropDown"><a href="#listExercises" data-toggle="tab">Add Exercise</a></li>
+                        </ul>
+                        <script type="text/html" id="nav-exercise-template">
+                            <li class="list-group-item" data-toggle="collapse" data-target="#exerciseDropDown"><a class="" href="#listSessions" data-toggle="tab" data-bind="text: name, click: $root.gotoEntity"></a></li>
+                        </script>
+                    </div>
+                </div>
+            </div>
         </nav>
 
         <div class="tab-content">
@@ -136,7 +190,7 @@
                             <tr>
                                 <td class="col-xs-10">
                                     <h4><a href="#listSessions" data-toggle="tab" data-bind="text: name, hidden: editable, click: $root.gotoEntity"></a></h4>
-                                    <input class="form-control input-lg" type="text" placeholder="Day Name" data-bind="value: name, visible: editable" />
+                                    <input class="form-control input-lg" type="text" placeholder="Exercise Name" data-bind="value: name, visible: editable" />
                                 </td>
                                 <td class="col-xs-2">
                                     <a class="btn btn-link btn-large pull-left" data-bind="visible: editable, click: $root.setEditable"><span class="glyphicon glyphicon-ok"></span></a>
@@ -179,40 +233,49 @@
                     <ul class="list-group" data-bind="foreach: childs">
 
                         <li class="list-group-item">
-                            <div class="list-group-item-heading">
-
-                                <h3><a class="" data-toggle="collapse" data-bind="attr: { href: '#'.concat(id()) }">
+                            <h3 class="list-group-item-heading">
+                                <a class="col-xs-8" data-toggle="collapse" data-bind="attr: { href: '#'.concat(id()) }">
                                     <i data-bind="text: name, hidden: editable, click: $root.gotoEntity"></i>
-                                </a></h3>
-                                <input class="form-control input-lg" data-bind="value: name, visible: editable" />
+                                </a>
 
-                                <div class="row">
-                                    <div class="col-xs-4">
-                                        <small><a href="#" data-bind="click: $root.setEditable"><span class="glyphicon glyphicon-edit"></span>&nbsp;Session</a></small>
-                                        <b>| </b>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <small><a data-bind="click: $root.deleteSession"><span class="glyphicon glyphicon-minus"></span>&nbsp;Session</a></small>
-                                        <b>| </b>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <small><a data-bind="hidden: editable, click: $root.addSet, attr: { href: '#'.concat(id()) }"><span class="glyphicon glyphicon-plus"></span>&nbsp;Set</a></small>
-                                    </div>
-                                </div>
-                                <!-- <div class="btn-group">
-                                        <button type="button" class="btn btn-link btn-default btn-lg dropdown-toggle" data-toggle="dropdown">
-                                            <span class="glyphicon glyphicon-pencil"></span>
-                                        </button>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#" data-bind="click: $root.setEditable">Edit</a></li>
-                                            <li><a href="#" data-bind="hidden: editable, click: $root.addSet">Add Set</a></li>
-                                            <li><a href="#" data-bind="click: $root.deleteEntity">Delete</a></li>
-                                        </ul>
-                                    </div>-->
-                            </div>
+                                <input class="col-xs-8" data-bind="value: name, visible: editable" />
+
+                                <small><i>sets</i></small> <span class="badge" data-bind="text: childs().length"></span>
+                            </h3>
 
                             <div class="collapse list-group-item-text" data-bind="attr: { id: id }">
+                                <br />
 
+                                <div class="row">
+                                    <p class="col-xs-4">
+                                        <b>| </b><small><a href="#" data-bind="click: $root.setEditable">&nbsp;Session<span class="glyphicon glyphicon-edit"></span>
+                                            &nbsp;
+                                        </a></small>
+                                    </p>
+                                    <p class="col-xs-4">
+                                        <b>| </b><small><a data-bind="click: $root.deleteSession">&nbsp;Session<span class="glyphicon glyphicon-minus"></span>
+                                            &nbsp;
+                                        </a></small>
+                                    </p>
+                                    <p class="col-xs-4">
+                                        <b>| </b><small><a data-bind="hidden: editable, click: $root.addSet, attr: { href: '#'.concat(id()) }">&nbsp;Set <span class="glyphicon glyphicon-plus"></span>
+                                            &nbsp;
+                                        </a></small>
+                                    </p>
+                                    <br />
+                                    <p class="col-xs-4">
+                                        <b>| </b><small><a data-bind="hidden: editable">&nbsp;Weight<span class="glyphicon glyphicon-glass"></span>
+                                            &nbsp;
+                                        </a></small>
+                                    </p>
+                                    <p class="col-xs-2">
+                                        <small><a data-bind="click: $root.convertToKg">Kg</a></small>
+                                    </p>
+                                    <p class="col-xs-2">
+                                        <small><a data-bind="click: $root.convertToLbs">Lbs</a></small>
+                                    </p>
+                                </div>
+                                <br />
                                 <table class="table" id="session">
                                     <thead>
                                         <tr>
@@ -237,7 +300,7 @@
                                                 <h4 data-bind="text: reps, hidden: editable"></h4>
                                             </td>
                                             <td class="col-xs-4">
-                                                <h4 data-bind="text: weight, hidden: editable"></h4>
+                                                <h4 data-bind="text: (weight()).toString().concat(measurement()), hidden: editable"></h4>
                                             </td>
                                             <td class="col-xs-2">
                                                 <div class="btn-group">
@@ -246,7 +309,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu" role="menu">
                                                         <li><a href="#" data-bind="click: $root.setEditable">Edit</a></li>
-                                                        <li><a href="#" data-bind="click: $root.deleteEntity">Delete</a></li>
+                                                        <li><a href="#" data-bind="click: $root.deleteSet">Delete</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -264,7 +327,7 @@
                                                 <div class="input-group input-group-lg" data-bind="visible: editable">
                                                     <input class="form-control input-lg" type="number"
                                                         data-bind="value: weight" />
-                                                    <span class="input-group-addon">.Kg</span>
+                                                    <span class="input-group-addon" data-type="text: $root.weightMeasurement()"></span>
                                                 </div>
                                             </td>
                                             <td class="col-xs-2">

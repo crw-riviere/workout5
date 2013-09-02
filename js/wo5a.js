@@ -205,17 +205,22 @@
 
         self.deleteProgram = function (program) {
             var entityStore = wo5.db.transaction(wo5.tblProgramName, wo5.opReadWrite).objectStore(wo5.tblProgramName);
-            var deleteRequest = entityStore.delete(program.id);
+            var deleteRequest = entityStore.delete(program.id());
 
             deleteRequest.onsuccess = function (event) {
                 self.listProgram().childs.remove(program);
-                console.log('Removed entity: ' + program.type + ' ' + program.id);
+                console.log('Removed entity: ' + program.type + ' ' + program.id());
             };
 
             deleteRequest.onerror = function (event) {
                 console.log('Error deleting entity: ' + error.target.error);
             };
         };
+
+        self.deleteDay = function (day) {
+            self.selectedProgram().childs.remove(day);
+            self.savePrograms();
+        }
 
         self.addExercise = function () {
             var newExercise = new BaseViewModel({ name: 'Exercise', type: 'Exercise', editable: false })

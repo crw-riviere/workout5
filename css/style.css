@@ -1,12 +1,81 @@
-.rotate {
-    /* Safari */
-    -webkit-transform: rotate(90deg);
-    /* Firefox */
-    -moz-transform: rotate(90deg);
-    /* IE */
-    -ms-transform: rotate(90deg);
-    /* Opera */
-    -o-transform: rotate(90deg);
-    /* Internet Explorer */
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+.centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -100px;
+}
+
+.load-logo-container {
+    height: 500px;
+    width: 200px;
+}
+
+.loading-ball {
+    background-color: #f09999;
+    height: 20px;
+    width: 20px;
+    border-radius: 10px;
+}
+
+.logo-text {
+    font-size: 40px;
+}
+
+@-moz-keyframes loading-ball-animation {
+    0% {
+        background: #f09999;
+        margin-left: 0px;
+    }
+
+    50% {
+        background: #804DEE;
+        margin-left: 200px;
+    }
+
+    100% {
+        background: #f09999;
+        margin-left: 0px;
+    }
+}
+
+@-webkit-keyframes loading-ball-animation {
+    0% {
+        background: #f09999;
+        margin-left: 0px;
+    }
+
+    50% {
+        background: #804DEE;
+        margin-left: 200px;
+    }
+
+    100% {
+        background: #f09999;
+        margin-left: 0px;
+    }
+}
+
+@keyframes loading-ball-animation {
+    0% {
+        background: #f09999;
+        margin-left: 0px;
+    }
+
+    50% {
+        background: #804DEE;
+        margin-left: 200px;
+    }
+
+    100% {
+        background: #f09999;
+        margin-left: 0px;
+    }
+}
+
+.play-loading-ball {
+    -moz-animation: loading-ball-animation 2s infinite;
+    -o-animation: loading-ball-animation 2s infinite;
+    -webkit-animation: loading-ball-animation 2s infinite;
+    animation: loading-ball-animation 2s infinite;
 }

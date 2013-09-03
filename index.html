@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,7 +9,29 @@
     <title>WO5A</title>
 </head>
 <body>
-    <div class="container">
+    <div id="homeContainer" class="container">
+        <div class="centered">
+            <div class="load-logo-container">
+                <div class="logo-text text-center">
+                    <b>Workout</b><i>5</i>
+                </div>
+
+                <div id="homeloadingPanel">
+                    <p class="text-center">
+                        <small><i>loading...</i></small>
+                    </p>
+                    <div id="loadingBall" class="loading-ball play-loading-ball"></div>
+                </div>
+
+                <div id="homeNavigationPanel">
+                </div>
+
+                <p class="text-center">crw.riviere</p>
+                <p class="text-center"><small><b>Version |</b><i>0.1a</i></small> </p>
+            </div>
+        </div>
+    </div>
+    <div id="contentContainer" class="container hidden">
 
         <nav class="navbar" role="navigation">
             <ul class="nav nav-pills">
@@ -334,6 +356,7 @@
     </div>
 
     <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/script.js"></script>
     <script src="js/knockout-2.3.0.js"></script>
     <script src="js/knockout-mapping.js"></script>
     <script src="js/bootstrap.min.js"></script>

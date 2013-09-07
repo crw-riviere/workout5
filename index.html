@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" manifest="wo5.appcache">
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -125,13 +125,19 @@
 
                         <ul class="list-group" data-bind="foreach: childs">
                             <li class="list-group-item">
-
-                                <h4><a href="#listDays" class="col-xs-8" data-toggle="tab" data-bind="text: name, hidden: editable, click: $root.gotoEntity"></a></h4>
-                                <input class="col-xs-8" type="text" placeholder="Program Name" data-bind="value: name, visible: editable" />
-
-                                <a class="btn btn-large" data-bind="visible: editable, click: $root.setEditable"><span class="glyphicon glyphicon-ok"></span></a>
-                                <a class="btn btn-large" data-bind="hidden: editable, click: $root.setEditable"><span class="glyphicon glyphicon-pencil"></span></a>
-                                <a class="btn btn-large" data-bind="hidden: editable, click: $root.deleteProgram"><span class="glyphicon glyphicon-trash"></span></a>
+                                <div class="row">
+                                    <h4><a href="#listDays" class="col-xs-10" data-toggle="tab" data-bind="text: name, hidden: editable, click: $root.gotoEntity"></a></h4>
+                                    <input class="col-xs-10" type="text" placeholder="Program Name" data-bind="value: name, visible: editable" />
+                                    <a class="col-xs-2" data-bind="attr: { href: '#opt'.concat(id()) }" data-toggle="collapse"><span class="glyphicon glyphicon-edit"></span></a>
+                                    <div class="clearfix">
+                                        <br />
+                                    </div>
+                                    <div class="collapse" data-bind="attr: { id: 'opt'.concat(id()) }">
+                                        <a class="col-xs-6 btn btn-large" data-bind="visible: editable, click: $root.setEditable"><span class="glyphicon glyphicon-ok"></span></a>
+                                        <a class="col-xs-6 btn btn-large" data-bind="hidden: editable, click: $root.setEditable"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a class="col-xs-6 btn btn-large close" data-dismiss="alert" data-bind="hidden: editable, click: $root.deleteProgram"><span class="glyphicon glyphicon-trash"></span></a>
+                                    </div>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -157,11 +163,19 @@
                         </div>
                         <ul class="list-group" data-bind="foreach: childs">
                             <li class="list-group-item">
-                                <h4><a href="#listExercises" class="col-xs-8" data-toggle="tab" data-bind="text: name, hidden: editable, click: $root.gotoEntity"></a></h4>
-                                <input class="col-xs-8" type="text" placeholder="Day Name" data-bind="value: name, visible: editable" />
-                                <a class="btn btn-large" data-bind="visible: editable, click: $root.setEditable"><span class="glyphicon glyphicon-ok"></span></a>
-                                <a class="btn btn-large" data-bind="hidden: editable, click: $root.setEditable"><span class="glyphicon glyphicon-pencil"></span></a>
-                                <a class="btn btn-large" data-bind="hidden: editable, click: $root.deleteDay"><span class="glyphicon glyphicon-trash"></span></a>
+                                <div class="row">
+                                    <h4><a href="#listExercises" class="col-xs-10" data-toggle="tab" data-bind="text: name, hidden: editable, click: $root.gotoEntity"></a></h4>
+                                    <input class="col-xs-10" type="text" placeholder="Day Name" data-bind="value: name, visible: editable" />
+                                    <a class="col-xs-2" data-bind="attr: { href: '#opt'.concat(id()) }" data-toggle="collapse"><span class="glyphicon glyphicon-edit"></span></a>
+                                    <div class="clearfix">
+                                        <br />
+                                    </div>
+                                    <div class="collapse" data-bind="attr: { id: 'opt'.concat(id()) }">
+                                        <a class="col-xs-6 btn btn-large" data-bind="visible: editable, click: $root.setEditable"><span class="glyphicon glyphicon-ok"></span></a>
+                                        <a class="col-xs-6 btn btn-large" data-bind="hidden: editable, click: $root.setEditable"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a class="col-xs-6 btn btn-large" data-bind="hidden: editable, click: $root.deleteDay"><span class="glyphicon glyphicon-trash"></span></a>
+                                    </div>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -186,11 +200,20 @@
 
                         <ul class="list-group" data-bind="foreach: childs">
                             <li class="list-group-item">
-                                <h4><a href="#listSessions" class="col-xs-8" data-toggle="tab" data-bind="text: name, hidden: editable, click: $root.gotoEntity"></a></h4>
-                                <input class="cl-xs-8" type="text" placeholder="Exercise Name" data-bind="value: name, visible: editable" />
-                                <a class="btn btn-large" data-bind="visible: editable, click: $root.setEditable"><span class="glyphicon glyphicon-ok"></span></a>
-                                <a class="btn btn-large" data-bind="hidden: editable, click: $root.setEditable"><span class="glyphicon glyphicon-pencil"></span></a>
-                                <a class="btn btn-large" data-bind="hidden: editable, click: function () { $parent.childs.remove($data) }"><span class="glyphicon glyphicon-trash"></span></a>
+                                <div class="row">
+                                    <h4><a href="#listSessions" class="col-xs-10" data-toggle="tab" data-bind="text: name, hidden: editable, click: $root.gotoEntity"></a></h4>
+                                    <input class="cl-xs-10" type="text" placeholder="Exercise Name" data-bind="value: name, visible: editable" />
+                                    <a class="col-xs-2" data-bind="attr: { href: '#opt'.concat(id()) }" data-toggle="collapse"><span class="glyphicon glyphicon-edit"></span></a>
+
+                                    <div class="clearfix">
+                                        <br />
+                                    </div>
+                                    <div class="collapse" data-bind="attr: { id: 'opt'.concat(id()) }">
+                                        <a class="btn btn-large" data-bind="visible: editable, click: $root.setEditable"><span class="glyphicon glyphicon-ok"></span></a>
+                                        <a class="btn btn-large" data-bind="hidden: editable, click: $root.setEditable"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a class="btn btn-large" data-bind="hidden: editable, click: function () { $parent.childs.remove($data) }"><span class="glyphicon glyphicon-trash"></span></a>
+                                    </div>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -225,17 +248,25 @@
                             <li class="list-group-item">
                                 <div class="list-group-item-heading">
                                     <div class="row">
-                                        <h3 class="col-xs-8"><a data-toggle="collapse" data-bind="attr: { href: '#'.concat(id()) }">
-                                            <b data-bind="text: name, hidden: editable, click: $root.gotoEntity"></b><b>| </b><small><i>sets </i><b data-bind="    text: childs().length"></b></small>
+                                        <h3 class="col-xs-12"><a data-toggle="collapse" data-bind="hidden: editable, attr: { href: '#'.concat(id()) }">
+                                            <b data-bind="text: name, click: $root.gotoEntity"></b><b>| </b><small><i>sets </i><b data-bind="    text: childs().length"></b></small>
                                         </a></h3>
 
-                                        <input class="col-xs-7" data-bind="value: name, visible: editable" />
+                                        <input class="col-xs-12" data-bind="value: name, visible: editable" />
                                     </div>
+                                </div>
+
+                                <div class="clearfix">
+                                    <br />
                                 </div>
 
                                 <div class="collapse list-group-item-text" data-bind="attr: { id: id }">
 
-                                    <a class="btn btn-primary" data-bind="click: $root.addSet">&nbsp;<span class="glyphicon glyphicon-plus"></span>&nbsp;Set&nbsp;</a>
+                                    <a class="col-xs-4 btn btn-primary" data-bind="click: $root.addSet">&nbsp;<span class="glyphicon glyphicon-plus"></span>&nbsp;Set&nbsp;</a>
+                                    <a class="col-xs-4 btn btn-large" data-bind="visible: editable, click: $root.setEditable"><span class="glyphicon glyphicon-ok"></span></a>
+                                    <a class="col-xs-4 btn btn-large" data-bind="hidden: editable, click: $root.setEditable"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    <a class="col-xs-4 btn btn-large" data-bind="click: function () { $parent.childs.remove($data) }"><span class="glyphicon glyphicon-trash"></span></a>
+
                                     <div class="clearfix">
                                         <br />
                                     </div>

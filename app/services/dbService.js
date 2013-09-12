@@ -1,26 +1,7 @@
-﻿wo5App.service('dbService', function () {
+﻿wo5App.service('dbService', function (resourceService) {
     window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 
     var self = this;
-
-    var consts = {
-        db: { wo5: 'WO5' },
-        op: {
-            rw: 'readwrite'
-        },
-        store: {
-            program: 'Program',
-            exercise: 'Exercise',
-            session: 'Session',
-            set: 'Set'
-        },
-        index: {
-            id: 'id',
-            name: 'name',
-            exercise: 'exercise',
-            weight: 'weight'
-        }
-    }
 
     self.programs = [];
 
@@ -30,26 +11,26 @@
                 window.alert("Your browser doesn't support IndexedDB. You will not be able to save your workout.");
             };
 
-            var request = window.indexedDB.open(consts.db.wo5, 3);
+            var request = window.indexedDB.open(resourceService.resourceService.consts.db.wo5, 3);
 
             request.onupgradeneeded = function (event) {
                 console.info('Upgrading database.');
                 var db = event.target.result;
 
-                var productStore = db.createObjectStore(consts.store.program, { keyPath: consts.index.id, autoIncrement: true });
-                productStore.createIndex(consts.index.name, consts.index.name, { unique: false });
+                var productStore = db.createObjectStore(resourceService.consts.store.program, { keyPath: resourceService.consts.index.id, autoIncrement: true });
+                productStore.createIndex(resourceService.consts.index.name, resourceService.consts.index.name, { unique: false });
 
-                var exerciseStore = db.createObjectStore(consts.store.exercise, { keyPath: consts.index.id, autoIncrement: true });
-                exerciseStore.createIndex(consts.index.name, consts.index.name, { unique: false });
+                var exerciseStore = db.createObjectStore(resourceService.consts.store.exercise, { keyPath: resourceService.consts.index.id, autoIncrement: true });
+                exerciseStore.createIndex(resourceService.consts.index.name, resourceService.consts.index.name, { unique: false });
 
-                var sessionStore = db.createObjectStore(consts.store.session, { keyPath: consts.index.id, autoIncrement: true });
-                sessionStore.createIndex(consts.index.name, consts.index.name, { unique: false });
-                sessionStore.createIndex(consts.index.exercise, consts.index.exercise, { unique: false });
+                var sessionStore = db.createObjectStore(resourceService.consts.store.session, { keyPath: resourceService.consts.index.id, autoIncrement: true });
+                sessionStore.createIndex(resourceService.consts.index.name, resourceService.consts.index.name, { unique: false });
+                sessionStore.createIndex(resourceService.consts.index.exercise, resourceService.consts.index.exercise, { unique: false });
 
-                var setStore = db.createObjectStore(consts.store.set, { keyPath: consts.index.id, autoIncrement: true });
-                setStore.createIndex(consts.index.name, consts.index.name, { unique: false });
-                setStore.createIndex(consts.index.exercise, consts.index.exercise, { unique: false });
-                setStore.createIndex(consts.index.weight, consts.index.weight, { unique: false });
+                var setStore = db.createObjectStore(resourceService.consts.store.set, { keyPath: resourceService.consts.index.id, autoIncrement: true });
+                setStore.createIndex(resourceService.consts.index.name, resourceService.consts.index.name, { unique: false });
+                setStore.createIndex(resourceService.consts.index.exercise, resourceService.consts.index.exercise, { unique: false });
+                setStore.createIndex(resourceService.consts.index.weight, resourceService.consts.index.weight, { unique: false });
             };
 
             request.onerror = function (event) {
@@ -58,10 +39,10 @@
             request.onsuccess = function (event) {
                 console.info('Successfully loaded database.');
                 window.db = request.result;
-                self.getEntities(consts.store.program, self.programs);
-                //self.getEntities(consts.store.exercise, exercises);
-                //self.getEntities(consts.store.sesssion, sessions);
-                //self.getEntities(consts.store.set, sets);
+                //self.getEntities(resourceService.consts.store.program, self.programs);
+                //self.getEntities(resourceService.consts.store.exercise, exercises);
+                //self.getEntities(resourceService.consts.store.sesssion, sessions);
+                //self.getEntities(resourceService.consts.store.set, sets);
             }
         } catch (ex) {
             console.error('Failed to load database. Ex: ' + ex.message);
@@ -76,7 +57,7 @@
 
     self.getEntity = function (index, indexName, storeName) {
         try {
-            var store = getStore(storeName, consts.op.rw);
+            var store = getStore(storeName, resourceService.consts.op.rw);
             var index = store.index(indexName);
 
             var request = index.get(index);
@@ -94,22 +75,22 @@
         }
     }
 
-    self.getEntities = function (storeName, model) {
+    self.getEntities = function (storeName, callback) {
         try {
             var entityCollection = [];
-            var store = self.getStore(storeName, consts.op.rw);
+            var store = self.getStore(storeName, resourceService.consts.op.rw);
             var request = store.openCursor();
 
             request.onsuccess = function (event) {
                 var cursor = event.target.result;
                 if (cursor) {
                     var entity = cursor.value;
-                    model.push(entity);
+                    entityCollection.push(entity);
                     console.info('Retrieved ' + cursor.value.name + ' from ' + storeName + '.');
                     cursor.continue();
                 }
                 else {
-                    
+                    callback(entityCollection);
                 }
             }
         }
@@ -120,7 +101,7 @@
 
     self.putEntity = function (entity, storeName, callback) {
         try {
-            var store = self.getStore(storeName, consts.op.rw);
+            var store = self.getStore(storeName, resourceService.consts.op.rw);
             var request = store.put(entity);
 
             request.onsuccess = function (event) {
@@ -140,7 +121,8 @@
 
     self.removeEntity = function (entity, storeName, callback) {
         try {
-            var store = self.getStore(storeName, consts.op.rw);
+            var store = self.getStore(storeName, resourceService.consts.op.rw);
+            console.log('Deleting entity: ' + entity.id);
             var request = store.delete(entity.id);
 
             request.onsuccess = function (event) {

@@ -1,44 +1,44 @@
-﻿wo5App.service('programService', function (dbService) {
+﻿wo5App.service('programService', function ($q, $rootScope, resourceService, dbService) {
     var self = this;
 
-    var consts = {
-        store: {
-            program: 'Program',
-            exercise: 'Exercise',
-            session: 'Session',
-            set: 'Set'
-        },
-        index: {
-            id: 'id',
-            name: 'name',
-            exercise: 'exercise',
-            weight: 'weight'
-        }
-    };
-
     self.programs = [];
-    //self.programs = [{ name: 'test' }];
 
     self.getPrograms = function () {
-        
-            self.programs = dbService.programs;
-        
-        
-    };  
+        var deferred = $q.defer();
 
-    self.addProgram = function ($scope) {
-        dbService.putEntity({ name: 'Program', isEditing: true }, consts.store.program,
+        dbService.getEntities(resourceService.consts.store.program, function (storePrograms) {
+            $rootScope.$apply(function () {
+                console.log('service callback');
+                self.programs = storePrograms;
+                deferred.resolve(self.programs);
+            });
+        });
+
+        return deferred.promise;
+    };
+
+    self.saveProgram = function (program) {
+        dbService.putEntity(program, resourceService.consts.store.program,
         function (newProgram) {
-            $scope.$apply(function () {
-                console.log('addProgram retrieved: ' + newProgram);
-                self.programs.push(newProgram);                
+            $rootScope.$apply(function () {
+                console.log('programService: saved program ' + newProgram.id);
+            });
+        });
+    }
+
+    self.addProgram = function () {
+        dbService.putEntity({ name: 'Program', isEditing: true }, resourceService.consts.store.program,
+        function (newProgram) {
+            $rootScope.$apply(function () {
+                console.log('programService: adding new program ' + newProgram.id);
+                self.programs.push(newProgram);
             });
         });
     };
 
-    self.deleteProgram = function ($scope,program) {
-        dbService.removeEntity(program, consts.store.program, function () {
-            $scope.$apply(function () {
+    self.deleteProgram = function (program) {
+        dbService.removeEntity(program, resourceService.consts.store.program, function () {
+            $rootScope.$apply(function () {
                 self.programs.splice(self.programs.indexOf(program), 1);
             })
         });

@@ -17,11 +17,11 @@
                     <h4><a href="#listDays" class="col-xs-10" data-toggle="tab" data-ng-click="gotoProgram()" data-ng-hide="program.isEditing">{{program.name}}</a></h4>
                     <input class="col-xs-10" type="text" placeholder="Program Name" data-ng-model="program.name" data-ng-show="program.isEditing" />
                     <a class="col-xs-2 btn btn-large" data-ng-click="saveProgram(program)" data-ng-show="program.isEditing"><span class="glyphicon glyphicon-ok"></span></a>
-                    <a class="col-xs-2" data-ng-href="#opt{{program.name}}" data-toggle="collapse" data-ng-hide="program.isEditing"><span class="glyphicon glyphicon-edit"></span></a>
+                    <a class="col-xs-2" data-ng-href="#opt{{program.id}}" data-toggle="collapse" data-ng-hide="program.isEditing"><span class="glyphicon glyphicon-edit"></span></a>
                     <div class="clearfix">
                         <br />
                     </div>
-                    <div id="opt{{program.name}}" class="collapse">
+                    <div id="opt{{program.id}}" class="collapse">
                         <a class="col-xs-6 btn btn-large" data-ng-click="editProgram(program)" data-ng-disabled="program.isEditing"><span class="glyphicon glyphicon-pencil"></span></a>
                         <a class="col-xs-6 btn btn-large" data-ng-click="deleteProgram(program)"><span class="glyphicon glyphicon-trash"></span></a>
                     </div>

@@ -1,0 +1,32 @@
+﻿<div id="listPrograms" class="tab-pane">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <p><b></b><b>|</b><small><i>Days</i></small></p>
+                <p>
+                    <a class="btn btn-primary" data-ng-click="addDay()">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Day&nbsp;</a>
+                </p>
+            </div>
+
+            <p><small><i>Use this page to create and edit existing days.</i></small></p>
+        </div>
+
+        <ul class="list-group">
+            <li data-ng-repeat="day in days" class="list-group-item">
+                <div class="row">
+                    <h4><a href="#listDays" class="col-xs-10" data-toggle="tab" data-ng-click="gotoDay()" data-ng-hide="day.isEditing">{{program.name}}</a></h4>
+                    <input class="col-xs-10" type="text" placeholder="Day Name" data-ng-model="day.name" data-ng-show="day.isEditing" />
+                    <a class="col-xs-2 btn btn-large" data-ng-click="saveDay(program)" data-ng-show="day.isEditing"><span class="glyphicon glyphicon-ok"></span></a>
+                    <a class="col-xs-2" data-ng-href="#opt{{day.id}}" data-toggle="collapse" data-ng-hide="day.isEditing"><span class="glyphicon glyphicon-edit"></span></a>
+                    <div class="clearfix">
+                        <br />
+                    </div>
+                    <div id="opt{{day.id}}" class="collapse">
+                        <a class="col-xs-6 btn btn-large" data-ng-click="editDay(day)" data-ng-disabled="program.isEditing"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a class="col-xs-6 btn btn-large" data-ng-click="deleteDay(day)"><span class="glyphicon glyphicon-trash"></span></a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

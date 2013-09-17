@@ -1,0 +1,119 @@
+﻿<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <ul class="nav nav-pills">
+        <li class="dropdown">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#headerNav" data-target="#ddExercise">EXERCISE <span class="caret"></span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="panel-group" id="headerNav">
+
+        <div class="panel">
+            <div id="ddExercise" class="panel panel-default collapse ">
+
+                <ul class="list-group">
+
+                    <li data-ng-repeat="exercise in session.exercises" class="list-group-item" data-toggle="collapse" data-target="#ddExercise">
+                        <a data-toggle="tab">{{exercise.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <p><b>{{session.name}} | </b><small><i>{{exercise.name}}</i></small></p>
+            <p>
+                <a class="btn btn-primary" data-ng-click="addSet()">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Set&nbsp;</a>
+            </p>
+        </div>
+
+        <p><small><i>Use this page to create and edit sets.</i></small></p>
+    </div>
+
+    <div class="clearfix">
+        <br />
+    </div>
+
+    <small>&nbsp;<b>Weight |</b>
+        &nbsp;
+    </small>
+    <a class="btn btn-sm" data-bind="click: $root.convertToKg, css: { 'btn-primary': $root.weightMeasurement() === 'kg' }">
+        <small><i>kilograms</i></small>
+    </a>
+    <a class="btn btn-sm" data-bind="click: $root.convertToLbs, css: { 'btn-primary': $root.weightMeasurement() === 'lbs' }">
+        <small><i>pounds</i></small>
+    </a>
+
+    <br />
+    <table class="table" id="workout">
+        <thead>
+            <tr>
+                <th>
+                    <small><b>SET</b></small>
+                </th>
+                <th>
+                    <small><b>REPS</b></small>
+                </th>
+                <th>
+                    <small><b>WEIGHT</b></small>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody data-ng-repeat="set in sets">
+            <tr data-ng-hide="set.isEditing">
+                <td class="col-xs-3">
+                    <h4>{{$index + 1}}.</h4>
+                </td>
+                <td class="col-xs-3">
+                    <h4>{{set.reps}}</h4>
+                </td>
+                <td class="col-xs-4">
+                    <h4>{{set.weight}}{{set.measurement}}</h4>
+                </td>
+                <td class="col-xs-2">
+                    <div class="btn-group">
+                        <a class="btn btn-link btn-default btn-lg" data-target="#opt{{$index}}" data-toggle="collapse">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            <!--Edit Set-->
+            <tr data-ng-show="set.isEditing">
+                <td class="col-xs-2">
+                    <h4>{{$index + 1}}.</h4>
+                </td>
+
+                <td class="col-xs-3">
+                    <input class="form-control" type="number"
+                        data-ng-model="set.reps" />
+                </td>
+                <td class="col-xs-5">
+                    <div class="">
+                        <input class="form-control" type="number"
+                            data-ng-model="set.weight" />
+                        <p>{{measurement}}</p>
+                    </div>
+                </td>
+                <td class="col-xs-2">
+                    <a class="btn btn-link btn-default btn-lg" data-ng-click="saveSet(set)">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </a>
+                </td>
+            </tr>
+
+            <tr id="opt{{$index}}" class="collapse">
+                <td colspan="4">
+                    <a class="col-xs-6 btn btn-large" data-ng-click="editSet(set)" data-ng-disabled="set.isEditing"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a class="col-xs-6 btn btn-large" data-ng-click="deleteSet(set)"><span class="glyphicon glyphicon-trash"></span></a>
+                </td>
+               
+            </tr>
+        </tbody>
+    </table>
+</div>

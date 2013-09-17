@@ -1,0 +1,32 @@
+﻿<div id="listPrograms" class="tab-pane">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <p><b>{{day.name}} |</b><small><i>Exercises</i></small></p>
+                <p>
+                    <a class="btn btn-primary" data-ng-click="addExercise()">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Exercise&nbsp;</a>
+                </p>
+            </div>
+
+            <p><small><i>Use this page to create and edit existing exercises.</i></small></p>
+        </div>
+
+        <ul class="list-group">
+            <li data-ng-repeat="exercise in day.exercises" class="list-group-item">
+                <div class="row">
+                    <h4><a data-ng-href="{{exercise.id}}/Sessions" class="col-xs-10" data-toggle="tab" data-ng-click="gotoExercise()" data-ng-hide="exercise.isEditing">{{exercise.name}}</a></h4>
+                    <input class="col-xs-10" type="text" placeholder="Exercise Name" data-ng-model="exercise.name" data-ng-show="exercise.isEditing" />
+                    <a class="col-xs-2 btn btn-large" data-ng-click="saveExercise(exercise)" data-ng-show="exercise.isEditing"><span class="glyphicon glyphicon-ok"></span></a>
+                    <a class="col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse" data-ng-hide="exercise.isEditing"><span class="glyphicon glyphicon-edit"></span></a>
+                    <div class="clearfix">
+                        <br />
+                    </div>
+                    <div id="opt{{$index}}" class="collapse">
+                        <a class="col-xs-6 btn btn-large" data-ng-click="editExercise(exercise)" data-ng-disabled="program.isEditing"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a class="col-xs-6 btn btn-large" data-ng-click="deleteExercise(exercise)"><span class="glyphicon glyphicon-trash"></span></a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

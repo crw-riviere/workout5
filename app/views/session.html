@@ -1,0 +1,69 @@
+﻿<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <ul class="nav nav-pills">
+        <li class="dropdown">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#headerNav" data-target="#ddProgram">PROGRAM <span class="caret"></span>
+            </a>
+        </li>
+        <li class="dropdown">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#headerNav" data-target="#ddDay">DAY <span class="caret"></span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="panel-group" id="headerNav">
+
+        <div class="panel">
+            <div id="ddProgram" class="panel panel-default collapse ">
+
+                <ul class="list-group">
+                    <li data-ng-repeat="program in programs" data-ng-click="loadProgram(program)" class="list-group-item" data-toggle="collapse" data-target="#ddProgram">
+                        <a data-toggle="tab">{{program.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel">
+            <div id="ddDay" class="panel panel-default collapse ">
+
+                <ul class="list-group">
+
+                    <li data-ng-repeat="day in program.days" class="list-group-item" data-toggle="collapse" data-target="#ddDay">
+                        <a data-toggle="tab" data-ng-click="loadDay(day)">{{day.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Session List -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <p><b>Workout</b><i>5</i> <b>|</b><small><i>Sessions</i></small></p>
+            <p>
+                <a class="btn btn-primary" data-ng-click="addSession()">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Session&nbsp;</a>
+            </p>
+        </div>
+
+        <p><small><i>Use this page to create and edit sessions.</i></small></p>
+    </div>
+
+    <ul class="list-group">
+        <li data-ng-repeat="session in sessions" class="list-group-item">
+            <div class="row">
+                <h4><a data-ng-href="Workout/{{session.id}}" class="col-xs-10" data-toggle="tab" data-ng-click="loadSession(session)" data-ng-hide="session.isEditing">{{session.name}}</a></h4>
+                <input class="col-xs-10" type="text" placeholder="Session Name" data-ng-model="session.name" data-ng-show="session.isEditing" />
+                <a class="col-xs-2 btn btn-large" data-ng-click="saveSession(session)" data-ng-show="session.isEditing"><span class="glyphicon glyphicon-ok"></span></a>
+                <a class="col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse" data-ng-hide="session.isEditing"><span class="glyphicon glyphicon-edit"></span></a>
+                <div class="clearfix">
+                    <br />
+                </div>
+                <div id="opt{{$index}}" class="collapse">
+                    <a class="col-xs-6 btn btn-large" data-ng-click="editSession(session)" data-ng-disabled="session.isEditing"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a class="col-xs-6 btn btn-large" data-ng-click="deleteSession(session)"><span class="glyphicon glyphicon-trash"></span></a>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>

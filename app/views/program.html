@@ -5,13 +5,16 @@
                 <p><b>Workout</b><i>5</i> <b>|</b><small><i>Programs</i></small></p>
                 <p>
                     <a data-toggle="modal" data-target="#mdlCreate" class="btn btn-primary">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Program&nbsp;</a>
-                    <modal title="Create Program" text="Please enter a Program name" name="programName" error="error" validate="programExists(programName)" create="addProgram(programName)"></modal>
+                    <modal title="Create Program" text="Please enter a Program name" name="programName" error="error" validate="validProgram(programName)" create="addProgram(programName)"></modal>
                 </p>
             </div>
 
             <p><small><i>Use this page to create and edit existing programs.</i></small></p>
         </div>
         <ul class="list-group">
+            <li class="list-group-item" data-ng-show="programs.length <= 0">
+                <p class="text-center">You have no programs.</p>
+            </li>
             <li data-ng-repeat="program in programs" class="list-group-item">
                 <div class="row">
                     <h4><a data-ng-href="Days/{{program.id}}" class="col-xs-10" data-toggle="tab" data-ng-hide="program.isEditing">{{program.name}}</a></h4>

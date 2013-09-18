@@ -11,7 +11,7 @@
             
 
         },
-        templateUrl: '/app/views/directives/createModal.html',
+        templateUrl: '/app/views/directives/modal.html',
         replace: true,
         transclude: false,
         link: function (scope, element, attrs, controller) {

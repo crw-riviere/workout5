@@ -27,8 +27,8 @@
 
                 <ul class="list-group">
 
-                    <li data-ng-repeat="day in program.days" class="list-group-item" data-toggle="collapse" data-target="#ddDay">
-                        <a data-toggle="tab" data-ng-click="loadDay(day)">{{day.name}}</a>
+                    <li data-ng-repeat="day in program.days" data-ng-click="loadDay(day)" class="list-group-item" data-toggle="collapse" data-target="#ddDay">
+                        <a data-toggle="tab">{{day.name}}</a>
                     </li>
                 </ul>
             </div>
@@ -50,6 +50,9 @@
     </div>
 
     <ul class="list-group">
+         <li class="list-group-item" data-ng-show="sessions.length <= 0">
+                <p class="text-center">You have no sessions.</p>
+            </li>
         <li data-ng-repeat="session in sessions" class="list-group-item">
             <div class="row">
                 <h4><a data-ng-href="Workout/{{session.id}}" class="col-xs-10" data-toggle="tab" data-ng-click="loadSession(session)" data-ng-hide="session.isEditing">{{session.name}}</a></h4>

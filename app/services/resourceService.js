@@ -15,14 +15,15 @@
             id: 'id',
             program: 'program',
             workout: 'workout',
-            day:'day',
+            day: 'day',
             name: 'name',
             exercise: 'exercise',
             session: 'session'
         },
         measuement: {
             weight: {
-                kg:'kg'
+                kg: 'kg',
+                lbs: 'lbs'
             }
         }
     },

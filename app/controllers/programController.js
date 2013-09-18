@@ -7,11 +7,10 @@
         });
 
         $scope.programName = '';
-        $scope.error += '';
+        $scope.error = '';
 
         $scope.$watch('programName', function () {
-            console.log('programName changed');
-            $scope.error = $scope.programExists($scope.programName) ? 'Name exists.' : 'Name free!';
+            $scope.error = $scope.validProgram($scope.programName) ? 'Name free!' : 'Name exists.';
         });
     };
 
@@ -24,6 +23,7 @@
         var newProgram = { name: programName, days: [], isEditing: false };
         entityService.addProgram(newProgram).then(function (program) {
             $scope.programs.push(program);
+            $scope.programName = '';
         })
     };
 
@@ -38,14 +38,14 @@
         })
     }
 
-    $scope.programExists = function(programName) {
-        var exists = false;
+    $scope.validProgram = function (programName) {
+        var valid = true;
         angular.forEach($scope.programs, function (program) {
             if (angular.lowercase(program.name) === angular.lowercase(programName)) {
-                exists = true;                
+                valid = false;
             }
         });
 
-        return exists;
+        return valid;
     }
 });

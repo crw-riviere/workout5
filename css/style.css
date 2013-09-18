@@ -3,11 +3,9 @@ body {
 }
 
 .centered {
-    position: fixed;
-    top: 40%;
-    left: 50%;
-    margin-top: -100px;
-    margin-left: -100px;
+    width: 180px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .home-panel {

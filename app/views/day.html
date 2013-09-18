@@ -12,6 +12,9 @@
         </div>
 
         <ul class="list-group">
+             <li class="list-group-item" data-ng-show="program.days.length <= 0">
+                <p class="text-center">You have no days.</p>
+            </li>
             <li data-ng-repeat="day in program.days" class="list-group-item">
                 <div class="row">
                     <h4><a data-ng-href="Exercises/{{program.id}}/{{day.name}}" class="col-xs-10" data-toggle="tab" data-ng-click="loadDay()" data-ng-hide="day.isEditing">{{day.name}}</a></h4>

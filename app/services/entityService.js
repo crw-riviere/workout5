@@ -28,12 +28,17 @@
     };
 
     self.saveProgram = function (program) {
+        var deferred = $q.defer();
+
         dbService.putEntity(program, resourceService.consts.store.program,
         function (newProgram) {
             $rootScope.$apply(function () {
-                console.log('Saved program ' + newProgram.id);
+                deferred.resolve(newProgram);
             });
         });
+
+        return deferred.promise;
+
     }
 
     self.addProgram = function (program) {
@@ -79,6 +84,18 @@
     //End Day Functions
 
     //Exercise Functions
+
+    self.getExercises = function () {
+        var deferred = $q.defer();
+
+        dbService.getEntities(resourceService.consts.store.exercise, function (exercises) {
+            $rootScope.$apply(function () {
+                deferred.resolve(exercises);
+            });
+        });
+
+        return deferred.promise;
+    };
 
     self.saveExercise = function (exercise) {
         dbService.putEntity(exercise, resourceService.consts.store.exercise,
@@ -155,7 +172,7 @@
 
     //Set Functions
 
-    self.getSetByWorkout = function (workout) {
+    self.getSetsByWorkout = function (workout) {
         var deferred = $q.defer();
         dbService.getEntitiesByIndex(resourceService.consts.index.workout, workout, resourceService.consts.store.set, function (sets) {
             $rootScope.$apply(function () {

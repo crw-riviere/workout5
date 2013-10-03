@@ -1,51 +1,47 @@
-﻿wo5App.controller('ProgramController', function ($scope, entityService) {
+﻿wo5App.controller('ProgramController', function ($scope, entityService, resourceService) {
     init();
 
     function init() {
+        $scope.programs = [];
         entityService.getPrograms().then(function (programs) {
-            $scope.programs = programs;
+            angular.forEach(programs, function (program) {
+                var loadedProgram = { entity: program, operation: resourceService.consts.op.read, error: '' };
+                $scope.programs.push(loadedProgram);
+            });
         });
 
-        $scope.programName = '';
-        $scope.error = '';
-
-        $scope.$watch('programName', function () {
-            $scope.error = $scope.validProgram($scope.programName) ? 'Name free!' : 'Name exists.';
-        });
+        $scope.newProgram = { entity: { name: '' }, error: '' };
     };
 
     $scope.editProgram = function (program) {
-        program.isEditing = true;
+        program.operation = resourceService.consts.op.update;
     };
 
-    $scope.addProgram = function (programName) {
-        console.log('program name: ' + programName);
-        var newProgram = { name: programName, days: [], isEditing: false };
-        entityService.addProgram(newProgram).then(function (program) {
-            $scope.programs.push(program);
-            $scope.programName = '';
+    $scope.addProgram = function (program) {
+        entityService.addProgram(program.entity).then(function (program) {
+            var newProgram = { entity: program, operation: resourceService.consts.op.read, error: '' };
+            $scope.programs.push(newProgram);
+            $scope.newProgram.entity = { name: '' };
         })
     };
 
     $scope.saveProgram = function (program) {
-        program.isEditing = false;
-        entityService.saveProgram(program);
+        program.operation = resourceService.consts.op.read;
+        program.error = '';
+        entityService.saveProgram(program.entity);
     };
 
     $scope.deleteProgram = function (program) {
-        entityService.deleteProgram(program).then(function () {
+        entityService.deleteProgram(program.entity).then(function () {
             $scope.programs.splice($scope.programs.indexOf(program), 1);
         })
-    }
+    };
 
-    $scope.validProgram = function (programName) {
-        var valid = true;
-        angular.forEach($scope.programs, function (program) {
-            if (angular.lowercase(program.name) === angular.lowercase(programName)) {
-                valid = false;
-            }
-        });
+    $scope.validProgram = function (program) {
+        return resourceService.validScopeEntity(program, $scope.programs);
+    };
 
-        return valid;
-    }
+    $scope.validProgramFeedback = function (program) {
+        program.error = $scope.validProgram(program) ? 'Name free!' : 'Name exists.';
+    };
 });

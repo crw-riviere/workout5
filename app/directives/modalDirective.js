@@ -2,18 +2,14 @@
     return {
         restrict: "E",
         scope: {
-            title: "@",
-            text: "@",
-            name: "=",
-            error: "=",
-            validate: "&",
-            create: "&"
-            
-
+            modalid: '@',
+            title: '@',           
+            validation: '&',
+            action: '&'
         },
-        templateUrl: '/app/views/directives/modal.html',
         replace: true,
-        transclude: false,
+        transclude: true,
+        templateUrl: '/app/views/directives/modal.html',
         link: function (scope, element, attrs, controller) {
         }
     }

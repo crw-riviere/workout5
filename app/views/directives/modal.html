@@ -1,4 +1,4 @@
-﻿<div class="modal fade" id="mdlCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+﻿<div class="modal fade" id="{{modalid}}" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -6,14 +6,11 @@
                 <h4 class="modal-title">{{title}}</h4>
             </div>
             <div class="modal-body">
-                <p>{{text}}</p>
-                <input class="form-control" placeholder="" data-ng-model="name">
-                <br />
-                <p>{{error}}</p>
+                <div data-ng-transclude=""></div>                            
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-disabled="!validate()" data-ng-click="create()">Create</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-disabled="!validation()" data-ng-click="action()">Create</button>
             </div>
         </div>
     </div>

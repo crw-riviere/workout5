@@ -3,10 +3,19 @@
         <div class="panel-heading">
             <div class="panel-title">
                 <p><b>Workout</b><i>5</i> <b>|</b><small><i>Programs</i></small></p>
-                <p>
-                    <a data-toggle="modal" data-target="#mdlCreate" class="btn btn-primary">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Program&nbsp;</a>
-                    <modal title="Create Program" text="Please enter a Program name" name="programName" error="error" validate="validProgram(programName)" create="addProgram(programName)"></modal>
-                </p>
+
+                <a data-toggle="modal" data-target="#mdlCreateProgram" class="btn btn-primary">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Program&nbsp;</a>
+
+                <modal
+                    modalid="mdlCreateProgram"
+                    title="Create Program"                  
+                    validation="validProgram(newProgram)"
+                    action="addProgram(newProgram)">
+                         <p>Please enter a program name.</p>
+                <input class="form-control" data-ng-model="newProgram.entity.name" data-ng-change="validProgramFeedback(newProgram)">
+                    <br />
+                    <p>{{newProgram.error}}</p>
+                   </modal>
             </div>
 
             <p><small><i>Use this page to create and edit existing programs.</i></small></p>
@@ -15,19 +24,25 @@
             <li class="list-group-item" data-ng-show="programs.length <= 0">
                 <p class="text-center">You have no programs.</p>
             </li>
+
             <li data-ng-repeat="program in programs" class="list-group-item">
-                <div class="row">
-                    <h4><a data-ng-href="Days/{{program.id}}" class="col-xs-10" data-toggle="tab" data-ng-hide="program.isEditing">{{program.name}}</a></h4>
-                    <input class="col-xs-10" type="text" placeholder="Program Name" data-ng-model="program.name" data-ng-show="program.isEditing" />
-                    <a class="col-xs-2 btn btn-large" data-ng-click="saveProgram(program)" data-ng-show="program.isEditing"><span class="glyphicon glyphicon-ok"></span></a>
-                    <a class="col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse" data-ng-hide="program.isEditing"><span class="glyphicon glyphicon-edit"></span></a>
+                <div data-ng-switch on="program.operation">
+                    <div class="row" data-ng-switch-when="read">
+                        <h4><a data-ng-href="Days/{{program.entity.id}}" class="col-xs-10" data-toggle="tab">{{program.entity.name}}</a></h4>
+                        <a class="col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse"><span class="glyphicon glyphicon-edit"></span></a>
+                    </div>
+                    <div class="row" data-ng-switch-when="update">
+                        <input class="form-control col-xs-10" type="text" placeholder="Program Name" data-ng-model="program.entity.name" data-ng-change="validProgramFeedback(program)" />
+                        <a class="col-xs-2 btn btn-large" data-ng-disabled="!validProgram(program)" data-ng-click="saveProgram(program)"><span class="glyphicon glyphicon-ok"></span></a>
+                    </div>
+                </div>
+                <div id="opt{{$index}}" class="row collapse">
                     <div class="clearfix">
                         <br />
                     </div>
-                    <div id="opt{{$index}}" class="collapse">
-                        <a class="col-xs-6 btn btn-large" data-ng-click="editProgram(program)" data-ng-disabled="program.isEditing"><span class="glyphicon glyphicon-pencil"></span></a>
-                        <a class="col-xs-6 btn btn-large" data-ng-click="deleteProgram(program)"><span class="glyphicon glyphicon-trash"></span></a>
-                    </div>
+                    <p>{{program.error}}</p>
+                    <a class="col-xs-6 btn btn-large" data-ng-click="editProgram(program)"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a class="col-xs-6 btn btn-large" data-ng-click="deleteProgram(program)"><span class="glyphicon glyphicon-trash"></span></a>
                 </div>
             </li>
         </ul>

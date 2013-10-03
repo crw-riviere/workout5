@@ -3,44 +3,55 @@
 
     function init() {
         $scope.weightMeasurement = resourceService.consts.measuement.weight.kg;
+
         entityService.getSession(parseInt($routeParams.sessionId)).then(function (session) {
-            $scope.session = session;
-            $scope.exercise = session.exercises[0];
-            var workout = [$scope.session.id, $scope.exercise.id];
-            entityService.getSetsByWorkout(workout).then(function (sets) {
-                $scope.sets = sets;
+            $scope.session = resourceService.getScopeEntity(session);
+            $scope.exercises = [];
+
+            angular.forEach(session.exercises, function (exerciseId) {
+                entityService.getExercise(exerciseId).then(function (exercise) {
+                    $scope.exercises.push(resourceService.getScopeEntity(exercise));
+                })
+            })
+
+            entityService.getSetsBySession($scope.session.entity.id).then(function (sets) {
+                $scope.sets = resourceService.getScopeEntityCollection(sets);
             })
         });
     };
 
-    $scope.loadSets = function (exercise) {
-        console.log('exercise: ' + exercise);
+    $scope.loadExercise = function (exercise) {
         $scope.exercise = exercise;
-        var workout = [$scope.session.id, $scope.exercise.id];
-        entityService.getSetsByWorkout(workout).then(function (sets) {
-            $scope.sets = sets;
+
+        var sessionExercise = [$scope.session.entity.prevSession, exercise.entity.id];
+        console.log('session exercise:');
+        console.debug(sessionExercise);
+        entityService.getSetsBySessionExercise(sessionExercise).then(function (sets) {
+            $scope.prevSessionExercises = resourceService.getScopeEntityCollection(sets);
         })
     };
 
     $scope.addSet = function () {
-        var newSet = { name: '', session: $scope.session.id, exercise: $scope.exercise.id, reps: 0, weight: 0, measuement: $scope.weightMeasurement, isEditing: true };
-        entityService.addSet(newSet).then(function (set) {
-            $scope.sets.push(set);
-        })
+        var newSet = {
+            entity: { no: $scope.sets.length + 1, session: $scope.session.entity.id, exercise: $scope.exercise.entity.id, reps: 0, weight: 0, measuement: $scope.weightMeasurement },
+            operation: resourceService.consts.op.update
+        };
+
+        $scope.sets.push(newSet);
     };
 
     $scope.editSet = function (set) {
-        set.isEditing = true;
+        set.operation = resourceService.consts.op.update;
     };
 
     $scope.saveSet = function (set) {
-        set.isEditing = false;
-        entityService.saveSet(set).then(function (set) {
+        entityService.saveSet(set.entity).then(function () {
+            set.operation = resourceService.consts.op.read;
         });
     };
 
     $scope.deleteSet = function (set) {
-        entityService.deleteSet(set).then(function () {
+        entityService.deleteSet(set.entity).then(function () {
             $scope.sets.splice($scope.sets.indexOf(set), 1);
         })
     };

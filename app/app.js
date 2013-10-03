@@ -30,7 +30,7 @@ wo5App.config(function ($routeProvider, $locationProvider) {
         templateUrl: 'app/views/exercise.html',
         controller: 'ExerciseController'
     })
-    .when('/Exercises/:programId/:dayId', {
+    .when('/Exercises/:dayId', {
         templateUrl: 'app/views/exercise.html',
         controller: 'ExerciseController'
     })

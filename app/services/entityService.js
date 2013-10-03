@@ -38,7 +38,6 @@
         });
 
         return deferred.promise;
-
     }
 
     self.addProgram = function (program) {
@@ -68,13 +67,59 @@
 
     //Day Functions
 
-    self.getDay = function (programId, dayId) {
+    self.getDay = function (dayId) {
         var deferred = $q.defer();
-        self.getProgram(programId).then(function (program) {
-            angular.forEach(program.days, function (day, key) {
-                if (day.name === dayId) {
-                    deferred.resolve(day);
-                }
+
+        dbService.getEntity(dayId, resourceService.consts.store.day, function (day) {
+            $rootScope.$apply(function () {
+                deferred.resolve(day);
+            });
+        });
+
+        return deferred.promise;
+    };
+
+    self.getDaysByProgram = function (programId) {
+        var deferred = $q.defer();
+        dbService.getEntitiesByIndex(resourceService.consts.index.program, programId, resourceService.consts.store.day, function (days) {
+            $rootScope.$apply(function () {
+                deferred.resolve(days);
+            });
+        });
+
+        return deferred.promise;
+    };
+
+    self.addDay = function (day) {
+        var deferred = $q.defer();
+        dbService.putEntity(day, resourceService.consts.store.day,
+        function (newDay) {
+            $rootScope.$apply(function () {
+                deferred.resolve(newDay);
+            });
+        });
+
+        return deferred.promise;
+    };
+
+    self.deleteDay = function (day) {
+        var deferred = $q.defer();
+        dbService.removeEntity(day, resourceService.consts.store.day, function () {
+            $rootScope.$apply(function () {
+                deferred.resolve();
+            })
+        });
+
+        return deferred.promise;
+    };
+
+    self.saveDay = function (day) {
+        var deferred = $q.defer();
+
+        dbService.putEntity(day, resourceService.consts.store.day,
+        function (newDay) {
+            $rootScope.$apply(function () {
+                deferred.resolve(newDay);
             });
         });
 
@@ -84,6 +129,18 @@
     //End Day Functions
 
     //Exercise Functions
+
+    self.getExercise = function (exerciseId) {
+        var deferred = $q.defer();
+
+        dbService.getEntity(exerciseId, resourceService.consts.store.exercise, function (exercise) {
+            $rootScope.$apply(function () {
+                deferred.resolve(exercise);
+            });
+        });
+
+        return deferred.promise;
+    };
 
     self.getExercises = function () {
         var deferred = $q.defer();
@@ -98,12 +155,16 @@
     };
 
     self.saveExercise = function (exercise) {
+        var deferred = $q.defer();
         dbService.putEntity(exercise, resourceService.consts.store.exercise,
         function (newExercise) {
             $rootScope.$apply(function () {
+                deferred.resolve(newExercise);
             });
         });
-    }
+
+        return deferred.promise;
+    };
 
     self.addExercise = function (exercise) {
         var deferred = $q.defer();
@@ -127,6 +188,24 @@
         return deferred.promise;
     };
 
+    //self.getExercisesByDay = function (day, callback) {
+    //    var deffered = $q.deffered();
+        
+    //    var exerciseCollection = [];
+    //    angular.forEach(day.exercises, function (exerciseId) {
+    //        self.getExercise(exerciseId).then(function (exercise) {
+
+    //        })
+    //    });
+
+    //    $q.all([exerciseCollection]).then(function (results) {
+    //        angular.forEach(results, function (result) {
+    //            console.debug(result);
+    //        })
+    //    })
+             
+    //}
+
     //End Exercise Functions
 
     //Session Functions
@@ -137,6 +216,17 @@
         dbService.getEntity(sessionId, resourceService.consts.store.session, function (session) {
             $rootScope.$apply(function () {
                 deferred.resolve(session);
+            });
+        });
+
+        return deferred.promise;
+    };
+
+    self.getSessionsByDay = function (dayId) {
+        var deferred = $q.defer();
+        dbService.getEntitiesByIndex(resourceService.consts.index.day, dayId, resourceService.consts.store.session, function (sessions) {
+            $rootScope.$apply(function () {
+                deferred.resolve(sessions);
             });
         });
 
@@ -168,6 +258,30 @@
         return deferred.promise;
     };
 
+    self.saveSession = function (session) {
+        var deferred = $q.defer();
+
+        dbService.putEntity(session, resourceService.consts.store.session,
+        function (newSession) {
+            $rootScope.$apply(function () {
+                deferred.resolve(newSession);
+            });
+        });
+
+        return deferred.promise;
+    }
+
+    self.deleteSession = function (session) {
+        var deferred = $q.defer();
+        dbService.removeEntity(session, resourceService.consts.store.session, function () {
+            $rootScope.$apply(function () {
+                deferred.resolve();
+            })
+        });
+
+        return deferred.promise;
+    };
+
     //End Session Functions
 
     //Set Functions
@@ -175,6 +289,29 @@
     self.getSetsByWorkout = function (workout) {
         var deferred = $q.defer();
         dbService.getEntitiesByIndex(resourceService.consts.index.workout, workout, resourceService.consts.store.set, function (sets) {
+            $rootScope.$apply(function () {
+                console.log('ret sets: ' + sets);
+                deferred.resolve(sets);
+            });
+        });
+
+        return deferred.promise;
+    };
+
+    self.getSetsBySession = function (session) {
+        var deferred = $q.defer();
+        dbService.getEntitiesByIndex(resourceService.consts.index.session, session, resourceService.consts.store.set, function (sets) {
+            $rootScope.$apply(function () {           
+                deferred.resolve(sets);
+            });
+        });
+
+        return deferred.promise;
+    };
+
+    self.getSetsBySessionExercise = function (sessionExercise) {
+        var deferred = $q.defer();
+        dbService.getEntitiesByIndex(resourceService.consts.index.sessionExercise, sessionExercise, resourceService.consts.store.set, function (sets) {
             $rootScope.$apply(function () {
                 console.log('ret sets: ' + sets);
                 deferred.resolve(sets);
@@ -221,5 +358,4 @@
     };
 
     //End Set Functions
-
 });

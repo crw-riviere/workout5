@@ -20,19 +20,24 @@
                 var productStore = db.createObjectStore(resourceService.consts.store.program, { keyPath: resourceService.consts.index.id, autoIncrement: true });
                 productStore.createIndex(resourceService.consts.index.name, resourceService.consts.index.name, { unique: true });
 
+                var dayStore = db.createObjectStore(resourceService.consts.store.day, { keyPath: resourceService.consts.index.id, autoIncrement: true });
+                dayStore.createIndex(resourceService.consts.index.name, resourceService.consts.index.name, { unique: false });
+                dayStore.createIndex(resourceService.consts.index.program, resourceService.consts.index.program, { unique: false });
+
                 var exerciseStore = db.createObjectStore(resourceService.consts.store.exercise, { keyPath: resourceService.consts.index.id, autoIncrement: true });
                 exerciseStore.createIndex(resourceService.consts.index.name, resourceService.consts.index.name, { unique: true });
 
                 var sessionStore = db.createObjectStore(resourceService.consts.store.session, { keyPath: resourceService.consts.index.id, autoIncrement: true });
                 sessionStore.createIndex(resourceService.consts.index.name, resourceService.consts.index.name, { unique: false });
+                sessionStore.createIndex(resourceService.consts.index.program, resourceService.consts.index.program, { unique: false });
+                sessionStore.createIndex(resourceService.consts.index.day, resourceService.consts.index.day, { unique: false });
                 sessionStore.createIndex(resourceService.consts.index.workout, [resourceService.consts.index.program, resourceService.consts.index.day], { unique: false });
 
                 var setStore = db.createObjectStore(resourceService.consts.store.set, { keyPath: resourceService.consts.index.id, autoIncrement: true });
                 setStore.createIndex(resourceService.consts.index.name, resourceService.consts.index.name, { unique: false });
                 setStore.createIndex(resourceService.consts.index.exercise, resourceService.consts.index.exercise, { unique: false });
                 setStore.createIndex(resourceService.consts.index.session, resourceService.consts.index.session, { unique: false });
-                setStore.createIndex(resourceService.consts.index.workout, [resourceService.consts.index.session, resourceService.consts.index.exercise], { unique: false });
-
+                setStore.createIndex(resourceService.consts.index.sessionExercise, [resourceService.consts.index.session, resourceService.consts.index.exercise], { unique: false });
             };
 
             request.onerror = function (event) {
@@ -49,13 +54,12 @@
 
     self.getStore = function (storeName, mode) {
         try {
-            console.log('dbService rsc: ' + resourceService.db);
-            console.log('dbService storeName: ' + storeName);
+            console.log('Retrieving store ' + storeName + ' using ' + resourceService.db);
             var tx = resourceService.db.transaction(storeName, mode);
             return tx.objectStore(storeName);
         }
         catch (ex) {
-            console.error('Failed to retrieve store. Ex: ' + ex.message);
+            console.error('Failed to retrieve store ' + storeName + '. Ex: ' + ex.message);
             throw ex;
         }
     };
@@ -127,6 +131,8 @@
             var entityCollection = [];
             var range = IDBKeyRange.only(indexValue);
             var store = self.getStore(storeName, resourceService.consts.op.rw);
+            console.log('Retrieved store ' + storeName);
+            console.log('Retrieving index ' + indexName);
             var index = store.index(indexName);
             var request = index.openCursor(range);
 
@@ -135,7 +141,7 @@
                 if (cursor) {
                     var entity = cursor.value;
                     entityCollection.push(entity);
-                    console.info('Retrieved ' + cursor.value.name + ' from ' + storeName + '.');
+                    console.info('Retrieved ' + cursor.value.name + ' from ' + storeName);
                     cursor.continue();
                 }
                 else {
@@ -154,21 +160,24 @@
 
     self.putEntity = function (entity, storeName, callback) {
         try {
+            console.log('Putting entity ' + entity.id + ': ' + entity.name + ' into store ' + storeName);
             var store = self.getStore(storeName, resourceService.consts.op.rw);
+            console.log('Retrieved store ' + storeName);
             var request = store.put(entity);
 
             request.onsuccess = function (event) {
+                console.log('Successfully put entity ' + entity.id + ': ' + entity.name + ' into ' + storeName);
                 event.target.transaction.objectStore(storeName).get(event.target.result).onsuccess = function (event) {
                     callback(event.target.result);
                 }
             };
 
             request.onerror = function (event) {
-                console.error('Failed to put entity: ' + entity + '. Ex: ' + event.target.errorCode);
+                console.error('Failed to put entity ' + entity.id + ': ' + entity.name + ' into store ' + storeName + '. Ex: ' + event.target.errorCode);
             };
         }
         catch (ex) {
-            console.error('Failed to put entity: ' + entity + '. Ex: ' + ex);
+            console.error('Failed to put entity ' + entity.id + ': ' + entity.name + ' into store ' + storeName + '. Ex: ' + ex.message);
         }
     };
 
@@ -191,4 +200,32 @@
             console.error('Failed to delete entity: ' + entity + '. Ex: ' + ex.message);
         }
     }
+
+    self.getEntityByCount = function (storeName, count, callback) {
+        try {
+            var i = 0;
+            var store = self.getStore(storeName, resourceService.consts.op.rw);
+            console.log('Retrieved store ' + storeName);
+            var request = index.openCursor();
+
+            request.onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    var entity = cursor.value;
+                    console.info('Retrieved ' + cursor.value.name + ' from ' + storeName);
+                    cursor.continue();
+                }
+                else {
+                    callback(entityCollection);
+                }
+            }
+
+            request.onerror = function (event) {
+                console.error('Failed to retrieve ' + indexValue + '. Ex: ' + event.target.errorCode);
+            }
+        }
+        catch (ex) {
+            console.error('Failed to retrieve ' + indexValue + '. Ex: ' + ex.message);
+        }
+    };
 });

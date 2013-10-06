@@ -3,33 +3,77 @@
 
     function init() {
         $scope.weightMeasurement = resourceService.consts.measuement.weight.kg;
+        $scope.sessions = [];
+        $scope.exercises = [];
 
-        entityService.getSession(parseInt($routeParams.sessionId)).then(function (session) {
-            $scope.session = resourceService.getScopeEntity(session);
-            $scope.exercises = [];
-
-            angular.forEach(session.exercises, function (exerciseId) {
-                entityService.getExercise(exerciseId).then(function (exercise) {
-                    $scope.exercises.push(resourceService.getScopeEntity(exercise));
-                })
-            })
-
-            entityService.getSetsBySession($scope.session.entity.id).then(function (sets) {
-                $scope.sets = resourceService.getScopeEntityCollection(sets);
-            })
+        entityService.getPrograms().then(function (programs) {
+            $scope.programs = programs;
+            $('#mdlSessions').modal('show')
         });
+
+        //entityService.getSession(parseInt($routeParams.sessionId)).then(function (session) {
+        //    $scope.session = resourceService.getViewModel(session);
+        //    $scope.exercises = [];
+
+        //    angular.forEach(session.exercises, function (exerciseId) {
+        //        entityService.getExercise(exerciseId).then(function (exercise) {
+        //            $scope.exercises.push(resourceService.getViewModel(exercise));
+
+        //        })
+        //    })
+        //});
     };
 
-    $scope.loadExercise = function (exercise) {
-        $scope.exercise = exercise;
+    $scope.loadProgram = function (program) {
+        $scope.program = program;
 
-        var sessionExercise = [$scope.session.entity.prevSession, exercise.entity.id];
-        console.log('session exercise:');
-        console.debug(sessionExercise);
-        entityService.getSetsBySessionExercise(sessionExercise).then(function (sets) {
-            $scope.prevSessionExercises = resourceService.getScopeEntityCollection(sets);
+        entityService.getDaysByProgram(program.id).then(function (days) {
+            $scope.days = days;
         })
     };
+
+    $scope.loadDay = function (day) {
+        $scope.day = day;
+        entityService.getSessionsByDay(day.id).then(function (sessions) {
+            angular.forEach(sessions, function (session) {
+                $scope.sessions.push({ entity: session, operation: resourceService.consts.op.read });
+            })
+        })
+    };
+
+    $scope.startSession = function () {
+        var newSession = {
+            name: getDateString(),
+            program: $scope.program.id,
+            day: $scope.day.id,
+            exercises: $scope.day.exercises,
+            date: getDateObject(),
+            prevSession: $scope.sessions.length > 0 ? $scope.sessions[$scope.sessions.length - 1].entity.id : null
+        }
+
+        entityService.addSession(newSession).then(function (session) {
+            $scope.session = resourceService.getViewModel(session);
+        });
+
+        $scope.exercises = [];
+
+        angular.forEach($scope.day.exercises, function (exerciseId) {
+            entityService.getExercise(exerciseId).then(function (exercise) {
+                $scope.exercises.push(resourceService.getViewModel(exercise));
+            })
+        })
+    };
+
+    //$scope.loadExercise = function (exercise) {
+    //    $scope.exercise = exercise;
+
+    //    var sessionExercise = [$scope.session.entity.prevSession, exercise.entity.id];
+    //    console.log('session exercise:');
+    //    console.debug(sessionExercise);
+    //    entityService.getSetsBySessionExercise(sessionExercise).then(function (sets) {
+    //        $scope.prevSessionExercises = resourceService.getViewModelCollection(sets);
+    //    })
+    //};
 
     $scope.addSet = function () {
         var newSet = {
@@ -79,4 +123,15 @@
         });
         $scope.weightMeasurement = resourceService.consts.measuement.weight.lbs
     };
+
+    function getDateString() {
+        var date = resourceService.date();
+
+        return date.day + '/' + date.month + '/' + date.yearShort;
+    };
+
+    function getDateObject() {
+        return resourceService.date();
+    };
+
 });

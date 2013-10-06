@@ -38,6 +38,10 @@ wo5App.config(function ($routeProvider, $locationProvider) {
         templateUrl: 'app/views/session.html',
         controller: 'SessionController'
     })
+          .when('/Workout', {
+              templateUrl: 'app/views/workout.html',
+              controller: 'WorkoutController'
+          })
     .when('/Workout/:sessionId', {
         templateUrl: 'app/views/workout.html',
         controller: 'WorkoutController'

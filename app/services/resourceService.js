@@ -74,11 +74,11 @@
         return valid;
     };
 
-    self.getScopeEntity = function (entity) {
+    self.getViewModel = function (entity) {
         return { entity: entity, operation: self.consts.op.read, error: '' };
     };
 
-    self.getScopeEntityCollection = function (entities) {
+    self.getViewModelCollection = function (entities) {
         var entityCollection = [];
         angular.forEach(entities, function (entity) {
             entityCollection.push({ entity: entity, operation: self.consts.op.read, error: '' });

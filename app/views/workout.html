@@ -1,4 +1,35 @@
-﻿<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+﻿<div class="modal fade" id="mdlSessions" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                <h4 class="modal-title">Select Program</h4>
+            </div>
+            <div class="modal-body">
+                <select data-ng-model="program" data-ng-options="program.name for program in programs" data-ng-click="loadProgram(program)">
+                    <option value="">-- select program --</option>
+                </select>
+
+                <div class="clearfix visible">
+                    <br />
+                </div>
+
+                <select data-ng-model="day" data-ng-options="day.name for day in days" data-ng-click="loadDay(day)" data-ng-show="program">
+                    <option value="">-- select day --</option>
+                </select>
+
+                <div class="clearfix visible">
+                    <br />
+                </div>
+
+                <a class="btn btn-primary  col-xs-12 " data-ng-click="startSession()" data-ng-show="day" data-dismiss="modal">Start Workout</a>
+            </div>          
+        </div>
+    </div>
+</div>
+
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <ul class="nav nav-pills">
         <li class="dropdown">
             <a class="accordion-toggle" data-toggle="collapse" data-parent="#headerNav" data-target="#ddExercise">EXERCISE <span class="caret"></span>
@@ -42,7 +73,7 @@
             </label>
 
             <label class="col-xs-4 accordion-toggle" data-parent="#optionsWokrout" data-target="#prevSessionExercises" data-toggle="collapse">
-                <span class="caret"></span>&nbsp;<small><b>Previous Session </b></small>
+                <span class="caret"></span>&nbsp;<small><b>Previous</b></small>
             </label>
         </div>
 
@@ -58,6 +89,15 @@
             </div>
             <div id="prevSessionExercises" class="collapse">
                 <ul class="list-group">
+                    <li class="list-group-item">
+
+                        <div class="row">
+                            <h6 class="col-xs-2">No.</h6>
+                            <h6 class="col-xs-4">Reps</h6>
+                            <h6 class="col-xs-3">Weight</h6>
+                            <h6 class="col-xs-1"></h6>
+                        </div>
+                    </li>
                     <li data-ng-repeat="set in prevSessionExercises" class="list-group-item">
                         <div data-ng-switch on="set.operation">
                             <div class="row" data-ng-switch-when="read">

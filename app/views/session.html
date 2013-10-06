@@ -56,13 +56,65 @@
         <li data-ng-repeat="session in sessions" class="list-group-item">
             <div data-ng-switch on="session.operation">
                 <div class="row" data-ng-switch-when="read">
-                    <h4><a data-ng-href="Workout/{{session.entity.id}}" class="col-xs-10" data-toggle="tab">{{session.entity.name}}</a></h4>
+                    <h4><a data-ng-click="loadSession(session)" data-target="#sets{{session.entity.id}}" data-toggle="collapse" class="col-xs-10" data-toggle="tab">{{session.entity.name}}</a></h4>
                     <a class="col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse"><span class="glyphicon glyphicon-edit"></span></a>
                 </div>
                 <div class="row" data-ng-switch-when="update">
                     <input class="col-xs-10" type="text" placeholder="Session Name" data-ng-model="session.entity.name" />
                     <a class="col-xs-2 btn btn-large" data-ng-click="saveSession(session)"><span class="glyphicon glyphicon-ok"></span></a>
                 </div>
+            </div>
+
+            <!--Set List-->
+
+            <div id="sets{{session.entity.id}}" class="row collapse">
+
+                <select data-ng-model="exercise"
+                    data-ng-options="exercise.entity.name for exercise in exercises"
+                    data-ng-click="loadExercise(session,exercise)">
+                    <option value="">select exercise</option>
+                </select>
+
+                <div class="clearfix visible">
+                    <br />
+                </div>
+
+                <ul class="list-group">
+                    <li class="row">
+                        <h6 class="col-xs-2">{{session.exercises.length}}</h6>
+                        <h6 class="col-xs-4">Rep</h6>
+                        <h6 class="col-xs-4">Weight</h6>
+                    </li>
+
+                    <li class="list-group-item" data-ng-show="sets.length <= 0">
+                        <p class="text-center">There are no sets for this exercise.</p>
+                    </li>
+
+                    <li data-ng-repeat="set in session.sets" class="list-group-item">
+                        <div data-ng-switch on="set.operation">
+                            <div class="row" data-ng-switch-when="read">
+                                <h6 class="col-xs-2">{{set.entity.no}}.</h6>
+                                <h6 class="col-xs-4">{{set.entity.reps}}</h6>
+                                <h6 class="col-xs-3">{{set.entity.weight}}</h6>
+                                <h6 class="col-xs-1">{{set.entity.measuement}}</h6>
+                            </div>
+
+                            <div class="row" data-ng-switch-when="update">
+
+                                <h4 class="col-xs-2">{{set.entity.no}}.</h4>
+
+                                <input class="col-xs-4" type="number"
+                                    data-ng-model="set.entity.reps" />
+
+                                <input class="col-xs-3" type="number"
+                                    data-ng-model="set.entity.weight" />
+                                <label class="col-xs-1">{{set.entity.measuement}}</label>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <!--End Set List-->
             </div>
             <div id="opt{{$index}}" class="row collapse">
                 <div class="clearfix">

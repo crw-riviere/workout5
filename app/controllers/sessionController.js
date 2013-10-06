@@ -3,6 +3,8 @@
 
     function init() {
         $scope.sessions = [];
+        $scope.exercises = [];
+
         var programs = entityService.getPrograms().then(function (programs) {
             $scope.programs = programs;
         });
@@ -29,7 +31,24 @@
                 $scope.sessions.push({ entity: session, operation: resourceService.consts.op.read });
             })
         })
+
+        angular.forEach(day.exercises, function (exerciseId) {
+            entityService.getExercise(exerciseId).then(function (exercise) {
+                $scope.exercises.push(resourceService.getViewModel(exercise));
+
+            })
+        })
     };
+
+    $scope.loadExercise = function (session,exercise) {       
+
+        var sessionExercise = [session.entity.id, exercise.entity.id];       
+        console.debug(sessionExercise);
+        entityService.getSetsBySessionExercise(sessionExercise).then(function (sets) {
+            session.sets = resourceService.getViewModelCollection(sets);
+        })
+           
+    }
 
     $scope.editSession = function (session) {
         session.operation = resourceService.consts.op.update;
@@ -41,20 +60,20 @@
         });
     };
 
-    $scope.addSession = function () {
-        var newSession = {
-            name: getDateString(),
-            program: $scope.program.id,
-            day: $scope.day.id,
-            exercises: $scope.day.exercises,
-            date: getDateObject(),
-            prevSession: $scope.sessions.length > 0 ? $scope.sessions[$scope.sessions.length -1].entity.id : null
-        }
+    //$scope.addSession = function () {
+    //    var newSession = {
+    //        name: getDateString(),
+    //        program: $scope.program.id,
+    //        day: $scope.day.id,
+    //        exercises: $scope.day.exercises,
+    //        date: getDateObject(),
+    //        prevSession: $scope.sessions.length > 0 ? $scope.sessions[$scope.sessions.length -1].entity.id : null
+    //    }
 
-        entityService.addSession(newSession).then(function (session) {
-            $scope.sessions.push({ entity: session, operation: resourceService.consts.op.read });
-        });
-    };
+    //    entityService.addSession(newSession).then(function (session) {
+    //        $scope.sessions.push({ entity: session, operation: resourceService.consts.op.read });
+    //    });
+    //};
 
     $scope.deleteSession = function (session) {
         entityService.deleteSession(session.entity).then(function () {
@@ -62,13 +81,5 @@
         });
     };
 
-    function getDateString() {
-        var date = resourceService.date();
-
-        return date.day + '/' + date.month + '/' + date.yearShort;
-    };
-
-    function getDateObject() {
-        return resourceService.date();
-    };
+   
 });

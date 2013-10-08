@@ -32,22 +32,17 @@
             })
         })
 
-        angular.forEach(day.exercises, function (exerciseId) {
-            entityService.getExercise(exerciseId).then(function (exercise) {
-                $scope.exercises.push(resourceService.getViewModel(exercise));
-
-            })
+        entityService.getExercisesByDay($scope.day).then(function (exercises) {
+            $scope.exercises = resourceService.getViewModelCollection(exercises);
         })
     };
 
-    $scope.loadExercise = function (session,exercise) {       
-
-        var sessionExercise = [session.entity.id, exercise.entity.id];       
+    $scope.loadExercise = function (session, exercise) {
+        var sessionExercise = [session.entity.id, exercise.entity.id];
         console.debug(sessionExercise);
         entityService.getSetsBySessionExercise(sessionExercise).then(function (sets) {
             session.sets = resourceService.getViewModelCollection(sets);
         })
-           
     }
 
     $scope.editSession = function (session) {
@@ -80,6 +75,4 @@
             $scope.sessions.splice($scope.sessions.indexOf(session), 1);
         });
     };
-
-   
 });

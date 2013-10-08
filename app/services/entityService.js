@@ -188,23 +188,20 @@
         return deferred.promise;
     };
 
-    //self.getExercisesByDay = function (day, callback) {
-    //    var deffered = $q.deffered();
-        
-    //    var exerciseCollection = [];
-    //    angular.forEach(day.exercises, function (exerciseId) {
-    //        self.getExercise(exerciseId).then(function (exercise) {
+    self.getExercisesByDay = function (day, callback) {
+        var deferred = $q.defer();
+        var promises = [];
 
-    //        })
-    //    });
+        angular.forEach(day.exercises, function (exercise) {
+            promises.push(self.getExercise(exercise.id));
+        })
 
-    //    $q.all([exerciseCollection]).then(function (results) {
-    //        angular.forEach(results, function (result) {
-    //            console.debug(result);
-    //        })
-    //    })
-             
-    //}
+        $q.all(promises).then(function (exercises) {
+            deferred.resolve(exercises);
+        })
+
+        return deferred.promise;
+    };
 
     //End Exercise Functions
 
@@ -301,7 +298,7 @@
     self.getSetsBySession = function (session) {
         var deferred = $q.defer();
         dbService.getEntitiesByIndex(resourceService.consts.index.session, session, resourceService.consts.store.set, function (sets) {
-            $rootScope.$apply(function () {           
+            $rootScope.$apply(function () {
                 deferred.resolve(sets);
             });
         });
@@ -313,7 +310,6 @@
         var deferred = $q.defer();
         dbService.getEntitiesByIndex(resourceService.consts.index.sessionExercise, sessionExercise, resourceService.consts.store.set, function (sets) {
             $rootScope.$apply(function () {
-                console.log('ret sets: ' + sets);
                 deferred.resolve(sets);
             });
         });
@@ -354,6 +350,17 @@
                 deferred.resolve();
             })
         });
+        return deferred.promise;
+    };
+
+    self.getSetByExerciseWeightMax = function (exerciseId) {
+        var deferred = $q.defer();
+
+        dbService.getEntityByIndexHighestValue(resourceService.consts.index.exercise, exerciseId, 'weight', resourceService.consts.store.set, function (set) {
+            $rootScope.$apply(function () {
+                deferred.resolve(set);
+            });
+        })
         return deferred.promise;
     };
 

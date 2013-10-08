@@ -19,8 +19,7 @@
                     var loadedExercise = { entity: exercise, operation: resourceService.consts.op.read, error: '' };
                     $scope.exercises.push(loadedExercise);
                 })
-            })           
-               
+            })
         });
 
         $scope.newExercise = { entity: { name: '', }, error: '' };
@@ -33,7 +32,7 @@
     $scope.addExercise = function (exercise) {
         entityService.addExercise(exercise.entity).then(function (exercise) {
             //Add id to day.exercises
-            $scope.day.entity.exercises.push(exercise.id);
+            $scope.day.entity.exercises.push({ id: exercise.id });
             entityService.saveDay($scope.day.entity).then(function () {
                 //Add exercise to scope.exercises
                 var newExercise = { entity: exercise, operation: resourceService.consts.op.read, error: '' };
@@ -43,14 +42,14 @@
         })
     };
 
-    $scope.saveExercise = function (exercise) {       
-            entityService.saveDay(day.entity).then(function () {
-                day.operation = resourceService.consts.op.read;
-                day.error = '';               
-                entityService.saveProgram($scope.program).then(function () {
-                    exercise.operation = resourceService.consts.op.update;
-                })
-            });                   
+    $scope.saveExercise = function (exercise) {
+        entityService.saveDay(day.entity).then(function () {
+            day.operation = resourceService.consts.op.read;
+            day.error = '';
+            entityService.saveProgram($scope.program).then(function () {
+                exercise.operation = resourceService.consts.op.update;
+            })
+        });
     };
 
     $scope.deleteExercise = function (exercise) {

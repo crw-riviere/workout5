@@ -6,7 +6,7 @@
                 <h4 class="modal-title">Select Program</h4>
             </div>
             <div class="modal-body">
-                <select data-ng-model="program" data-ng-options="program.name for program in programs" data-ng-click="loadProgram(program)">
+                <select data-ng-model="program" data-ng-options="program.name for program in programs" data-ng-change="loadProgram(program)">
                     <option value="">-- select program --</option>
                 </select>
 
@@ -14,7 +14,7 @@
                     <br />
                 </div>
 
-                <select data-ng-model="day" data-ng-options="day.name for day in days" data-ng-click="loadDay(day)" data-ng-show="program">
+                <select data-ng-model="day" data-ng-options="day.name for day in days" data-ng-change="loadDay(day)" data-ng-show="program">
                     <option value="">-- select day --</option>
                 </select>
 
@@ -23,11 +23,10 @@
                 </div>
 
                 <a class="btn btn-primary  col-xs-12 " data-ng-click="startSession()" data-ng-show="day" data-dismiss="modal">Start Workout</a>
-            </div>          
+            </div>
         </div>
     </div>
 </div>
-
 
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <ul class="nav nav-pills">
@@ -75,6 +74,10 @@
             <label class="col-xs-4 accordion-toggle" data-parent="#optionsWokrout" data-target="#prevSessionExercises" data-toggle="collapse">
                 <span class="caret"></span>&nbsp;<small><b>Previous</b></small>
             </label>
+
+            <label class="col-xs-4 accordion-toggle" data-parent="#optionsWokrout" data-target="#exerciseMaxWeight" data-toggle="collapse">
+                <span class="caret"></span>&nbsp;<small><b>Record</b></small>
+            </label>
         </div>
 
         <div id="optionsWokrout">
@@ -88,41 +91,66 @@
                 </a>
             </div>
             <div id="prevSessionExercises" class="collapse">
-                <ul class="list-group">
-                    <li class="list-group-item">
-
-                        <div class="row">
-                            <h6 class="col-xs-2">No.</h6>
-                            <h6 class="col-xs-4">Reps</h6>
-                            <h6 class="col-xs-3">Weight</h6>
-                            <h6 class="col-xs-1"></h6>
-                        </div>
-                    </li>
-                    <li data-ng-repeat="set in prevSessionExercises" class="list-group-item">
-                        <div data-ng-switch on="set.operation">
-                            <div class="row" data-ng-switch-when="read">
-                                <h6 class="col-xs-2">{{set.no}}.</h6>
-                                <h6 class="col-xs-4">{{set.entity.reps}}</h6>
-                                <h6 class="col-xs-3">{{set.entity.weight}}</h6>
-                                <h6 class="col-xs-1">{{set.measuement}}</h6>
-                            </div>
-                    </li>
-                </ul>
+               <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <td>Set
+                            </td>
+                            <td>Rep
+                            </td>
+                            <td>Weight
+                            </td>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="set in prevSessionSets">
+                            <td>{{set.entity.no}}.
+                            </td>
+                            <td>{{set.entity.reps}}
+                            </td>
+                            <td>{{set.entity.weight}} {{maxWeightSet.entity.measuement}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>                
+            </div>
+            <div id="exerciseMaxWeight" class="collapse">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <td>Set
+                            </td>
+                            <td>Rep
+                            </td>
+                            <td>Weight
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{maxWeightSet.entity.no}}.
+                            </td>
+                            <td>{{maxWeightSet.entity.reps}}
+                            </td>
+                            <td>{{maxWeightSet.entity.weight}} {{maxWeightSet.entity.measuement}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <div class="clearfix">
-        <br />
-    </div>
-
-    <br />
+      
+    </div>  
 
     <ul class="list-group">
         <li class="row">
-            <h4 class="col-xs-2">Set</h4>
-            <h4 class="col-xs-4">Rep</h4>
-            <h4 class="col-xs-4">Weight</h4>
+            <h4 class="col-xs-2">Set</h4>    
+            <h4 class="col-xs-2">Rep</h4>
+            <h4 class="col-xs-3">Weight</h4>
+            <h4 class="col-xs-5">% of Max</h4>
         </li>
 
         <li class="list-group-item" data-ng-show="sets.length <= 0">
@@ -132,10 +160,10 @@
         <li data-ng-repeat="set in sets" class="list-group-item">
             <div data-ng-switch on="set.operation">
                 <div class="row" data-ng-switch-when="read">
-                    <h6 class="col-xs-2">{{set.no}}.</h6>
-                    <h6 class="col-xs-4">{{set.entity.reps}}</h6>
-                    <h6 class="col-xs-3">{{set.entity.weight}}</h6>
-                    <h6 class="col-xs-1">{{set.measuement}}</h6>
+                    <h6 class="col-xs-2">{{set.entity.no}}.</h6>
+                    <h6 class="col-xs-2">{{set.entity.reps}}</h6>
+                    <h6 class="col-xs-3">{{set.entity.weight}} {{set.entity.measuement}}</h6>
+                    <h6 class="col-xs-3">{{set.weightMaxPercent}} %</h6>
                     <a class="btn btn-link btn-default btn-lg col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse">
                         <span class="glyphicon glyphicon-edit"></span>
                     </a>
@@ -143,14 +171,14 @@
 
                 <div class="row" data-ng-switch-when="update">
 
-                    <h4 class="col-xs-2">{{set.no}}.</h4>
+                    <h4 class="col-xs-2">{{set.entity.no}}.</h4>
 
-                    <input class="col-xs-4" type="number"
+                    <input class="col-xs-2" type="number"
                         data-ng-model="set.entity.reps" />
 
                     <input class="col-xs-3" type="number"
                         data-ng-model="set.entity.weight" />
-                    <label class="col-xs-1">{{set.measuement}}</label>
+                    <label class="col-xs-3">{{set.entity.measuement}}</label>
 
                     <a class="col-xs-2 btn btn-link btn-default btn-lg" data-ng-click="saveSet(set)">
                         <span class="glyphicon glyphicon-ok"></span>
@@ -167,77 +195,4 @@
             </div>
         </li>
     </ul>
-    <!-- <table class="table" id="workout">
-        <thead>
-            <tr>
-                <th>
-                    <small><b>SET</b></small>
-                </th>
-                <th>
-                    <small><b>REPS</b></small>
-                </th>
-                <th>
-                    <small><b>WEIGHT</b></small>
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody data-ng-show="sets.length <= 0">
-            <tr>
-                <td colspan="4">
-                    <p class="text-center">You have no sets.</p>
-                </td>
-            </tr>
-        </tbody>
-        <tbody data-ng-repeat="set in sets" data-ng-switch on="workout.operation">
-            <tr data-ng-switch-when="read">
-                <td class="col-xs-3">
-                    <h4>{{$index + 1}}.</h4>
-                </td>
-                <td class="col-xs-3">
-                    <h4>{{set.entity.reps}}</h4>
-                </td>
-                <td class="col-xs-4">
-                    <h4>{{set.entity.weight}}{{set.weightMeasurement}}</h4>
-                </td>
-                <td class="col-xs-2">
-                    <div class="btn-group">
-                        <a class="btn btn-link btn-default btn-lg" data-target="#opt{{$index}}" data-toggle="collapse">
-                            <span class="glyphicon glyphicon-edit"></span>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-
-            <tr data-ng-switch-when="update">
-                <td class="col-xs-2">
-                    <h4>{{$index + 1}}.</h4>
-                </td>
-
-                <td class="col-xs-3">
-                    <input class="form-control" type="number"
-                        data-ng-model="set.entity.reps" />
-                </td>
-                <td class="col-xs-5">
-                    <div class="">
-                        <input class="form-control" type="number"
-                            data-ng-model="set.entity.weight" />
-                        <p>{{weightMeasurement}}</p>
-                    </div>
-                </td>
-                <td class="col-xs-2">
-                    <a class="btn btn-link btn-default btn-lg" data-ng-click="saveSet(set)">
-                        <span class="glyphicon glyphicon-ok"></span>
-                    </a>
-                </td>
-            </tr>
-
-            <tr id="opt{{$index}}" class="collapse">
-                <td class="row" colspan="4">
-                    <a class="col-xs-6 btn btn-large" data-ng-click="editSet(set)" data-ng-disabled="set.isEditing"><span class="glyphicon glyphicon-pencil"></span></a>
-                    <a class="col-xs-6 btn btn-large" data-ng-click="deleteSet(set)"><span class="glyphicon glyphicon-trash"></span></a>
-                </td>
-            </tr>
-        </tbody>
-    </table>-->
 </div>

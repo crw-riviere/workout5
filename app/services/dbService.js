@@ -228,4 +228,39 @@
             console.error('Failed to retrieve ' + indexValue + '. Ex: ' + ex.message);
         }
     };
+
+    self.getEntityByIndexHighestValue = function (indexName, indexValue, entityProp, storeName, callback) {
+        try {
+            var highestValueEntity;
+            var range = IDBKeyRange.only(indexValue);
+            var store = self.getStore(storeName, 'readwrite');
+            console.log('Retrieved store ' + storeName);
+            console.log('Retrieving index ' + indexName);
+            var index = store.index(indexName);
+            var request = index.openCursor(range);
+
+            request.onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    var entity = cursor.value;
+                    if (!highestValueEntity || entity[entityProp] > highestValueEntity[entityProp]) {
+                        console.log('entity value higher, assigning');
+                        highestValueEntity = entity;
+                    }
+
+                    cursor.continue();
+                }
+                else {
+                    callback(highestValueEntity);
+                }
+            }
+
+            request.onerror = function (event) {
+                console.error('Failed to retrieve ' + indexValue + ' by its highest value. Ex: ' + event.target.errorCode);
+            }
+        }
+        catch (ex) {
+            console.error('Failed to retrieve ' + indexValue + ' by its highest value. Ex: ' + ex.message);
+        }
+    }
 });

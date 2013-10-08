@@ -9,7 +9,7 @@
 
             entityService.getDaysByProgram(program.id).then(function (days) {
                 angular.forEach(days, function (day) {
-                    var loadedDay = { entity: day, operation: resourceService.consts.op.read, error: '' };
+                    var loadedDay = resourceService.getViewModal(day);
                     $scope.days.push(loadedDay);
                 });
             })

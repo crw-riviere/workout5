@@ -1,4 +1,4 @@
-﻿wo5App.controller('WorkoutController', function ($scope, $routeParams, resourceService, entityService) {
+﻿wo5App.controller('WorkoutController', function ($scope, $routeParams, $q, resourceService, entityService) {
     init();
 
     function init() {
@@ -10,18 +10,6 @@
             $scope.programs = programs;
             $('#mdlSessions').modal('show')
         });
-
-        //entityService.getSession(parseInt($routeParams.sessionId)).then(function (session) {
-        //    $scope.session = resourceService.getViewModel(session);
-        //    $scope.exercises = [];
-
-        //    angular.forEach(session.exercises, function (exerciseId) {
-        //        entityService.getExercise(exerciseId).then(function (exercise) {
-        //            $scope.exercises.push(resourceService.getViewModel(exercise));
-
-        //        })
-        //    })
-        //});
     };
 
     $scope.loadProgram = function (program) {
@@ -42,6 +30,7 @@
     };
 
     $scope.startSession = function () {
+        $scope.exercises = [];
         var newSession = {
             name: getDateString(),
             program: $scope.program.id,
@@ -53,35 +42,47 @@
 
         entityService.addSession(newSession).then(function (session) {
             $scope.session = resourceService.getViewModel(session);
-        });
-
-        $scope.exercises = [];
-
-        angular.forEach($scope.day.exercises, function (exerciseId) {
-            entityService.getExercise(exerciseId).then(function (exercise) {
-                $scope.exercises.push(resourceService.getViewModel(exercise));
+            entityService.getExercisesByDay($scope.day).then(function (exercises) {
+                $scope.exercises = resourceService.getViewModelCollection(exercises);
+                $scope.loadExercise($scope.exercises[0]);
             })
+        });
+    }
+
+    $scope.loadExercise = function (exercise) {
+        $scope.exercise = exercise;
+
+        var sessionExercise = [$scope.session.entity.id, exercise.entity.id];
+        var prevSessionExercise = [$scope.session.entity.prevSession, exercise.entity.id];
+
+        entityService.getSetsBySessionExercise(sessionExercise).then(function (sets) {
+            $scope.sets = resourceService.getViewModelCollection(sets);
+        })
+
+        entityService.getSetsBySessionExercise(prevSessionExercise).then(function (sets) {
+            $scope.prevSessionSets = resourceService.getViewModelCollection(sets);
+        })
+
+        entityService.getSetByExerciseWeightMax(exercise.entity.id).then(function (sets) {
+            $scope.maxWeightSet = resourceService.getViewModel(sets);
         })
     };
 
-    //$scope.loadExercise = function (exercise) {
-    //    $scope.exercise = exercise;
-
-    //    var sessionExercise = [$scope.session.entity.prevSession, exercise.entity.id];
-    //    console.log('session exercise:');
-    //    console.debug(sessionExercise);
-    //    entityService.getSetsBySessionExercise(sessionExercise).then(function (sets) {
-    //        $scope.prevSessionExercises = resourceService.getViewModelCollection(sets);
-    //    })
-    //};
-
     $scope.addSet = function () {
-        var newSet = {
-            entity: { no: $scope.sets.length + 1, session: $scope.session.entity.id, exercise: $scope.exercise.entity.id, reps: 0, weight: 0, measuement: $scope.weightMeasurement },
-            operation: resourceService.consts.op.update
+        var set = {
+            no: $scope.sets.length + 1,
+            session: $scope.session.entity.id,
+            exercise: $scope.exercise.entity.id,
+            reps: 0,
+            weight: 0,
+            measuement: $scope.weightMeasurement
         };
 
-        $scope.sets.push(newSet);
+        entityService.addSet(set).then(function (newSet) {
+            var set = resourceService.getViewModel(newSet);
+            set.operation = resourceService.consts.op.update;
+            $scope.sets.push(set);
+        })
     };
 
     $scope.editSet = function (set) {
@@ -91,6 +92,7 @@
     $scope.saveSet = function (set) {
         entityService.saveSet(set.entity).then(function () {
             set.operation = resourceService.consts.op.read;
+            set.weightMaxPercent = getWeightMaxPercantage(set);
         });
     };
 
@@ -124,6 +126,13 @@
         $scope.weightMeasurement = resourceService.consts.measuement.weight.lbs
     };
 
+    function getWeightMaxPercantage(set) {
+        var maxWeight = $scope.maxWeightSet.entity.weight;
+        var setWeight = set.entity.weight;
+
+        return ((setWeight / maxWeight) * 100).toFixed(2);
+    }
+
     function getDateString() {
         var date = resourceService.date();
 
@@ -133,5 +142,4 @@
     function getDateObject() {
         return resourceService.date();
     };
-
 });

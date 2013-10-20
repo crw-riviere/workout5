@@ -18,7 +18,7 @@
         },
         index: {
             id: 'id',
-            program: 'program',           
+            program: 'program',
             day: 'day',
             name: 'name',
             exercise: 'exercise',
@@ -49,8 +49,9 @@
         return { year: yyyy, yearShort: yy, month: mm, day: dd, hour: h, minute: m, second: s };
     };
 
-    self.validScopeEntity = function (valEntity, entityCollection) {
+    self.validViewModelEntity = function (valEntity, entityCollection) {
         var valid = true;
+
         angular.forEach(entityCollection, function (scopeEntity) {
             if (scopeEntity.entity.id !== valEntity.entity.id &&
                 angular.lowercase(scopeEntity.entity.name) === angular.lowercase(valEntity.entity.name)) {
@@ -63,6 +64,7 @@
 
     self.validEntity = function (valEntity, entityCollection) {
         var valid = true;
+
         angular.forEach(entityCollection, function (entity) {
             if (entity.id !== valEntity.id &&
                 angular.lowercase(entity.name) === angular.lowercase(valEntity.name)) {
@@ -73,14 +75,14 @@
         return valid;
     };
 
-    self.getViewModel = function (entity) {
-        return { entity: entity, operation: self.consts.op.read, error: '' };
+    self.getViewModel = function (entity, operation) {
+        return { entity: entity || {}, operation: operation || self.consts.op.read, error: '' };
     };
 
-    self.getViewModelCollection = function (entities) {
+    self.getViewModelCollection = function (entities, operation) {
         var entityCollection = [];
         angular.forEach(entities, function (entity) {
-            entityCollection.push({ entity: entity, operation: self.consts.op.read, error: '' });
+            entityCollection.push({ entity: entity, operation: operation || self.consts.op.read, error: '' });
         });
 
         return entityCollection;

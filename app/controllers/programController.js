@@ -38,7 +38,7 @@
     };
 
     $scope.validProgram = function (program) {
-        return resourceService.validScopeEntity(program, $scope.programs);
+        return resourceService.validViewModelEntity(program, $scope.programs);
     };
 
     $scope.validProgramFeedback = function (program) {

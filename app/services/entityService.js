@@ -142,7 +142,7 @@
         return deferred.promise;
     };
 
-    self.getExercises = function () {
+    self.getAllExercises = function () {
         var deferred = $q.defer();
 
         dbService.getEntities(resourceService.consts.store.exercise, function (exercises) {
@@ -188,7 +188,7 @@
         return deferred.promise;
     };
 
-    self.getExercisesByDay = function (day, callback) {
+    self.getExercisesByDay = function (day) {
         var deferred = $q.defer();
         var promises = [];
 
@@ -282,8 +282,6 @@
     //End Session Functions
 
     //Set Functions
-
-    
 
     self.getSetsBySession = function (session) {
         var deferred = $q.defer();

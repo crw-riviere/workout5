@@ -230,17 +230,17 @@
         return deferred.promise;
     };
 
-    self.getSessionsByWorkout = function (workout) {
-        var deferred = $q.defer();
-        dbService.getEntitiesByIndex(resourceService.consts.index.workout, workout, resourceService.consts.store.session, function (sessions) {
-            $rootScope.$apply(function () {
-                console.log('ret sessions: ' + sessions);
-                deferred.resolve(sessions);
-            });
-        });
+    //self.getSessionsByWorkout = function (workout) {
+    //    var deferred = $q.defer();
+    //    dbService.getEntitiesByIndex(resourceService.consts.index.workout, workout, resourceService.consts.store.session, function (sessions) {
+    //        $rootScope.$apply(function () {
+    //            console.log('ret sessions: ' + sessions);
+    //            deferred.resolve(sessions);
+    //        });
+    //    });
 
-        return deferred.promise;
-    };
+    //    return deferred.promise;
+    //};
 
     self.addSession = function (session) {
         var deferred = $q.defer();
@@ -283,11 +283,12 @@
 
     //Set Functions
 
-    self.getSetsByWorkout = function (workout) {
+    
+
+    self.getSetsBySession = function (session) {
         var deferred = $q.defer();
-        dbService.getEntitiesByIndex(resourceService.consts.index.workout, workout, resourceService.consts.store.set, function (sets) {
+        dbService.getEntitiesByIndex(resourceService.consts.index.session, session, resourceService.consts.store.set, function (sets) {
             $rootScope.$apply(function () {
-                console.log('ret sets: ' + sets);
                 deferred.resolve(sets);
             });
         });
@@ -295,9 +296,9 @@
         return deferred.promise;
     };
 
-    self.getSetsBySession = function (session) {
+    self.getSetsByDay = function (day) {
         var deferred = $q.defer();
-        dbService.getEntitiesByIndex(resourceService.consts.index.session, session, resourceService.consts.store.set, function (sets) {
+        dbService.getEntitiesByIndex(resourceService.consts.index.day, day, resourceService.consts.store.set, function (sets) {
             $rootScope.$apply(function () {
                 deferred.resolve(sets);
             });
@@ -350,6 +351,17 @@
                 deferred.resolve();
             })
         });
+        return deferred.promise;
+    };
+
+    self.getMaxSetBySession = function (sessionId) {
+        var deferred = $q.defer();
+
+        dbService.getEntityByIndexHighestValue(resourceService.consts.index.session, sessionId, 'weight', resourceService.consts.store.set, function (set) {
+            $rootScope.$apply(function () {
+                deferred.resolve(set);
+            });
+        })
         return deferred.promise;
     };
 

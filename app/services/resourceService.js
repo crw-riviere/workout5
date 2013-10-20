@@ -18,8 +18,7 @@
         },
         index: {
             id: 'id',
-            program: 'program',
-            workout: 'workout',
+            program: 'program',           
             day: 'day',
             name: 'name',
             exercise: 'exercise',

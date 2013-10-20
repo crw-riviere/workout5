@@ -31,10 +31,10 @@
                 sessionStore.createIndex(resourceService.consts.index.name, resourceService.consts.index.name, { unique: false });
                 sessionStore.createIndex(resourceService.consts.index.program, resourceService.consts.index.program, { unique: false });
                 sessionStore.createIndex(resourceService.consts.index.day, resourceService.consts.index.day, { unique: false });
-                sessionStore.createIndex(resourceService.consts.index.workout, [resourceService.consts.index.program, resourceService.consts.index.day], { unique: false });
 
                 var setStore = db.createObjectStore(resourceService.consts.store.set, { keyPath: resourceService.consts.index.id, autoIncrement: true });
                 setStore.createIndex(resourceService.consts.index.name, resourceService.consts.index.name, { unique: false });
+                setStore.createIndex(resourceService.consts.index.day, resourceService.consts.index.day, { unique: false });
                 setStore.createIndex(resourceService.consts.index.exercise, resourceService.consts.index.exercise, { unique: false });
                 setStore.createIndex(resourceService.consts.index.session, resourceService.consts.index.session, { unique: false });
                 setStore.createIndex(resourceService.consts.index.sessionExercise, [resourceService.consts.index.session, resourceService.consts.index.exercise], { unique: false });

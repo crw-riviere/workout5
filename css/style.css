@@ -76,3 +76,46 @@ body {
     -webkit-animation: loading-ball-animation 2s infinite;
     animation: loading-ball-animation 2s infinite;
 }
+
+/*Line Graph*/
+
+path {
+	stroke: black;
+	stroke-width: 1;
+	fill: none;
+}
+
+.axis {
+	shape-rendering: crispEdges;
+}
+
+.x.axis line {
+	stroke: black;
+}
+
+.x.axis text {
+    font-size:small;
+}
+
+.x.axis .minor {
+    stroke-opacity: .5;
+}
+
+.x.axis path {
+    display:none;
+}
+
+.y.axis {
+   
+}
+
+.y.axis path{
+   display:none;
+}
+
+.y.axis line {
+    fill: none;
+    stroke: #000;
+    stroke-dasharray:1;
+}
+

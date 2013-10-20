@@ -36,7 +36,7 @@
             program: $scope.program.id,
             day: $scope.day.id,
             exercises: $scope.day.exercises,
-            date: getDateObject(),
+            date: getDateString(),
             prevSession: $scope.sessions.length > 0 ? $scope.sessions[$scope.sessions.length - 1].entity.id : null
         }
 
@@ -71,6 +71,7 @@
     $scope.addSet = function () {
         var set = {
             no: $scope.sets.length + 1,
+            day: $scope.day.id,
             session: $scope.session.entity.id,
             exercise: $scope.exercise.entity.id,
             reps: 0,
@@ -136,10 +137,6 @@
     function getDateString() {
         var date = resourceService.date();
 
-        return date.day + '/' + date.month + '/' + date.yearShort;
-    };
-
-    function getDateObject() {
-        return resourceService.date();
-    };
+        return date.day + '-' + date.month + '-' + date.yearShort;
+    };   
 });

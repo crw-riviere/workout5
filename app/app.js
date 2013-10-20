@@ -46,6 +46,10 @@ wo5App.config(function ($routeProvider, $locationProvider) {
         templateUrl: 'app/views/workout.html',
         controller: 'WorkoutController'
     })
+        .when('/Progress', {
+            templateUrl: 'app/views/progress.html',
+            controller: 'ProgressController'
+        })
     .otherwise({ redirectTo: '/' });
 
     $locationProvider.html5Mode(true);

@@ -1,0 +1,44 @@
+﻿<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <ul class="nav nav-pills">
+        <li class="dropdown">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#headerNav" data-target="#ddProgram">
+                PROGRAM <span class="caret"></span>
+            </a>
+        </li>
+        <li class="dropdown">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#headerNav" data-target="#ddDay">
+                DAY <span class="caret"></span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="panel-group" id="headerNav">
+
+        <div class="panel">
+            <div id="ddProgram" class="panel panel-default collapse ">
+
+                <ul class="list-group">
+                    <li data-ng-repeat="program in programs" data-ng-click="loadProgram(program)" class="list-group-item" data-toggle="collapse" data-target="#ddProgram">
+                        <a data-toggle="tab">{{program.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel">
+            <div id="ddDay" class="panel panel-default collapse ">
+
+                <ul class="list-group">
+
+                    <li data-ng-repeat="day in days" data-ng-click="loadDay(day)" class="list-group-item" data-toggle="collapse" data-target="#ddDay">
+                        <a data-toggle="tab">{{day.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+<line-chart val="data" class=""></line-chart>
+
+

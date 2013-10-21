@@ -4,16 +4,7 @@
             <div class="panel-title">
                 <p><b>{{program.entity.name}}|</b><small><i>Days</i></small></p>
 
-                <a data-toggle="modal" data-target="#mdlCreateDay" class="btn btn-primary">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Day&nbsp;</a>
-                <modal
-                    modalid="mdlCreateDay"
-                    title="Create Day"
-                    validation="validDay(newDay)"
-                    action="addDay(newDay)">
-                         <p>Please enter a day name.</p>
-                <input class="form-control" data-ng-model="newDay.entity.name" data-ng-change="validDayFeedback(newDay)">
-                    <p>{{newDay.error}}</p>
-                   </modal>
+                <a data-toggle="modal" data-target="#mdlCreateDay" class="btn btn-primary">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Day&nbsp;</a>               
             </div>
 
             <p><small><i>Use this page to create and edit existing days.</i></small></p>
@@ -24,9 +15,10 @@
                 <p class="text-center">You have no days.</p>
             </li>
             <li data-ng-repeat="day in days" class="list-group-item">
+                
                 <div data-ng-switch on="day.operation">
                     <div class="row" data-ng-switch-when="read">
-                        <h4><a data-ng-href="Exercises/{{day.entity.id}}" class="col-xs-10" data-toggle="tab">{{day.entity.name}}</a></h4>
+                        <h4><a class="col-xs-10" data-ng-click="loadExercises(day)" data-target="#exercises{{day.entity.id}}" data-toggle="collapse">{{day.entity.name}}</a></h4>
                         <a class="col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse"><span class="glyphicon glyphicon-edit"></span></a>
                     </div>
                     <div class="row" data-ng-switch-when="update">
@@ -34,15 +26,124 @@
                         <a class="col-xs-2 btn btn-large" data-ng-click="saveDay(day)" data-ng-disabled="!validDay(day)"><span class="glyphicon glyphicon-ok"></span></a>
                     </div>
                 </div>
+
+                <!--Exercises Collapse-->
+                <div id="exercises{{day.entity.id}}" class="row collapse">
+                    <div class="clearfix">
+                        <br />
+                    </div>
+                    <div data-ng-show="day.exercises.length <= 0">
+                        <p class="text-center">You have no exercises for this day.</p>
+                        <p class="text-center"><a data-ng-click="loadDay(day)" data-toggle="modal" data-target="#mdlCreateExercise">Add Exercise.</a></p>
+                    </div>
+
+                    <table class="table" data-ng-show="day.exercises.length > 0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Reps</th>
+                                <th>Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="exercise in day.exercises">
+                                <td>{{exercise.entity.name}}</td>
+                                <td>{{day.entity.exercises[$index].target.reps}}</td>
+                                <td>{{day.entity.exercises[$index].target.weight}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                        </div>
+                <!--End Exercise Collapse-->
+
+                <!--Day Options-->
                 <div id="opt{{$index}}" class="row collapse">
                     <div class="clearfix">
                         <br />
                     </div>
                     <p>{{day.error}}</p>
-                    <a class="col-xs-6 btn btn-large" data-ng-click="editDay(day)"><span class="glyphicon glyphicon-pencil"></span></a>
-                    <a class="col-xs-6 btn btn-large" data-ng-click="deleteDay(day)"><span class="glyphicon glyphicon-trash"></span></a>
+                    <a class="col-xs-4 btn btn-large" data-ng-click="loadDay(day)" data-toggle="modal" data-target="#mdlCreateExercise"><span class="glyphicon glyphicon-plus"></span></a>
+                    <a class="col-xs-4 btn btn-large" data-ng-click="editDay(day)"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a class="col-xs-4 btn btn-large" data-ng-click="deleteDay(day)"><span class="glyphicon glyphicon-trash"></span></a>
                 </div>
+                <!--End Day Options-->
             </li>
         </ul>
     </div>
 </div>
+
+<!--Modals-->
+<modal modalid="mdlCreateDay">
+    <div class="modal-body">
+        <p>Please enter a day name.</p>
+        <input class="form-control" data-ng-model="newDay.entity.name" data-ng-change="validDayFeedback(newDay)">
+        <p>{{newDay.error}}</p>
+        </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-disabled="!validDay(newDay)" data-ng-click="addDay(newDay)">Create</button>
+    </div>
+</modal>
+
+<modal modalid="mdlCreateExercise">
+
+    <div class="modal-body">
+        <p>Please select an exercise.</p>
+        <select ng-model="selectedExercise" data-ng-change="newExercise.entity.name = ''" ng-options="exercise.entity.name for exercise in allExercises">
+            <option value="">-- Create New Exercise --</option>
+        </select>
+
+        <div class="clearfix">
+            <br />
+        </div>
+
+        <div data-ng-hide="selectedExercise">
+            <p>Please enter an exercise name.</p>
+            <input class="form-control" data-ng-model="newExercise.entity.name">
+            <p>{{newExercise.error}}</p>
+        </div>
+
+        <p>Reps.</p>
+        <input class="form-control" type="number" data-ng-model="newExercise.target.reps">
+
+        <p>Weight.</p>
+        <input class="form-control" type="number" data-ng-model="newExercise.target.weight">
+        </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-show="selectedExercise" data-ng-click="addExercise(selectedExercise)">Add</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-hide="selectedExercise" data-ng-disabled="!validExercise(newExercise)" data-ng-click="createExercise(newExercise)">Create</button>
+
+    </div>
+
+</modal>
+<!--End Modals-->
+
+<!--<ul class="list-group">
+    <li class="list-group-item" data-ng-show="day.exercises.length <= 0">
+        <p class="text-center">You have no exercises for this day.</p>
+        <p class="text-center"><a data-ng-click="loadDay(day)" data-toggle="modal" data-target="#mdlCreateExercise">Add Exercise.</a></p>
+    </li>
+    <li data-ng-repeat="exercise in day.exercises" class="list-group-item">
+        <div data-ng-switch on="exercise.operation">
+            <div class="row" data-ng-switch-when="read">
+                <h4><a class="col-xs-10" data-toggle="tab">{{exercise.entity.name}}</a></h4>
+                <a class="col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse"><span class="glyphicon glyphicon-edit"></span></a>
+            </div>
+            <div class="row" data-ng-switch-when="update">
+                <input class="col-xs-10" type="text" placeholder="Exercise Name" data-ng-model="exercise.entity.name" data-ng-change="validExerciseFeedback(exercise)" />
+                <a class="col-xs-2 btn btn-large" data-ng-click="saveExercise(exercise)" data-ng-disabled="!validDay(day)"><span class="glyphicon glyphicon-ok"></span></a>
+            </div>
+        </div>
+        <div id="opt{{$index}}" class="row collapse">
+            <div class="clearfix">
+                <br />
+            </div>
+            <p>{{exercise.error}}</p>
+            <a class="col-xs-6 btn btn-large" data-ng-click="editExercise(exercise)"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a class="col-xs-6 btn btn-large" data-ng-click="deleteExercise(exercise)"><span class="glyphicon glyphicon-trash"></span></a>
+        </div>
+
+    </li>
+</ul>-->

@@ -2,10 +2,7 @@
     return {
         restrict: "E",
         scope: {
-            modalid: '@',
-            title: '@',           
-            validation: '&',
-            action: '&'
+            modalid: '@'
         },
         replace: true,
         transclude: true,

@@ -5,17 +5,7 @@
                 <p><b>Workout</b><i>5</i> <b>|</b><small><i>Programs</i></small></p>
 
                 <a data-toggle="modal" data-target="#mdlCreateProgram" class="btn btn-primary">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Program&nbsp;</a>
-
-                <modal
-                    modalid="mdlCreateProgram"
-                    title="Create Program"                  
-                    validation="validProgram(newProgram)"
-                    action="addProgram(newProgram)">
-                         <p>Please enter a program name.</p>
-                <input class="form-control" data-ng-model="newProgram.entity.name" data-ng-change="validProgramFeedback(newProgram)">
-                    <br />
-                    <p>{{newProgram.error}}</p>
-                   </modal>
+                               
             </div>
 
             <p><small><i>Use this page to create and edit existing programs.</i></small></p>
@@ -48,3 +38,20 @@
         </ul>
     </div>
 </div>
+
+<!--Modals-->
+
+<modal modalid="mdlCreateProgram">
+    <div class="modal-body">
+        <p>Please enter a program name.</p>
+        <input class="form-control" data-ng-model="newProgram.entity.name" data-ng-change="validProgramFeedback(newProgram)">
+        <br />
+        <p>{{newProgram.error}}</p>
+        </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-disabled="!validProgram(newProgram)" data-ng-click="addProgram(newProgram)">Add</button>
+    </div>
+</modal>
+
+<!--End Modals-->

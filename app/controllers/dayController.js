@@ -2,18 +2,22 @@
     init();
 
     function init() {
-        $scope.days = [];
         entityService.getProgram(parseInt($routeParams.programId)).then(function (program) {
-            $scope.program = { entity: program };
+            $scope.program = resourceService.getViewModel(program);
             $scope.newDay = { entity: { name: '', program: $scope.program.entity.id, exercises: [] }, error: '' };
 
-            entityService.getDaysByProgram(program.id).then(function (days) {
-                angular.forEach(days, function (day) {
-                    var loadedDay = resourceService.getViewModel(day);
-                    $scope.days.push(loadedDay);
-                });
+            entityService.getDaysByProgram(program.id).then(function (days) {               
+                $scope.days = resourceService.getViewModelCollection(days);
             })
         });
+
+        entityService.getAllExercises().then(function (exercises) {
+            $scope.allExercises = resourceService.getViewModelCollection(exercises);
+        });
+
+        $scope.newExercise = resourceService.getViewModel({}, resourceService.consts.op.create);
+
+        $scope.selectedExercise = '';
     };
 
     $scope.editDay = function (day) {
@@ -49,5 +53,45 @@
 
     $scope.validDayFeedback = function (day) {
         day.error = $scope.validDay(day) ? 'Name free!' : 'Name exists.';
+    }
+
+    $scope.loadDay = function (day) {
+        $scope.selectedDay = day;
+    }
+
+    $scope.loadExercises = function (day) {
+        entityService.getExercisesByDay(day.entity).then(function (exercises) {
+            day.exercises = resourceService.getViewModelCollection(exercises);
+        })
+    };
+
+    $scope.addExercise = function (exercise) {
+        $scope.selectedDay.entity.exercises.push({ id: exercise.entity.id, target: { reps: $scope.newExercise.target.reps, weight: $scope.newExercise.target.weight } });
+        $scope.selectedDay.exercises.push(exercise);
+
+        entityService.saveDay($scope.selectedDay.entity).then(function () {
+            $scope.selectedExercise = '';
+        })
+    }
+
+    $scope.createExercise = function (newExercise) {      
+        entityService.addExercise(newExercise.entity).then(function (exercise) {
+            $scope.selectedDay.entity.exercises.push({ id: exercise.id, target: { reps: newExercise.target.reps, weight: newExercise.target.weight } });
+            $scope.selectedDay.exercises.push(resourceService.getViewModel(exercise));
+            $scope.allExercises.push(resourceService.getViewModel(exercise));
+        });
+
+        entityService.saveDay($scope.selectedDay.entity).then(function () {
+            $scope.selectedExercise = '';
+        })
+    }
+   
+
+    $scope.validExercise = function (exercise) {
+        return resourceService.validViewModelEntity(exercise, $scope.allExercises);
+    }
+
+    $scope.validExerciseFeedback = function (exercise) {
+        exercise.error = $scope.validExercise(exercise) ? 'Name free!' : 'Name exists.';
     }
 });

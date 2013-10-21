@@ -22,8 +22,13 @@
                         <a class="col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse"><span class="glyphicon glyphicon-edit"></span></a>
                     </div>
                     <div class="row" data-ng-switch-when="update">
-                        <input class="col-xs-10" type="text" placeholder="Day Name" data-ng-model="day.entity.name" data-ng-change="validDayFeedback(day)" />
-                        <a class="col-xs-2 btn btn-large" data-ng-click="saveDay(day)" data-ng-disabled="!validDay(day)"><span class="glyphicon glyphicon-ok"></span></a>
+                        <div class="col-xs-10">
+                            <input class="form-control" type="text" placeholder="Day Name" data-ng-model="day.entity.name" data-ng-change="validDayFeedback(day)" />
+                        </div>
+                        <div class="col-xs-2">
+                            <a class="btn btn-large" data-ng-click="saveDay(day)" data-ng-disabled="!validDay(day)"><span class="glyphicon glyphicon-ok"></span></a>
+                        </div>
+
                     </div>
                 </div>
 
@@ -89,7 +94,7 @@
 
     <div class="modal-body">
         <p>Please select an exercise.</p>
-        <select ng-model="selectedExercise" data-ng-change="newExercise.entity.name = ''" ng-options="exercise.entity.name for exercise in allExercises">
+        <select class="form-control" ng-model="selectedExercise" data-ng-change="newExercise.entity.name = ''" ng-options="exercise.entity.name for exercise in allExercises">
             <option value="">-- Create New Exercise --</option>
         </select>
 
@@ -120,30 +125,3 @@
 </modal>
 <!--End Modals-->
 
-<!--<ul class="list-group">
-    <li class="list-group-item" data-ng-show="day.exercises.length <= 0">
-        <p class="text-center">You have no exercises for this day.</p>
-        <p class="text-center"><a data-ng-click="loadDay(day)" data-toggle="modal" data-target="#mdlCreateExercise">Add Exercise.</a></p>
-    </li>
-    <li data-ng-repeat="exercise in day.exercises" class="list-group-item">
-        <div data-ng-switch on="exercise.operation">
-            <div class="row" data-ng-switch-when="read">
-                <h4><a class="col-xs-10" data-toggle="tab">{{exercise.entity.name}}</a></h4>
-                <a class="col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse"><span class="glyphicon glyphicon-edit"></span></a>
-            </div>
-            <div class="row" data-ng-switch-when="update">
-                <input class="col-xs-10" type="text" placeholder="Exercise Name" data-ng-model="exercise.entity.name" data-ng-change="validExerciseFeedback(exercise)" />
-                <a class="col-xs-2 btn btn-large" data-ng-click="saveExercise(exercise)" data-ng-disabled="!validDay(day)"><span class="glyphicon glyphicon-ok"></span></a>
-            </div>
-        </div>
-        <div id="opt{{$index}}" class="row collapse">
-            <div class="clearfix">
-                <br />
-            </div>
-            <p>{{exercise.error}}</p>
-            <a class="col-xs-6 btn btn-large" data-ng-click="editExercise(exercise)"><span class="glyphicon glyphicon-pencil"></span></a>
-            <a class="col-xs-6 btn btn-large" data-ng-click="deleteExercise(exercise)"><span class="glyphicon glyphicon-trash"></span></a>
-        </div>
-
-    </li>
-</ul>-->

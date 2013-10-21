@@ -8,6 +8,11 @@
 
         entityService.getPrograms().then(function (programs) {
             $scope.programs = programs;
+
+            if (programs[0]) {
+                $scope.loadProgram(programs[0]);
+            }
+
             $('#mdlSessions').modal('show')
         });
     };
@@ -17,15 +22,16 @@
 
         entityService.getDaysByProgram(program.id).then(function (days) {
             $scope.days = days;
+            if (days[0]) {
+                $scope.loadDay(days[0]);
+            }
         })
     };
 
     $scope.loadDay = function (day) {
         $scope.day = day;
         entityService.getSessionsByDay(day.id).then(function (sessions) {
-            angular.forEach(sessions, function (session) {
-                $scope.sessions.push({ entity: session, operation: resourceService.consts.op.read });
-            })
+            $scope.sessions = resourceService.getViewModelCollection(sessions);
         })
     };
 
@@ -93,7 +99,7 @@
     $scope.saveSet = function (set) {
         entityService.saveSet(set.entity).then(function () {
             set.operation = resourceService.consts.op.read;
-            set.weightMaxPercent = getWeightMaxPercantage(set);
+            set.weightMaxPercent = resourceService.getWeightTargetPercantage(set.entity.weight,);
         });
     };
 
@@ -103,40 +109,9 @@
         })
     };
 
-    $scope.convertToKg = function () {
-        angular.forEach($scope.exercise.sets, function (set) {
-            if (set.weightMeasurement === resourceService.consts.measuement.weight.lbs) {
-                var kgCalc = set.weightMeasurement * 0.45359237;
-                var kgs = Math.round(kgCalc);
-                set.weight = kgs;
-                set.weightMeasurement = resourceService.consts.measuement.weight.kg;
-            }
-        });
-        $scope.weightMeasurement = resourceService.consts.measuement.weight.kg;
-    };
-
-    $scope.convertToLbs = function () {
-        angular.forEach($scope.exercise.sets, function (set) {
-            if (set.weightMeasurement === resourceService.consts.measuement.weight.kg) {
-                var kg = set.weight() / 0.45359237;
-                var lbs = Math.floor(kg);
-                set.weight = lbs;
-                set.measurement = resourceService.consts.measuement.weight.lbs
-            }
-        });
-        $scope.weightMeasurement = resourceService.consts.measuement.weight.lbs
-    };
-
-    function getWeightMaxPercantage(set) {
-        var maxWeight = $scope.maxWeightSet.entity.weight;
-        var setWeight = set.entity.weight;
-
-        return ((setWeight / maxWeight) * 100).toFixed(2);
-    }
-
     function getDateString() {
         var date = resourceService.date();
 
         return date.day + '-' + date.month + '-' + date.yearShort;
-    };   
+    };
 });

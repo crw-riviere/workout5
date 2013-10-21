@@ -1,33 +1,4 @@
-﻿<div class="modal fade" id="mdlSessions" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-                <h4 class="modal-title">Select Program</h4>
-            </div>
-            <div class="modal-body">
-                <select data-ng-model="program" data-ng-options="program.name for program in programs" data-ng-change="loadProgram(program)">
-                    <option value="">-- select program --</option>
-                </select>
-
-                <div class="clearfix visible">
-                    <br />
-                </div>
-
-                <select data-ng-model="day" data-ng-options="day.name for day in days" data-ng-change="loadDay(day)" data-ng-show="program">
-                    <option value="">-- select day --</option>
-                </select>
-
-                <div class="clearfix visible">
-                    <br />
-                </div>
-
-                <a class="btn btn-primary  col-xs-12 " data-ng-click="startSession()" data-ng-show="day" data-dismiss="modal">Start Workout</a>
-            </div>
-        </div>
-    </div>
-</div>
-
+﻿
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <ul class="nav nav-pills">
         <li class="dropdown">
@@ -52,13 +23,16 @@
     </div>
 </nav>
 
+    <!--Header Info-->
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="panel-title">
             <p>
                 <b>Session | </b><small><i>{{session.entity.name}}</i></small>
-                <b>Exercise | </b><small><i>{{exercise.entity.name}}</i></small>
-            </p>
+           </p>
+            <p>
+                <b>Exercise | </b><small><i>{{exercise.entity.name}}</i></small>           
             <p>
                 <a class="btn btn-primary" data-ng-click="addSet()">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Set&nbsp;</a>
             </p>
@@ -118,12 +92,12 @@
                 <table class="table table-condensed">
                     <thead>
                         <tr>
-                            <td>Set
-                            </td>
-                            <td>Rep
-                            </td>
-                            <td>Weight
-                            </td>
+                            <th>Set
+                            </th>
+                            <th>Rep
+                            </th>
+                            <th>Weight
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -141,16 +115,20 @@
         </div>
     </div>
 
+    <!--End Header Info-->
+
+    <!--Set Info-->   
+
     <div class="clearfix">
       
     </div>  
 
     <ul class="list-group">
         <li class="row">
-            <h4 class="col-xs-2">Set</h4>    
-            <h4 class="col-xs-2">Rep</h4>
-            <h4 class="col-xs-3">Weight</h4>
-            <h4 class="col-xs-5">% of Max</h4>
+            <h5 class="col-xs-2 text-center">Set</h5>
+            <h5 class="col-xs-2">Rep</h5>
+            <h5 class="col-xs-3">Weight</h5>
+            <h5 class="col-xs-3">Max %</h5>
         </li>
 
         <li class="list-group-item" data-ng-show="sets.length <= 0">
@@ -164,27 +142,38 @@
                     <h6 class="col-xs-2">{{set.entity.reps}}</h6>
                     <h6 class="col-xs-3">{{set.entity.weight}} {{set.entity.measuement}}</h6>
                     <h6 class="col-xs-3">{{set.weightMaxPercent}} %</h6>
-                    <a class="btn btn-link btn-default btn-lg col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse">
+                    <a class="btn btn-link btn-default col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse">
                         <span class="glyphicon glyphicon-edit"></span>
                     </a>
                 </div>
 
-                <div class="row" data-ng-switch-when="update">
+                <div class="row" data-ng-switch-when="update">              
 
-                    <h4 class="col-xs-2">{{set.entity.no}}.</h4>
+                    <div class="col-xs-5">
+                        <div class="input-group input-group-sm">
+                            <input class="form-control" type="number" data-ng-model="set.entity.reps" />
+                            <span class="input-group-addon">reps</span>
+                        </div>
+                    </div>
 
-                    <input class="col-xs-2" type="number"
-                        data-ng-model="set.entity.reps" />
 
-                    <input class="col-xs-3" type="number"
-                        data-ng-model="set.entity.weight" />
-                    <label class="col-xs-3">{{set.entity.measuement}}</label>
+                    <div class="col-xs-5">
+                        <div class="input-group input-group-sm">
+                            <input class=" form-control" type="number"
+                                   data-ng-model="set.entity.weight" />
 
-                    <a class="col-xs-2 btn btn-link btn-default btn-lg" data-ng-click="saveSet(set)">
+                            <span class="input-group-addon">{{set.entity.measuement}}</span>
+                        </div>
+                    </div>
+
+                    <a class="col-xs-2 btn btn-link btn-default" data-ng-click="saveSet(set)">
                         <span class="glyphicon glyphicon-ok"></span>
                     </a>
                 </div>
             </div>
+
+
+
             <div id="opt{{$index}}" class="row collapse">
                 <div class="clearfix">
                     <br />
@@ -195,4 +184,40 @@
             </div>
         </li>
     </ul>
+
+    <!--End Set Info-->
 </div>
+
+<!--Modals-->
+
+<div class="modal fade" id="mdlSessions" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                <h4 class="modal-title">Select Program</h4>
+            </div>
+            <div class="modal-body">
+                <select class="form-control" data-ng-model="program" data-ng-options="program.name for program in programs" data-ng-change="loadProgram(program)">
+                    <option value="">-- select program --</option>
+                </select>
+
+                <div class="clearfix visible">
+                    <br />
+                </div>
+
+                <select class="form-control" data-ng-model="day" data-ng-options="day.name for day in days" data-ng-change="loadDay(day)" data-ng-show="program">
+                    <option value="">-- select day --</option>
+                </select>
+
+                <div class="clearfix visible">
+                    <br />
+                </div>
+
+                <a class="btn btn-primary  col-xs-12 " data-ng-click="startSession()" data-ng-show="day" data-dismiss="modal">Start Workout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--End Modals-->

@@ -7,6 +7,10 @@
 
         var programs = entityService.getPrograms().then(function (programs) {
             $scope.programs = programs;
+
+            if (programs[0]) {
+                $scope.loadProgram(programs[0]);
+            }
         });
 
         if ($routeParams.sessionId) {
@@ -21,6 +25,10 @@
 
         entityService.getDaysByProgram(program.id).then(function (days) {
             $scope.days = days;
+
+            if (days[0]) {
+                $scope.loadDay(days[0]);
+            }
         })
     };
 
@@ -39,7 +47,6 @@
 
     $scope.loadExercise = function (session, exercise) {
         var sessionExercise = [session.entity.id, exercise.entity.id];
-        console.debug(sessionExercise);
         entityService.getSetsBySessionExercise(sessionExercise).then(function (sets) {
             session.sets = resourceService.getViewModelCollection(sets);
         })
@@ -54,21 +61,6 @@
             session.operation = resourceService.consts.op.read;
         });
     };
-
-    //$scope.addSession = function () {
-    //    var newSession = {
-    //        name: getDateString(),
-    //        program: $scope.program.id,
-    //        day: $scope.day.id,
-    //        exercises: $scope.day.exercises,
-    //        date: getDateObject(),
-    //        prevSession: $scope.sessions.length > 0 ? $scope.sessions[$scope.sessions.length -1].entity.id : null
-    //    }
-
-    //    entityService.addSession(newSession).then(function (session) {
-    //        $scope.sessions.push({ entity: session, operation: resourceService.consts.op.read });
-    //    });
-    //};
 
     $scope.deleteSession = function (session) {
         entityService.deleteSession(session.entity).then(function () {

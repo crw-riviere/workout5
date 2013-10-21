@@ -6,7 +6,7 @@
             $scope.program = resourceService.getViewModel(program);
             $scope.newDay = { entity: { name: '', program: $scope.program.entity.id, exercises: [] }, error: '' };
 
-            entityService.getDaysByProgram(program.id).then(function (days) {               
+            entityService.getDaysByProgram(program.id).then(function (days) {
                 $scope.days = resourceService.getViewModelCollection(days);
             })
         });
@@ -74,7 +74,7 @@
         })
     }
 
-    $scope.createExercise = function (newExercise) {      
+    $scope.createExercise = function (newExercise) {
         entityService.addExercise(newExercise.entity).then(function (exercise) {
             $scope.selectedDay.entity.exercises.push({ id: exercise.id, target: { reps: newExercise.target.reps, weight: newExercise.target.weight } });
             $scope.selectedDay.exercises.push(resourceService.getViewModel(exercise));
@@ -83,9 +83,9 @@
 
         entityService.saveDay($scope.selectedDay.entity).then(function () {
             $scope.selectedExercise = '';
+            $scope.newExercise = resourceService.getViewModel({}, resourceService.consts.op.create);
         })
     }
-   
 
     $scope.validExercise = function (exercise) {
         return resourceService.validViewModelEntity(exercise, $scope.allExercises);

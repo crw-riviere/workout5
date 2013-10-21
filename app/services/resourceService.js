@@ -87,4 +87,34 @@
 
         return entityCollection;
     }
+
+    self.getWeightTargetPercantage = function (weight, targetWeight) {
+        return ((setWeight / targetWeight) * 100).toFixed(2);
+    }
+
+    self.convertSetsToKg = function (sets) {
+        angular.forEach(sets, function (set) {
+            if (set.weightMeasurement === resourceService.consts.measuement.weight.lbs) {
+                var kgCalc = set.weightMeasurement * 0.45359237;
+                var kgs = Math.round(kgCalc);
+                set.weight = kgs;
+                set.weightMeasurement = resourceService.consts.measuement.weight.kg;
+            }
+        });
+
+        return sets;
+    };
+
+    self.convertSetsToLbs = function (sets) {
+        angular.forEach(sets, function (set) {
+            if (set.weightMeasurement === resourceService.consts.measuement.weight.kg) {
+                var kg = set.weight() / 0.45359237;
+                var lbs = Math.floor(kg);
+                set.weight = lbs;
+                set.measurement = resourceService.consts.measuement.weight.lbs
+            }
+        });
+
+        return sets;
+    };
 });

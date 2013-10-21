@@ -228,19 +228,7 @@
         });
 
         return deferred.promise;
-    };
-
-    //self.getSessionsByWorkout = function (workout) {
-    //    var deferred = $q.defer();
-    //    dbService.getEntitiesByIndex(resourceService.consts.index.workout, workout, resourceService.consts.store.session, function (sessions) {
-    //        $rootScope.$apply(function () {
-    //            console.log('ret sessions: ' + sessions);
-    //            deferred.resolve(sessions);
-    //        });
-    //    });
-
-    //    return deferred.promise;
-    //};
+    };  
 
     self.addSession = function (session) {
         var deferred = $q.defer();

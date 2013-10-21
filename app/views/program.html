@@ -22,8 +22,13 @@
                         <a class="col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse"><span class="glyphicon glyphicon-edit"></span></a>
                     </div>
                     <div class="row" data-ng-switch-when="update">
-                        <input class="form-control col-xs-10" type="text" placeholder="Program Name" data-ng-model="program.entity.name" data-ng-change="validProgramFeedback(program)" />
-                        <a class="col-xs-2 btn btn-large" data-ng-disabled="!validProgram(program)" data-ng-click="saveProgram(program)"><span class="glyphicon glyphicon-ok"></span></a>
+                        <div class="col-xs-10">
+                            <input class="form-control" type="text" placeholder="Program Name" data-ng-model="program.entity.name" data-ng-change="validProgramFeedback(program)" />
+                        </div>
+                        <div class="col-xs-2">
+                            <a class="btn btn-large" data-ng-disabled="!validProgram(program)" data-ng-click="saveProgram(program)"><span class="glyphicon glyphicon-ok"></span></a>
+                        </div>
+
                     </div>
                 </div>
                 <div id="opt{{$index}}" class="row collapse">
@@ -50,7 +55,7 @@
         </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-disabled="!validProgram(newProgram)" data-ng-click="addProgram(newProgram)">Add</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-disabled="!validProgram(newProgram)" data-ng-click="addProgram(newProgram)">Create</button>
     </div>
 </modal>
 

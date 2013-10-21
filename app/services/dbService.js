@@ -134,6 +134,40 @@
             console.log('Retrieved store ' + storeName);
             console.log('Retrieving index ' + indexName);
             var index = store.index(indexName);
+            console.log('Retrieved index ' + indexName);
+            var request = index.openCursor(range);
+
+            request.onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    var entity = cursor.value;
+                    entityCollection.push(entity);
+                    console.info('Retrieved ' + cursor.value.name + ' from ' + storeName);
+                    cursor.continue();
+                }
+                else {
+                    callback(entityCollection);
+                }
+            }
+
+            request.onerror = function (event) {
+                console.error('Failed to retrieve ' + indexValue + '. Ex: ' + event.target.errorCode);
+            }
+        }
+        catch (ex) {
+            console.error('Failed to retrieve ' + indexValue + '. Ex: ' + ex.message);
+        }
+    };
+
+    self.getEntitiesByMultipleIndex = function (indexName, indexValue, storeName, callback) {
+        try {
+            var entityCollection = [];
+            var range = IDBKeyRange.bound(indexValue);
+            var store = self.getStore(storeName, resourceService.consts.op.rw);
+            console.log('Retrieved store ' + storeName);
+            console.log('Retrieving index ' + indexName);
+            var index = store.index(indexName);
+            console.log('Retrieved index ' + indexName);
             var request = index.openCursor(range);
 
             request.onsuccess = function (event) {

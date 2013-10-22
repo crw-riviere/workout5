@@ -7,18 +7,18 @@
         },
         link: function (scope, element, attrs) {
             var data = [
-                {date: '01-01-11', weight: 25 },
-                { date: '03-01-11', weight: 27.5 },
-                { date: '05-01-11', weight: 30 },
-                { date: '09-01-11', weight: 35 },
-                { date: '11-01-11', weight: 35 },
-                { date: '18-01-11', weight: 32.5 },
-                { date: '22-01-11', weight: 35 },
-                { date: '29-01-11', weight: 40 },
-                { date: '31-01-11', weight: 45 },
-                { date: '05-02-11', weight: 47 },
-                { date: '10-02-11', weight: 48 },
-                { date: '12-02-11', weight: 50 }];
+                {date: '01-01-11', perform: 25 },
+                { date: '03-01-11', perform: 27.5 },
+                { date: '05-01-11', perform: 30 },
+                { date: '09-01-11', perform: 35 },
+                { date: '11-01-11', perform: 35 },
+                { date: '18-01-11', perform: 32.5 },
+                { date: '22-01-11', perform: 35 },
+                { date: '29-01-11', perform: 40 },
+                { date: '31-01-11', perform: 45 },
+                { date: '05-02-11', perform: 47 },
+                { date: '10-02-11', perform: 48 },
+                { date: '12-02-11', perform: 50 }];
            
 
             var h = 500;
@@ -35,15 +35,15 @@
           
             var minDate = parseDate(data[0].date),
                 maxDate = parseDate(data[data.length - 1].date);
-                minWeight = d3.min(data.map(function (d) { return d.weight; }))
-                maxWeight = d3.max(data.map(function (d) { return d.weight; }))
+                minPerform = d3.min(data.map(function (d) { return d.perform; }))
+                maxPerform = d3.max(data.map(function (d) { return d.perform; }))
 
 
             var x = d3.time.scale.utc().domain([minDate, maxDate])
                .range([50, w - 20]);
           
            
-            var y = d3.scale.linear().domain([minWeight, maxWeight + 10])
+            var y = d3.scale.linear().domain([minPerform, maxPerform + 10])
                 // bottom / top
                 .range([h -60,10]);
             //.range([h - 40, -10]);
@@ -54,7 +54,7 @@
             }
 
             function cy(d) {
-                return y(d.weight);
+                return y(d.perform);
             }
 
             var line = d3.svg.line()			
@@ -62,7 +62,7 @@
 			        return x(parseDate(d.date));
 			    })
 			    .y(function (d) {			   
-			        return y(d.weight);
+			        return y(d.perform);
 			    })         
 
             chart.selectAll("circle")

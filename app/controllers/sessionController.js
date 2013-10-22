@@ -40,15 +40,23 @@
             })
         })
 
-        entityService.getExercisesByDay($scope.day).then(function (exercises) {
-            $scope.exercises = resourceService.getViewModelCollection(exercises);
-        })
+        //entityService.getExercisesByDay($scope.day).then(function (exercises) {
+        //    $scope.exercises = resourceService.getViewModelCollection(exercises);
+        //})
     };
 
     $scope.loadExercise = function (session, exercise) {
-        var sessionExercise = [session.entity.id, exercise.entity.id];
+        session.exercise = exercise;
+
+        var sessionExercise = [session.entity.id, exercise.exercise.id];
         entityService.getSetsBySessionExercise(sessionExercise).then(function (sets) {
             session.sets = resourceService.getViewModelCollection(sets);
+
+            //var setsViewModel = resourceService.getViewModelCollection(sets);
+
+            //angular.forEach(setsViewModel, function (set) {
+            //    session.sets.push(getSetViewModelWithTarget(set));
+            //});
         })
     }
 
@@ -67,4 +75,26 @@
             $scope.sessions.splice($scope.sessions.indexOf(session), 1);
         });
     };
+
+    $scope.getSetTargetPercentage = function (perform, target) {
+        if (target || target > 0) {
+            return resourceService.getPerformTargetPercantage(perform, target) + '%';
+        }
+        else {
+            return 'N/A';
+        }
+    }
+
+    //function getSetViewModelWithTarget(set) {
+    //    var exerciseTarget = entityService.getExerciseTargetByDay(set.entity.exercise, $scope.day)
+
+    //    if (exerciseTarget) {
+    //        set.performTargetPercent = resourceService.getPerformTargetPercantage(set.entity.perform, exerciseTarget.perform) + '%';
+    //    }
+    //    else {
+    //        set.performTargetPercent = 'N/A';
+    //    }
+
+    //    return set;
+    //}
 });

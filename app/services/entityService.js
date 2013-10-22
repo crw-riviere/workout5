@@ -203,6 +203,16 @@
         return deferred.promise;
     };
 
+    self.getExerciseTargetByDay = function (exerciseId, day) {
+        for (var i = 0; i < day.exercises.length; i++) {
+            if (day.exercises[0].id === exerciseId) {
+                return day.exercises[i].target;
+            }
+        }
+
+        return null;
+    }
+
     //End Exercise Functions
 
     //Session Functions
@@ -228,7 +238,7 @@
         });
 
         return deferred.promise;
-    };  
+    };
 
     self.addSession = function (session) {
         var deferred = $q.defer();
@@ -343,7 +353,7 @@
     self.getMaxSetBySession = function (sessionId) {
         var deferred = $q.defer();
 
-        dbService.getEntityByIndexHighestValue(resourceService.consts.index.session, sessionId, 'weight', resourceService.consts.store.set, function (set) {
+        dbService.getEntityByIndexHighestValue(resourceService.consts.index.session, sessionId, 'perform', resourceService.consts.store.set, function (set) {
             $rootScope.$apply(function () {
                 deferred.resolve(set);
             });
@@ -351,10 +361,21 @@
         return deferred.promise;
     };
 
-    self.getSetByExerciseWeightMax = function (exerciseId) {
+    self.getSetByExercisePerformMax = function (exerciseId) {
         var deferred = $q.defer();
 
-        dbService.getEntityByIndexHighestValue(resourceService.consts.index.exercise, exerciseId, 'weight', resourceService.consts.store.set, function (set) {
+        dbService.getEntityByIndexHighestValue(resourceService.consts.index.exercise, exerciseId, 'perform', resourceService.consts.store.set, function (set) {
+            $rootScope.$apply(function () {
+                deferred.resolve(set);
+            });
+        })
+        return deferred.promise;
+    };
+
+    self.getMaxSetBySessionExercise = function (exerciseId) {
+        var deferred = $q.defer();
+
+        dbService.getEntityByIndexHighestValue(resourceService.consts.index.exercise, exerciseId, 'perform', resourceService.consts.store.set, function (set) {
             $rootScope.$apply(function () {
                 deferred.resolve(set);
             });

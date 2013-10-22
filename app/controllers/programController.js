@@ -38,10 +38,10 @@
     };
 
     $scope.validProgram = function (program) {
-        return resourceService.validViewModelEntity(program, $scope.programs);
+        return resourceService.validViewModelName(program, $scope.programs);
     };
 
     $scope.validProgramFeedback = function (program) {
-        program.error = $scope.validProgram(program) ? 'Name free!' : 'Name exists.';
+        program.error = $scope.validProgram(program) ? '' : 'A program with this name already exists.';
     };
 });

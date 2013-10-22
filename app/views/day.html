@@ -4,7 +4,7 @@
             <div class="panel-title">
                 <p><b>{{program.entity.name}}|</b><small><i>Days</i></small></p>
 
-                <a data-toggle="modal" data-target="#mdlCreateDay" class="btn btn-primary">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Day&nbsp;</a>               
+                <a data-toggle="modal" data-target="#mdlCreateDay" class="btn btn-primary">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Day&nbsp;</a>
             </div>
 
             <p><small><i>Use this page to create and edit existing days.</i></small></p>
@@ -12,10 +12,11 @@
 
         <ul class="list-group">
             <li class="list-group-item" data-ng-show="days.length <= 0">
-                <p class="text-center">You have no days.</p>
+                <p class="text-center">There are no days assigned to {{program.entity.name}}.</p>
+                <p class="text-center"><a data-toggle="modal" data-target="#mdlCreateDay">Add a day.</a></p>
             </li>
             <li data-ng-repeat="day in days" class="list-group-item">
-                
+
                 <div data-ng-switch on="day.operation">
                     <div class="row" data-ng-switch-when="read">
                         <h4><a class="col-xs-10" data-ng-click="loadExercises(day)" data-target="#exercises{{day.entity.id}}" data-toggle="collapse">{{day.entity.name}}</a></h4>
@@ -37,30 +38,29 @@
                     <div class="clearfix">
                         <br />
                     </div>
-                    <div data-ng-show="day.exercises.length <= 0">
-                        <p class="text-center">You have no exercises for this day.</p>
+                    <div data-ng-show="day.entity.exercises.length <= 0">
+                        <p class="text-center">You have no exercises assigned to {{day.entity.name}}.</p>
                         <p class="text-center"><a data-ng-click="loadDay(day)" data-toggle="modal" data-target="#mdlCreateExercise">Add Exercise.</a></p>
                     </div>
 
-                    <table class="table" data-ng-show="day.exercises.length > 0">
+                    <table class="table" data-ng-show="day.entity.exercises.length > 0">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Reps</th>
-                                <th>Weight</th>
+                                <th>Exercise</th>
+                                <th colspan="2" class="text-center">Targets</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr data-ng-repeat="exercise in day.exercises">
-                                <td>{{exercise.entity.name}}</td>
-                                <td>{{day.entity.exercises[$index].target.reps}}</td>
-                                <td>{{day.entity.exercises[$index].target.weight}}</td>
+                            <tr data-ng-repeat="exerciseInfo in day.entity.exercises">
+                                <td>{{exerciseInfo.exercise.name}}</td>
+                                <td>{{exerciseInfo.target.reps}} rep(s)</td>
+                                <td>{{exerciseInfo.target.perform}}{{exerciseInfo.target.measurement}}</td>
+                                <td data-ng-click="loadExercise(exerciseInfo,day)"><a class="" data-toggle="modal" data-target="#mdlUpdateExercise"><span class="glyphicon glyphicon-edit"></span></a></td>
                             </tr>
                         </tbody>
                     </table>
-                        </div>
+                </div>
                 <!--End Exercise Collapse-->
-
                 <!--Day Options-->
                 <div id="opt{{$index}}" class="row collapse">
                     <div class="clearfix">
@@ -78,12 +78,13 @@
 </div>
 
 <!--Modals-->
+
 <modal modalid="mdlCreateDay">
     <div class="modal-body">
         <p>Please enter a day name.</p>
         <input class="form-control" data-ng-model="newDay.entity.name" data-ng-change="validDayFeedback(newDay)">
         <p>{{newDay.error}}</p>
-        </div>
+    </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-disabled="!validDay(newDay)" data-ng-click="addDay(newDay)">Create</button>
@@ -93,35 +94,117 @@
 <modal modalid="mdlCreateExercise">
 
     <div class="modal-body">
-        <p>Please select an exercise.</p>
-        <select class="form-control" ng-model="selectedExercise" data-ng-change="newExercise.entity.name = ''" ng-options="exercise.entity.name for exercise in allExercises">
-            <option value="">-- Create New Exercise --</option>
+        <label>Please select an exercise </label>
+        <select class="form-control" ng-model="selectedExercise.exercise" ng-options="exercise.name for exercise in allExercises">
+            <option value="">create new exercise</option>
         </select>
 
         <div class="clearfix">
             <br />
         </div>
 
-        <div data-ng-hide="selectedExercise">
-            <p>Please enter an exercise name.</p>
-            <input class="form-control" data-ng-model="newExercise.entity.name">
+        <div data-ng-hide="selectedExercise.exercise">
+            <label>Exercise name </label>
+            <input class="form-control" data-ng-model="newExercise.entity.name" data-ng-change="validExerciseFeedback(newExercise)">
             <p>{{newExercise.error}}</p>
         </div>
 
-        <p>Reps.</p>
-        <input class="form-control" type="number" data-ng-model="newExercise.target.reps">
-
-        <p>Weight.</p>
-        <input class="form-control" type="number" data-ng-model="newExercise.target.weight">
+        <div class="clearfix">
+            <br />
         </div>
+
+
+        <label>Measurement </label>
+
+        <select class="form-control" ng-model="selectedExercise.target.measurement" ng-options="measurement for measurement in measurements"></select>
+
+
+        <div class="clearfix">
+            <br />
+        </div>
+
+        <label>Targets <i>(Optional)</i></label>
+
+        <div class="row">
+            <div class="col-xs-6">
+                <p>Reps</p>
+            </div>
+            <div class="col-xs-6">
+                <input class="form-control input-sm" type="number" data-ng-model="selectedExercise.target.reps">
+            </div>
+
+            <div class="clearfix">
+                <br />
+            </div>
+
+            <div class="col-xs-6">
+                <p>Weight</p>
+            </div>
+            <div class="col-xs-6">
+                <input class="form-control input-sm" type="number" data-ng-model="selectedExercise.target.perform">
+            </div>
+
+        </div>
+    </div>
 
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-show="selectedExercise" data-ng-click="addExercise(selectedExercise)">Add</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-hide="selectedExercise" data-ng-disabled="!validExercise(newExercise)" data-ng-click="createExercise(newExercise)">Create</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-show="selectedExercise.exercise" data-ng-click="addExercise(selectedExercise)">Add</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-hide="selectedExercise.exercise" data-ng-disabled="!validExercise(newExercise)" data-ng-click="createExercise(newExercise)">Create</button>
 
     </div>
 
 </modal>
-<!--End Modals-->
 
+<modal modalid="mdlUpdateExercise">
+
+    <div class="modal-body">
+        <label>Exercise </label>
+        <select class="form-control" ng-model="selectedExercise.exercise" ng-options="exercise.name for exercise in allExercises"></select>
+
+        <div class="clearfix">
+            <br />
+        </div>
+
+
+        <label>Measurement </label>
+
+        <select class="form-control" ng-model="selectedExercise.target.measurement" ng-options="measurement for measurement in measurements"></select>
+
+        <div class="clearfix">
+            <br />
+        </div>
+        
+        <p>Targets <i>(Optional)</i></p>
+       
+
+        <div class="row">
+            <div class="col-xs-6">
+                <label>Reps</label>
+            </div>
+            <div class="col-xs-6">
+                <input class="form-control input-sm" type="number" data-ng-model="selectedExercise.target.reps">
+            </div>
+
+            <div class="clearfix">
+                <br />
+            </div>
+
+            <div class="col-xs-6">
+                <label>Weight</label>
+            </div>
+            <div class="col-xs-6">
+                <input class="form-control input-sm" type="number" data-ng-model="selectedExercise.target.perform">
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-click="deleteExercise(selectedExercise)">Delete</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-click="updateExercise(selectedExercise)">Update</button>
+    </div>
+
+</modal>
+<!--End Modals-->

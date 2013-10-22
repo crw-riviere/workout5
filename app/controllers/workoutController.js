@@ -2,9 +2,9 @@
     init();
 
     function init() {
-        $scope.weightMeasurement = resourceService.consts.measuement.weight.kg;
         $scope.sessions = [];
         $scope.exercises = [];
+        $scope.sets = [];
 
         entityService.getPrograms().then(function (programs) {
             $scope.programs = programs;
@@ -48,30 +48,42 @@
 
         entityService.addSession(newSession).then(function (session) {
             $scope.session = resourceService.getViewModel(session);
-            entityService.getExercisesByDay($scope.day).then(function (exercises) {
-                $scope.exercises = resourceService.getViewModelCollection(exercises);
-                $scope.loadExercise($scope.exercises[0]);
-            })
+
+            $scope.loadExercise($scope.day.exercises[0]);
+
+            //entityService.getExercisesByDay($scope.day).then(function (exercises) {
+            //    $scope.exercises = resourceService.getViewModelCollection(exercises);
+            //})
         });
-    }
+    };
 
-    $scope.loadExercise = function (exercise) {
-        $scope.exercise = exercise;
+    $scope.loadExercise = function (exerciseInfo) {
+        $scope.sets = [];
+        $scope.selectedExercise = exerciseInfo;
 
-        var sessionExercise = [$scope.session.entity.id, exercise.entity.id];
-        var prevSessionExercise = [$scope.session.entity.prevSession, exercise.entity.id];
+        var sessionExercise = [$scope.session.entity.id, exerciseInfo.exercise.id];
+        var prevSessionExercise = [$scope.session.entity.prevSession, exerciseInfo.exercise.id];
 
         entityService.getSetsBySessionExercise(sessionExercise).then(function (sets) {
-            $scope.sets = resourceService.getViewModelCollection(sets);
-        })
+            var setsViewModel = resourceService.getViewModelCollection(sets);
 
-        entityService.getSetsBySessionExercise(prevSessionExercise).then(function (sets) {
-            $scope.prevSessionSets = resourceService.getViewModelCollection(sets);
-        })
+            //    angular.forEach(setsViewModel, function (set) {
+            //        $scope.sets.push(getSetViewModelWithTarget(set));
+            //    });
+            //})
 
-        entityService.getSetByExerciseWeightMax(exercise.entity.id).then(function (sets) {
-            $scope.maxWeightSet = resourceService.getViewModel(sets);
-        })
+            if (exerciseInfo.exercise.id) {
+                entityService.getSetByExercisePerformMax(exerciseInfo.exercise.id).then(function (sets) {
+                    $scope.maxPerformSet = resourceService.getViewModel(sets);
+                })
+            }
+
+            if (prevSessionExercise) {
+                entityService.getSetsBySessionExercise(prevSessionExercise).then(function (sets) {
+                    $scope.prevSessionSets = resourceService.getViewModelCollection(sets);
+                })
+            }
+        });
     };
 
     $scope.addSet = function () {
@@ -79,10 +91,10 @@
             no: $scope.sets.length + 1,
             day: $scope.day.id,
             session: $scope.session.entity.id,
-            exercise: $scope.exercise.entity.id,
+            exercise: $scope.selectedExercise.exercise.id,
             reps: 0,
-            weight: 0,
-            measuement: $scope.weightMeasurement
+            perform: 0,
+            measurement: $scope.selectedExercise.target.measurement
         };
 
         entityService.addSet(set).then(function (newSet) {
@@ -99,7 +111,7 @@
     $scope.saveSet = function (set) {
         entityService.saveSet(set.entity).then(function () {
             set.operation = resourceService.consts.op.read;
-            set.weightMaxPercent = resourceService.getWeightTargetPercantage(set.entity.weight,);
+            set = getSetViewModelWithTarget(set);
         });
     };
 
@@ -109,9 +121,36 @@
         })
     };
 
+    $scope.convertToKg = function () {
+        $scope.sets = resourceService.convertSetsViewModelToKg($scope.sets);
+    }
+
+    $scope.convertToLbs = function () {
+        $scope.sets = resourceService.convertSetsViewModelToLbs($scope.sets);
+    }
+
+    $scope.cycleMeasurement = function (set) {
+        var weights = resourceService.getWeightMeasurements();
+        var index = weights.indexOf(set.entity.measurement) + 1 < weights.length ? weights.indexOf(set.entity.measurement) + 1 : 0;
+        set.entity.measurement = weights[index];
+    }
+
     function getDateString() {
         var date = resourceService.date();
 
         return date.day + '-' + date.month + '-' + date.yearShort;
     };
+
+    function getSetViewModelWithTarget(set) {
+        var exerciseTarget = entityService.getExerciseTargetByDay(set.entity.exercise, $scope.day)
+
+        if (exerciseTarget) {
+            set.performTargetPercent = resourceService.getPerformTargetPercantage(set.entity.perform, exerciseTarget.perform) + '%';
+        }
+        else {
+            set.performTargetPercent = 'N/A';
+        }
+
+        return set;
+    }
 });

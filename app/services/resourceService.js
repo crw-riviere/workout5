@@ -25,13 +25,17 @@
             session: 'session',
             sessionExercise: 'sessionExercise'
         },
-        measuement: {
+        measurement: {
             weight: {
-                kg: 'kg',
+                kgs: 'kgs',
                 lbs: 'lbs'
             }
         }
     };
+
+    self.getWeightMeasurements = function () {
+        return [self.consts.measurement.weight.kgs, self.consts.measurement.weight.lbs];
+    }
 
     self.date = function () {
         var today = new Date();
@@ -65,15 +69,25 @@
     self.validEntity = function (valEntity, entityCollection) {
         var valid = true;
 
-        angular.forEach(entityCollection, function (entity) {
-            if (entity.id !== valEntity.id &&
-                angular.lowercase(entity.name) === angular.lowercase(valEntity.name)) {
-                valid = false;
+        if (entityCollection) {
+            for (var i = 0; i < entityCollection.lenght; i++) {
+                if (entityCollection[i].id !== valEntity.id &&
+                    angular.lowercase(entityCollection[i].name) === angular.lowercase(valEntity.name)) {
+                    return false;
+                }
             }
-        });
+        }
 
-        return valid;
+        return true;
     };
+
+    self.validViewModelName = function (viewModel, viewModelCollection) {
+        return self.validViewModelEntity(viewModel, viewModelCollection) && viewModel.entity.name !== '';
+    }
+
+    self.validEntityName = function (entity, entityCollection) {
+        return self.validEntity(entity, entityCollection) && entity.name !== '';
+    }
 
     self.getViewModel = function (entity, operation) {
         return { entity: entity || {}, operation: operation || self.consts.op.read, error: '' };
@@ -88,30 +102,29 @@
         return entityCollection;
     }
 
-    self.getWeightTargetPercantage = function (weight, targetWeight) {
-        return ((setWeight / targetWeight) * 100).toFixed(2);
+    self.getPerformTargetPercantage = function (perform, targetPerform) {
+        return ((perform / targetPerform) * 100).toFixed(2);
     }
 
-    self.convertSetsToKg = function (sets) {
+    self.convertSetsViewModelToKg = function (sets) {
         angular.forEach(sets, function (set) {
-            if (set.weightMeasurement === resourceService.consts.measuement.weight.lbs) {
-                var kgCalc = set.weightMeasurement * 0.45359237;
+            if (set.entity.measurement === self.consts.measurement.weight.lbs) {
+                var kgCalc = set.entity.perform * 0.45359237;
                 var kgs = Math.round(kgCalc);
-                set.weight = kgs;
-                set.weightMeasurement = resourceService.consts.measuement.weight.kg;
+                set.entity.perform = kgs;
+                set.entity.measurement = self.consts.measurement.weight.kgs;
             }
         });
-
         return sets;
     };
 
-    self.convertSetsToLbs = function (sets) {
+    self.convertSetsViewModelToLbs = function (sets) {
         angular.forEach(sets, function (set) {
-            if (set.weightMeasurement === resourceService.consts.measuement.weight.kg) {
-                var kg = set.weight() / 0.45359237;
-                var lbs = Math.floor(kg);
-                set.weight = lbs;
-                set.measurement = resourceService.consts.measuement.weight.lbs
+            if (set.entity.measurement === self.consts.measurement.weight.kgs) {
+                var kgs = set.entity.perform / 0.45359237;
+                var lbs = Math.floor(kgs);
+                set.entity.perform = lbs;
+                set.entity.measurement = self.consts.measurement.weight.lbs
             }
         });
 

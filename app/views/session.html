@@ -78,19 +78,17 @@
                 </div>
                 <div class="container">
                     <select class="form-control" data-ng-model="exercise"
-                            data-ng-options="exercise.entity.name for exercise in exercises"
+                            data-ng-options="exerciseInfo.exercise.name for exerciseInfo in session.entity.exercises"
                             data-ng-change="loadExercise(session,exercise)">
                         <option value="">select exercise</option>
                     </select>
                 </div>
 
-                <div class="clearfix visible">
-                    <br />
-                </div>
+             
 
                 <ul class="list-group">
-                    <li class="row">
-                        <h6 class="col-xs-2 text-center">Set</h6>
+                    <li class="row" data-ng-hide="sets.length <= 0">
+                        <h6 class="col-xs-2 text-center">&nbsp;Set</h6>
                         <h6 class="col-xs-2 text-center">Rep</h6>
                         <h6 class="col-xs-2 text-center">Weight</h6>
                         <h6 class="col-xs-3 text-center">Target %</h6>
@@ -106,11 +104,10 @@
                             <div class="row" data-ng-switch-when="read">
                                 <h6 class="col-xs-2">{{set.entity.no}}.</h6>
                                 <h6 class="col-xs-2">{{set.entity.reps}}</h6>
-                                <h6 class="col-xs-2">{{set.entity.weight}}{{set.entity.measuement}}</h6>
-                                <h6 class="col-xs-3"></h6>
+                                <h6 class="col-xs-2">{{set.entity.perform}}{{set.entity.measurement}}</h6>
+                                <h6 class="col-xs-3">{{getSetTargetPercentage(set.entity.perform,session.exercise.target.perform)}}</h6>
                                 <h6 class="col-xs-3"></h6>
                             </div>
-
                             <div class="row" data-ng-switch-when="update">
 
                                 <h4 class="col-xs-2">{{set.entity.no}}.</h4>
@@ -119,8 +116,8 @@
                                        data-ng-model="set.entity.reps" />
 
                                 <input class="col-xs-3" type="number"
-                                       data-ng-model="set.entity.weight" />
-                                <label class="col-xs-1">{{set.entity.measuement}}</label>
+                                       data-ng-model="set.entity.perform" />
+                                <label class="col-xs-1">{{set.entity.measurement}}</label>
                             </div>
                         </div>
                     </li>

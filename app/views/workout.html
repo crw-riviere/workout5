@@ -41,77 +41,95 @@
         <p><small><i>Use this page to create and edit sets.</i></small></p>
 
         <div class="row">
-            <label class="col-xs-4 accordion-toggle" data-parent="#optionsWokrout" data-target="#measurement" data-toggle="collapse">
-                <span class="caret"></span>&nbsp;<small><b>Weight </b></small>
+            <label class="col-xs-4 accordion-toggle" data-parent="#dtlOptionsMaster" data-target="#dtlConvertWeight" data-toggle="collapse">
+                <span class="caret"></span>&nbsp;<small><small>WEIGHT </small></small>
             </label>
 
-            <label class="col-xs-4 accordion-toggle" data-ng-disabled="prevSessionSets.length <= 0" data-parent="#optionsWokrout" data-target="#prevSessionExercises" data-toggle="collapse">
-                <span class="caret"></span>&nbsp;<small><b>Previous</b></small>
+            <label class="col-xs-4 accordion-toggle" data-ng-disabled="prevSessionSets.length <= 0" data-parent="#dtlOptionsMaster" data-target="#dtlPrevSets" data-toggle="collapse">
+                <span class="caret"></span>&nbsp;<small><small>PREVIOUS</small></small>
             </label>
 
-            <label class="col-xs-4 accordion-toggle" data-ng-disabled="!maxPerformSet" data-parent="#optionsWokrout" data-target="#exerciseMaxPerform" data-toggle="collapse">
-                <span class="caret"></span>&nbsp;<small><b>Record</b></small>
+            <label class="col-xs-4 accordion-toggle" data-ng-disabled="!maxPerformSet" data-parent="#dtlOptionsMaster" data-target="#dtlMaxPerformSet" data-toggle="collapse">
+                <span class="caret"></span>&nbsp;<small><small>RECORD</small></small>
             </label>
         </div>
 
-        <div id="optionsWokrout">
+        <div id="dtlOptionsMaster" class="panel-group">
+            <div class="panel panel-default">
+                <div id="dtlConvertWeight" class="panel-collapse collapse">
+                    <label>Convert to |</label>
+                    <a class="btn btn-sm" data-ng-click="convertToKg()">
+                        <small><i>kilograms</i></small>
+                    </a>
+                    <a class="btn btn-sm" data-ng-click="convertToLbs()">
+                        <small><i>pounds</i></small>
+                    </a>
+                </div>
+            </div>
 
-            <div id="measurement" class="collapse">
-                <label>Convert to |</label>
-                <a class="btn btn-sm" data-ng-click="convertToKg()">
-                    <small><i>kilograms</i></small>
-                </a>
-                <a class="btn btn-sm" data-ng-click="convertToLbs()">
-                    <small><i>pounds</i></small>
-                </a>
+            <div class="panel panel-default">
+                <div id="dtlPrevSets" class="panel-collapse collapse">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>
+                                    SET
+                                </th>
+                                <th>
+                                    REP(S)
+                                </th>
+                                <th>
+                                    WEIGHT
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="set in prevSessionSets">
+                                <td>
+                                    {{set.entity.no}}.
+                                </td>
+                                <td>
+                                    {{set.entity.reps}}
+                                </td>
+                                <td>
+                                    {{set.entity.perform}} {{set.entity.measurement}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div id="prevSessionExercises" class="collapse">
-               <table class="table table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Set
-                            </th>
-                            <th>Rep(s)
-                            </th>
-                            <th>Weight
-                            </th>                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-ng-repeat="set in prevSessionSets">
-                            <td>{{set.entity.no}}.
-                            </td>
-                            <td>{{set.entity.reps}}
-                            </td>
-                            <td>{{set.entity.perform}} {{set.entity.measurement}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>                
-            </div>
-            <div id="exerciseMaxPerform" class="collapse">
-                <table class="table table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Set
-                            </th>
-                            <th>Rep
-                            </th>
-                            <th>Weight
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{maxPerformSet.entity.no}}.
-                            </td>
-                            <td>{{maxPerformSet.entity.reps}}
-                            </td>
-                            <td>{{maxPerformSet.entity.perform}} {{set.entity.measurement}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="panel panel-default">
+                <div id="dtlMaxPerformSet" class="panel-collapse collapse">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>
+                                    SET
+                                </th>
+                                <th>
+                                    REP(S)
+                                </th>
+                                <th>
+                                    WEIGHT
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {{maxPerformSet.entity.no}}.
+                                </td>
+                                <td>
+                                    {{maxPerformSet.entity.reps}}
+                                </td>
+                                <td>
+                                    {{maxPerformSet.entity.perform}} {{set.entity.measurement}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -126,10 +144,10 @@
 
     <ul class="list-group">
         <li class="row" data-ng-hide="sets.length <= 0">
-            <h5 class="col-xs-2 text-center">&nbsp;Set</h5>
-            <h5 class="col-xs-2">Rep(s)</h5>
-            <h5 class="col-xs-3">Weight </h5>
-            <h5 class="col-xs-3 text-center">Target %</h5>
+            <h5 class="col-xs-2 text-center">&nbsp;SET</h5>
+            <h5 class="col-xs-2">REP(S)</h5>
+            <h5 class="col-xs-3">WEIGHT </h5>
+            <h5 class="col-xs-3 text-center">TARGET %</h5>
         </li>
 
         <li class="list-group-item" data-ng-show="sets.length <= 0">

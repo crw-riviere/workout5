@@ -372,7 +372,7 @@
         return deferred.promise;
     };
 
-    self.getMaxSetBySessionExercise = function (exerciseId) {
+    self.getMaxSetBySessionExercise = function (sessionExercise) {
         var deferred = $q.defer();
 
         dbService.getEntityByIndexHighestValue(resourceService.consts.index.exercise, exerciseId, 'perform', resourceService.consts.store.set, function (set) {

@@ -4,10 +4,14 @@
             <div class="panel-title">
                 <p><b>Workout</b><i>5</i> <b>|</b><small><i>Programs</i></small></p>
 
-                <a data-toggle="modal" data-target="#mdlCreateProgram" class="btn btn-primary">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Program&nbsp;</a>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mdlCreateProgram">
+                    &nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>Program&nbsp;
+                </button>
                                
             </div>
-
+            <div class="clearfix">
+                <br />
+            </div>
             <p><small><i>Use this page to create and edit existing programs.</i></small></p>
         </div>
         <ul class="list-group">
@@ -18,15 +22,20 @@
             <li data-ng-repeat="program in programs" class="list-group-item">
                 <div data-ng-switch on="program.operation">
                     <div class="row" data-ng-switch-when="read">
-                        <h4><a data-ng-href="Days/{{program.entity.id}}" class="col-xs-10" data-toggle="tab">{{program.entity.name}}</a></h4>
-                        <a class="col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse"><span class="glyphicon glyphicon-edit"></span></a>
-                    </div>
+
+                       
+                        <h4 class=""><a class="col-xs-10" data-ng-href="Days/{{program.entity.id}}" data-toggle="tab">{{program.entity.name}}</a></h4>
+                      
+                            <h4 class="">
+                                <button type="button" class="btn btn-default" data-target="#opt{{$index}}" data-toggle="collapse"><span class="glyphicon glyphicon-pencil"></span></button>
+                            </h4>
+                        </div>
                     <div class="row" data-ng-switch-when="update">
                         <div class="col-xs-10">
                             <input class="form-control" type="text" placeholder="Program Name" data-ng-model="program.entity.name" data-ng-change="validProgramFeedback(program)" />
                         </div>
-                        <div class="col-xs-2">
-                            <a class="btn btn-large" data-ng-disabled="!validProgram(program)" data-ng-click="saveProgram(program)"><span class="glyphicon glyphicon-ok"></span></a>
+                        <div class="col-xs-2 text-center">
+                            <button type="button" class="btn btn-large" data-ng-disabled="!validProgram(program)" data-ng-click="saveProgram(program)"><span class="glyphicon glyphicon-ok"></span></button>
                         </div>
 
                     </div>
@@ -36,8 +45,13 @@
                         <br />
                     </div>
                     <p>{{program.error}}</p>
-                    <a class="col-xs-6 btn btn-large" data-ng-click="editProgram(program)"><span class="glyphicon glyphicon-pencil"></span></a>
-                    <a class="col-xs-6 btn btn-large" data-ng-click="deleteProgram(program)"><span class="glyphicon glyphicon-trash"></span></a>
+                    <div class="col-xs-6 text-center">
+                        <button type="button" class="btn btn-default" data-ng-click="editProgram(program)"><span class="glyphicon glyphicon-pencil"></span></button>
+                    </div>
+
+                    <div class="col-xs-6 text-center">
+                        <button type="button" class="btn btn-default" data-ng-click="deleteProgram(program)"><span class="glyphicon glyphicon-trash"></span></button>
+                    </div>
                 </div>
             </li>
         </ul>
@@ -55,7 +69,7 @@
         </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-disabled="!validProgram(newProgram)" data-ng-click="addProgram(newProgram)">Create</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-disabled="!validProgram(newProgram)" data-ng-click="addProgram(newProgram)">Create</button>
     </div>
 </modal>
 

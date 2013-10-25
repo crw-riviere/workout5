@@ -29,19 +29,23 @@
     $scope.loadDay = function (day) {
         $scope.day = day;
 
-        angular.forEach(day.exercises, function (exerciseInfo) {
-            var exerciseData = { name: exerciseInfo.exercise.name, target: exerciseInfo.target.perform, sessions: [] };
-        })
+        //var sessionExerciseCollection = [];
 
-        entityService.getSessionsByDay(day.id).then(function (sessions) {
-            angular.forEach(sessions, function (session) {
-                $scope.sessions.push({ entity: session, operation: resourceService.consts.op.read });
-            })
-        })
+        //entityService.getSessionsByDay(day.id).then(function (sessions) {
+        //    angular.forEach(day.exercises, function (exerciseInfo) {
+        //        var exercise = [];
+        //        angular.forEach(sessions, function (session) {
+        //            var sessionExercise = [session.id, exerciseInfo.exercise.id];
+        //            entityService.getMaxSetBySessionExercise(sessionExercise).then(function (set) {
+        //                exercise.push(set);
+        //            })
+        //        })
 
-        //entityService.getExercisesByDay($scope.day).then(function (exercises) {
-        //    $scope.exercises = resourceService.getViewModelCollection(exercises);
+        //        sessionExerciseCollection.push(exercise);
+        //    })
         //})
+
+        entityService.getAllMaxSetsForDay(day);
     };
 
     //$scope.loadExercise = function (session, exercise) {

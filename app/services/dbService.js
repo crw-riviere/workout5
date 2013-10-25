@@ -278,7 +278,6 @@
                 if (cursor) {
                     var entity = cursor.value;
                     if (!highestValueEntity || entity[entityProp] > highestValueEntity[entityProp]) {
-                        console.log('entity value higher, assigning');
                         highestValueEntity = entity;
                     }
 

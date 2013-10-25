@@ -12,6 +12,27 @@
     <title>Workout5</title>
 </head>
 <body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menu-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+        <div class="collapse navbar-collapse navbar-menu-collapse">
+            <ul class="nav navbar-nav">
+                <li data-target=".navbar-menu-collapse" data-toggle="collapse" class="active"><a href="Programs">PROGRAMS</a></li>
+                <li data-target=".navbar-menu-collapse" data-toggle="collapse"><a data-ng-href="Workout">WORKOUT</a></li>
+                <li data-target=".navbar-menu-collapse" data-toggle="collapse"><a data-ng-href="Sessions">JOURNAL</a></li>
+                <li data-target=".navbar-menu-collapse" data-toggle="collapse"><a data-ng-href="Progress">PROGRESS</a></li>
+                <li data-target=".navbar-menu-collapse" data-toggle="collapse"><a data-ng-href="Settings">SETTINGS</a></li>
+            </ul>
+        </div>
+
+    </nav>
     <div class="container">
         <div data-ng-view="">
         </div>

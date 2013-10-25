@@ -375,13 +375,51 @@
     self.getMaxSetBySessionExercise = function (sessionExercise) {
         var deferred = $q.defer();
 
-        dbService.getEntityByIndexHighestValue(resourceService.consts.index.exercise, exerciseId, 'perform', resourceService.consts.store.set, function (set) {
+        dbService.getEntityByIndexHighestValue(resourceService.consts.index.sessionExercise, sessionExercise, 'perform', resourceService.consts.store.set, function (set) {
             $rootScope.$apply(function () {
                 deferred.resolve(set);
             });
         })
         return deferred.promise;
     };
+
+    self.getAllMaxSetsBySessionExercise = function (sessionExerciseCollection) {
+        var deferred = $q.defer();
+        var promises = [];
+
+        angular.forEach(sessionExerciseCollection, function (sessionExercise) {
+            promises.push(self.getMaxSetBySessionExercise(sessionExercise));
+        })
+
+        $q.all(promises).then(function (sets) {
+            deferred.resolve(sets);
+        })
+    }
+
+    self.getAllMaxSetsForDay = function (day) {
+        var deferred = $q.defer();
+
+        self.getSessionsByDay(day.id).then(function (sessions) {
+            var allExercisesSE = [];
+
+            angular.forEach(day.exercises, function (exerciseInfo) {
+                var sessionExerciseCollection = [];
+
+                angular.forEach(sessions, function (session) {
+                    var sessionExercise = [session.id, exerciseInfo.exercise.id];
+                    sessionExerciseCollection.push(sessionExercise);
+                })
+
+                allExercisesSE.push({ exercise: exerciseInfo.exercise.name, sessionExerciseCollection: sessionExerciseCollection });
+            })
+
+            console.log('ok');
+            console.debug(allExercisesSE);
+        })
+    }
+
+    self.getAllMaxSetsForDayData = function () {
+    }
 
     //End Set Functions
 });

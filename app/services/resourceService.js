@@ -103,7 +103,12 @@
     }
 
     self.getPerformTargetPercantage = function (perform, targetPerform) {
-        return ((perform / targetPerform) * 100).toFixed(2);
+        if (perform > 0 && targetPerform > 0) {
+            return ((perform / targetPerform) * 100).toFixed(2) + '%';
+        }
+        else {
+            return 'N/A';
+        }
     }
 
     self.convertSetsViewModelToKg = function (sets) {

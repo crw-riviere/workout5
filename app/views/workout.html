@@ -29,10 +29,9 @@
     <div class="panel-heading">
         <div class="panel-title">
             <p>
-                <b>Session | </b><small><i>{{session.entity.name}}</i></small>
+                <b>{{session.entity.name}} | </b><small><i>{{selectedExercise.exercise.name}}</i></small>
            </p>
-            <p>
-                <b>Exercise | </b><small><i>{{selectedExercise.exercise.name}}</i></small>           
+                   
             <p>
                 <a class="btn btn-primary" data-ng-click="addSet()">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Set&nbsp;</a>
             </p>
@@ -147,12 +146,12 @@
             <h5 class="col-xs-2 text-center">&nbsp;SET</h5>
             <h5 class="col-xs-2">REP(S)</h5>
             <h5 class="col-xs-3">WEIGHT </h5>
-            <h5 class="col-xs-3 text-center">TARGET %</h5>
+            <h5 class="col-xs-4 text-left">TARGET %</h5>
         </li>
 
         <li class="list-group-item" data-ng-show="sets.length <= 0">
             <p class="text-center">You have no sets.</p>
-            <p class="text-center"><a data-ng-click="addSet()">Add a set.</a></p>
+            <p class="text-center"><a class="btn btn-info" data-ng-click="addSet()">Add Set</a></p>
         </li>
 
         <li data-ng-repeat="set in sets" class="list-group-item">
@@ -163,32 +162,33 @@
                     <h6 class="col-xs-3">{{set.entity.perform}} {{set.entity.measurement}}</h6>
                     <h6 class="col-xs-3">&nbsp;&nbsp;{{set.performTargetPercent}}</h6>
                     <a class="btn btn-link btn-default col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse">
-                        <span class="glyphicon glyphicon-edit"></span>
+                        <span class="glyphicon glyphicon-pencil"></span>
                     </a>
                 </div>
 
-                <div class="row" data-ng-switch-when="update">              
+                <div class="row" data-ng-switch-when="update">
 
-                    <div class="col-xs-5">
-                        <div class="input-group input-group-sm">
-                            <input class="form-control" type="number" data-ng-model="set.entity.reps" />
-                            <span class="input-group-addon">reps</span>
-                        </div>
+
+
+                    <div class="col-xs-4">                       
+                        <input class="form-control" type="number" placeholder="reps" data-ng-model="set.entity.reps" />
                     </div>
 
 
-                    <div class="col-xs-5">
-                        <div class="input-group input-group-sm">
-                            <input class=" form-control" type="number"
-                                   data-ng-model="set.entity.perform" />
-
-                            <span class="input-group-addon" data-ng-click="cycleMeasurement(set)">{{set.entity.measurement}}&nbsp;<span class="glyphicon glyphicon-resize-vertical"></span></span>
-                        </div>
+                    <div class="col-xs-4">                       
+                        <input class=" form-control" type="number" placeholder="weight" data-ng-model="set.entity.perform" />
                     </div>
 
-                    <a class="col-xs-2 btn btn-link btn-default" data-ng-click="saveSet(set)">
-                        <span class="glyphicon glyphicon-ok"></span>
-                    </a>
+                    <div class="col-xs-2">
+                        <button type="button" class="btn btn-default" data-ng-click="cycleMeasurement(set)">{{set.entity.measurement}}&nbsp;&olarr;</button>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <button type="button" class="btn btn-default" data-ng-click="saveSet(set)">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
+                    </div>
+
                 </div>
             </div>
 
@@ -198,9 +198,16 @@
                 <div class="clearfix">
                     <br />
                 </div>
+                <div class="col-xs-6">
+                    <button type="button" class="btn btn-default" data-ng-click="editSet(set)" data-ng-disabled="set.isEditing"><span class="glyphicon glyphicon-pencil"></span></button>
+                </div>
 
-                <a class="col-xs-6 btn btn-large" data-ng-click="editSet(set)" data-ng-disabled="set.isEditing"><span class="glyphicon glyphicon-pencil"></span></a>
-                <a class="col-xs-6 btn btn-large" data-ng-click="deleteSet(set)"><span class="glyphicon glyphicon-trash"></span></a>
+
+
+                <div class="col-xs-6">
+                    <button type="button" class="btn btn-default" data-ng-click="deleteSet(set)"><span class="glyphicon glyphicon-trash"></span></button>
+                </div>
+
             </div>
         </li>
     </ul>

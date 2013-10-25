@@ -55,8 +55,8 @@
         <li data-ng-repeat="session in sessions" class="list-group-item">
             <div data-ng-switch on="session.operation">
                 <div class="row" data-ng-switch-when="read">
-                    <h4><a data-ng-click="loadSession(session)" data-target="#sets{{session.entity.id}}" data-toggle="collapse" class="col-xs-10" data-toggle="tab">{{session.entity.name}}</a></h4>
-                    <a class="col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse"><span class="glyphicon glyphicon-edit"></span></a>
+                    <h4><a data-ng-click="loadSession(session)" data-target="#sets{{session.entity.id}}" data-toggle="collapse" class="col-xs-10">{{session.entity.name}}</a></h4>
+                    <a class="col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse"><span class="glyphicon glyphicon-pencil"></span></a>
                 </div>
                 
                     <div class="row" data-ng-switch-when="update">

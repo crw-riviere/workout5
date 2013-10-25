@@ -92,8 +92,8 @@
             day: $scope.day.id,
             session: $scope.session.entity.id,
             exercise: $scope.selectedExercise.exercise.id,
-            reps: 0,
-            perform: 0,
+            reps: null,
+            perform: null,
             measurement: $scope.selectedExercise.target.measurement
         };
 
@@ -109,9 +109,17 @@
     };
 
     $scope.saveSet = function (set) {
+        if (!set.entity.reps) {
+            set.entity.reps = 0;
+        }
+
+        if (!set.entity.perform) {
+            set.entity.perform = 0;
+        }
+
         entityService.saveSet(set.entity).then(function () {
             set.operation = resourceService.consts.op.read;
-            set = getSetViewModelWithTarget(set);
+            set.performTargetPercent = resourceService.getPerformTargetPercantage(set.entity.perform, $selectedExercise.target.perform)
         });
     };
 
@@ -141,16 +149,16 @@
         return date.day + '-' + date.month + '-' + date.yearShort;
     };
 
-    function getSetViewModelWithTarget(set) {
-        var exerciseTarget = entityService.getExerciseTargetByDay(set.entity.exercise, $scope.day)
+    //function getPerformTargetPercantage(set) {
+    //    var exerciseTarget = entityService.getExerciseTargetByDay(set.entity.exercise, $scope.day)
 
-        if (exerciseTarget) {
-            set.performTargetPercent = resourceService.getPerformTargetPercantage(set.entity.perform, exerciseTarget.perform) + '%';
-        }
-        else {
-            set.performTargetPercent = 'N/A';
-        }
+    //    if (exerciseTarget) {
+    //        set.performTargetPercent = resourceService.getPerformTargetPercantage(set.entity.perform, exerciseTarget.perform) + '%';
+    //    }
+    //    else {
+    //        set.performTargetPercent = 'N/A';
+    //    }
 
-        return set;
-    }
+    //    return set;
+    //}
 });

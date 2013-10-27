@@ -38,6 +38,7 @@
                 setStore.createIndex(resourceService.consts.index.exercise, resourceService.consts.index.exercise, { unique: false });
                 setStore.createIndex(resourceService.consts.index.session, resourceService.consts.index.session, { unique: false });
                 setStore.createIndex(resourceService.consts.index.sessionExercise, [resourceService.consts.index.session, resourceService.consts.index.exercise], { unique: false });
+                setStore.createIndex(resourceService.consts.index.dayExercise, [resourceService.consts.index.day, resourceService.consts.index.exercise], { unique: false });
             };
 
             request.onerror = function (event) {
@@ -277,6 +278,7 @@
                 var cursor = event.target.result;
                 if (cursor) {
                     var entity = cursor.value;
+                    console.debug('entity:', entity);
                     if (!highestValueEntity || entity[entityProp] > highestValueEntity[entityProp]) {
                         highestValueEntity = entity;
                     }

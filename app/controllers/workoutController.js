@@ -58,6 +58,7 @@
     };
 
     $scope.loadExercise = function (exerciseInfo) {
+        console.debug(exerciseInfo);
         $scope.sets = [];
         $scope.selectedExercise = exerciseInfo;
 
@@ -94,7 +95,8 @@
             exercise: $scope.selectedExercise.exercise.id,
             reps: null,
             perform: null,
-            measurement: $scope.selectedExercise.target.measurement
+            measurement: $scope.selectedExercise.target.measurement,
+            date: $scope.session.entity.date
         };
 
         entityService.addSet(set).then(function (newSet) {
@@ -119,7 +121,7 @@
 
         entityService.saveSet(set.entity).then(function () {
             set.operation = resourceService.consts.op.read;
-            set.performTargetPercent = resourceService.getPerformTargetPercantage(set.entity.perform, $selectedExercise.target.perform)
+            set.performTargetPercent = resourceService.getPerformTargetPercantage(set.entity.perform, $scope.selectedExercise.target.perform)
         });
     };
 

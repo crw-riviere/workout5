@@ -350,17 +350,6 @@
         return deferred.promise;
     };
 
-    self.getMaxSetBySession = function (sessionId) {
-        var deferred = $q.defer();
-
-        dbService.getEntityByIndexHighestValue(resourceService.consts.index.session, sessionId, 'perform', resourceService.consts.store.set, function (set) {
-            $rootScope.$apply(function () {
-                deferred.resolve(set);
-            });
-        })
-        return deferred.promise;
-    };
-
     self.getSetByExercisePerformMax = function (exerciseId) {
         var deferred = $q.defer();
 
@@ -383,42 +372,22 @@
         return deferred.promise;
     };
 
-    self.getAllMaxSetsBySessionExercise = function (sessionExerciseCollection) {
-        var deferred = $q.defer();
-        var promises = [];
-
-        angular.forEach(sessionExerciseCollection, function (sessionExercise) {
-            promises.push(self.getMaxSetBySessionExercise(sessionExercise));
-        })
-
-        $q.all(promises).then(function (sets) {
-            deferred.resolve(sets);
-        })
-    }
-
-    self.getAllMaxSetsForDay = function (day) {
+    self.getAllMaxSetsByDayExercise = function (dayId, exerciseId) {
         var deferred = $q.defer();
 
-        self.getSessionsByDay(day.id).then(function (sessions) {
-            var allExercisesSE = [];
+        self.getSessionsByDay(dayId).then(function (sessions) {
+            var promises = [];
 
-            angular.forEach(day.exercises, function (exerciseInfo) {
-                var sessionExerciseCollection = [];
-
-                angular.forEach(sessions, function (session) {
-                    var sessionExercise = [session.id, exerciseInfo.exercise.id];
-                    sessionExerciseCollection.push(sessionExercise);
-                })
-
-                allExercisesSE.push({ exercise: exerciseInfo.exercise.name, sessionExerciseCollection: sessionExerciseCollection });
+            angular.forEach(sessions, function (session) {
+                promises.push(self.getMaxSetBySessionExercise([session.id, exerciseId]));
             })
 
-            console.log('ok');
-            console.debug(allExercisesSE);
+            $q.all(promises).then(function (maxSets) {
+                deferred.resolve(maxSets);
+            })
         })
-    }
 
-    self.getAllMaxSetsForDayData = function () {
+        return deferred.promise;
     }
 
     //End Set Functions

@@ -1,5 +1,5 @@
 ﻿
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<!--<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <ul class="nav nav-pills">
         <li class="dropdown">
             <a class="accordion-toggle" data-toggle="collapse" data-parent="#headerNav" data-target="#ddExercise">EXERCISE <span class="caret"></span>
@@ -21,7 +21,12 @@
             </div>
         </div>
     </div>
-</nav>
+</nav>-->
+
+<select class="form-control"
+        data-ng-model="selectedExercise"
+        data-ng-options="exerciseInfo.exercise.name for exerciseInfo in day.exercises"
+        data-ng-change="loadExercise(selectedExercise)"></select>
 
     <!--Header Info-->
 
@@ -225,7 +230,10 @@
                 <h4 class="modal-title">Select Program</h4>
             </div>
             <div class="modal-body">
-                <select class="form-control" data-ng-model="program" data-ng-options="program.name for program in programs" data-ng-change="loadProgram(program)">
+                <select class="form-control"
+                        data-ng-model="program"
+                        data-ng-options="program.name for program in programs"
+                        data-ng-change="loadProgram(program)">
                     <option value="">-- select program --</option>
                 </select>
 
@@ -233,7 +241,11 @@
                     <br />
                 </div>
 
-                <select class="form-control" data-ng-model="day" data-ng-options="day.name for day in days" data-ng-change="loadDay(day)" data-ng-show="program">
+                <select class="form-control"
+                        data-ng-model="day"
+                        data-ng-options="day.name for day in days"
+                        data-ng-change="loadDay(day)"
+                        data-ng-show="program">
                     <option value="">-- select day --</option>
                 </select>
 

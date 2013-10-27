@@ -23,7 +23,8 @@
             name: 'name',
             exercise: 'exercise',
             session: 'session',
-            sessionExercise: 'sessionExercise'
+            sessionExercise: 'sessionExercise',
+            dayExercise: 'dayExercise'
         },
         measurement: {
             weight: {

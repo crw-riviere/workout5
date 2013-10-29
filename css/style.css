@@ -76,22 +76,21 @@ table.first-col-border td:first-child {
 }
 
 .block-center {
-  text-align: center;
+    text-align: center;
 }
- 
 
-.block-center:before {
-  content: '';
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-  margin-right: -0.25em; 
-}
+    .block-center:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -0.25em;
+    }
 
 .centered {
-  display: inline-block;
-  vertical-align: middle;
-  width: 300px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 300px;
 }
 
 .loading-ball {
@@ -151,6 +150,10 @@ path {
 .axis {
     shape-rendering: crispEdges;
 }
+
+    .axis .axis-text {
+        font-size: 5px;
+    }
 
 .x.axis line {
     stroke: black;

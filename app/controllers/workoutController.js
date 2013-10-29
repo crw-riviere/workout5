@@ -50,31 +50,21 @@
             $scope.session = resourceService.getViewModel(session);
 
             $scope.loadExercise($scope.day.exercises[0]);
-
-            //entityService.getExercisesByDay($scope.day).then(function (exercises) {
-            //    $scope.exercises = resourceService.getViewModelCollection(exercises);
-            //})
         });
     };
 
-    $scope.loadExercise = function (exerciseInfo) {
-        console.debug(exerciseInfo);
+    $scope.loadExercise = function (exercise) {
         $scope.sets = [];
-        $scope.selectedExercise = exerciseInfo;
+        $scope.exercise = exercise;
 
-        var sessionExercise = [$scope.session.entity.id, exerciseInfo.exercise.id];
-        var prevSessionExercise = [$scope.session.entity.prevSession, exerciseInfo.exercise.id];
+        var sessionExercise = [$scope.session.entity.id, exercise.id];
+        var prevSessionExercise = [$scope.session.entity.prevSession, exercise.id];
 
         entityService.getSetsBySessionExercise(sessionExercise).then(function (sets) {
             var setsViewModel = resourceService.getViewModelCollection(sets);
 
-            //    angular.forEach(setsViewModel, function (set) {
-            //        $scope.sets.push(getSetViewModelWithTarget(set));
-            //    });
-            //})
-
-            if (exerciseInfo.exercise.id) {
-                entityService.getSetByExercisePerformMax(exerciseInfo.exercise.id).then(function (sets) {
+            if (exercise.id) {
+                entityService.getSetByExercisePerformMax(exercise.id).then(function (sets) {
                     $scope.maxPerformSet = resourceService.getViewModel(sets);
                 })
             }
@@ -92,10 +82,10 @@
             no: $scope.sets.length + 1,
             day: $scope.day.id,
             session: $scope.session.entity.id,
-            exercise: $scope.selectedExercise.exercise.id,
+            exercise: $scope.exercise.id,
             reps: null,
             perform: null,
-            measurement: $scope.selectedExercise.target.measurement,
+            measurement: $scope.exercise.target.measurement,
             date: $scope.session.entity.date
         };
 
@@ -121,7 +111,7 @@
 
         entityService.saveSet(set.entity).then(function () {
             set.operation = resourceService.consts.op.read;
-            set.performTargetPercent = resourceService.getPerformTargetPercantage(set.entity.perform, $scope.selectedExercise.target.perform)
+            set.performTargetPercent = resourceService.getPerformTargetPercantage(set.entity.perform, $scope.exercise.target.perform)
         });
     };
 
@@ -150,17 +140,4 @@
 
         return date.day + '-' + date.month + '-' + date.yearShort;
     };
-
-    //function getPerformTargetPercantage(set) {
-    //    var exerciseTarget = entityService.getExerciseTargetByDay(set.entity.exercise, $scope.day)
-
-    //    if (exerciseTarget) {
-    //        set.performTargetPercent = resourceService.getPerformTargetPercantage(set.entity.perform, exerciseTarget.perform) + '%';
-    //    }
-    //    else {
-    //        set.performTargetPercent = 'N/A';
-    //    }
-
-    //    return set;
-    //}
 });

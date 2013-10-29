@@ -19,7 +19,7 @@
 
         $scope.newExercise = resourceService.getViewModel({ name: null });
 
-        $scope.selectedExercise = { exercise: null, target: { reps: 0, perform: 0, measurement: $scope.measurements[0] } };
+        $scope.exercise = { name: null, target: { reps: 0, perform: 0, measurement: $scope.measurements[0] } };
     };
 
     $scope.editDay = function (day) {
@@ -58,44 +58,37 @@
     };
 
     $scope.loadDay = function (day) {
-        $scope.selectedDay = day;
+        $scope.day = day;
     };
 
     $scope.loadExercise = function (exercise, day) {
-        $scope.selectedDay = day;
-        $scope.selectedExercise = exercise;
-
-        for (var i = 0; i < $scope.allExercises.length; i++) {
-            if ($scope.allExercises[i].id === exercise.exercise.id) {
-                $scope.selectedExercise.exercise = $scope.allExercises[i];
-                break;
-            }
-        }
+        console.debug(exercise);
+        $scope.day = day;
+        $scope.exercise = exercise;
 
         for (var i = 0; i < $scope.measurements.length; i++) {
             if ($scope.measurements[i] === exercise.target.measurement) {
-                $scope.selectedExercise.target.measurement === $scope.measurements[i];
+                $scope.exercise.target.measurement = $scope.measurements[i];
                 break;
             }
         }
     }
 
     $scope.addExercise = function (addedExercise) {
-        $scope.selectedDay.entity.exercises.push({ exercise: addedExercise.exercise, target: { reps: addedExercise.target.reps, perform: addedExercise.target.perform, measurement: addedExercise.target.measurement } });
+        $scope.day.entity.exercises.push({ id: addedExercise.id, name: addedExercise.name, target: { reps: addedExercise.target.reps, perform: addedExercise.target.perform, measurement: addedExercise.target.measurement } });
 
-        entityService.saveDay($scope.selectedDay.entity).then(function (day) {
-            $scope.selectedDay = resourceService.getViewModel(day);
+        entityService.saveDay($scope.day.entity).then(function (day) {
+            $scope.day = resourceService.getViewModel(day);
         })
     };
 
     $scope.createExercise = function (newExercise) {
+        console.debug(newExercise);
         entityService.addExercise(newExercise.entity).then(function (exercise) {
-            $scope.selectedDay.entity.exercises.push({ exercise: exercise, target: { reps: $scope.selectedExercise.target.reps, perform: $scope.selectedExercise.target.perform, measurement: $scope.selectedExercise.target.measurement } });
+            $scope.day.entity.exercises.push({ id: exercise.id, name: exercise.name, target: { reps: $scope.exercise.target.reps, perform: $scope.exercise.target.perform, measurement: $scope.exercise.target.measurement } });
 
-            console.debug($scope.selectedDay);
-
-            entityService.saveDay($scope.selectedDay.entity).then(function (day) {
-                $scope.selectedDay = resourceService.getViewModel(day);
+            entityService.saveDay($scope.day.entity).then(function (day) {
+                $scope.day = resourceService.getViewModel(day);
                 $scope.allExercises.push(exercise);
                 $scope.newExercise = resourceService.getViewModel({ name: null });
             })
@@ -103,20 +96,20 @@
     };
 
     $scope.updateExercise = function (updatedExercise) {
-        $scope.saveDay($scope.selectedDay);
+        $scope.saveDay($scope.day);
     }
 
     $scope.deleteExercise = function (updatedExercise) {
-        var dayExercises = $scope.selectedDay.entity.exercises;
+        var dayExercises = $scope.day.entity.exercises;
 
         for (var i = 0; i < dayExercises.length; i++) {
-            if (dayExercises[i].exercise.id === updatedExercise.exercise.id) {
+            if (dayExercises[i].id === updatedExercise.id) {
                 dayExercises.splice(i, 1);
                 break;
             }
         }
 
-        $scope.saveDay($scope.selectedDay);
+        $scope.saveDay($scope.day);
     }
 
     $scope.validExercise = function (exercise) {

@@ -1,44 +1,56 @@
-﻿<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <ul class="nav nav-pills">
-        <li class="dropdown">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#headerNav" data-target="#ddProgram">
-                PROGRAM <span class="caret"></span>
-            </a>
-        </li>
-        <li class="dropdown">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#headerNav" data-target="#ddDay">
-                DAY <span class="caret"></span>
-            </a>
-        </li>
-    </ul>
+﻿
 
-    <div class="panel-group" id="headerNav">
-
-        <div class="panel">
-            <div id="ddProgram" class="panel panel-default collapse ">
-
-                <ul class="list-group">
-                    <li data-ng-repeat="program in programs" data-ng-click="loadProgram(program)" class="list-group-item" data-toggle="collapse" data-target="#ddProgram">
-                        <a data-toggle="tab">{{program.name}}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="panel">
-            <div id="ddDay" class="panel panel-default collapse ">
-
-                <ul class="list-group">
-
-                    <li data-ng-repeat="day in days" data-ng-click="loadDay(day)" class="list-group-item" data-toggle="collapse" data-target="#ddDay">
-                        <a data-toggle="tab">{{day.name}}</a>
-                    </li>
-                </ul>
-            </div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <p><b>Progress|</b><small><i>{{exercise.name}}</i></small></p>
         </div>
     </div>
-</nav>
 
+    <exercise-line-chart data="data" class=""></exercise-line-chart>
 
-<line-chart val="data" class=""></line-chart>
+    </div>
 
+<!--Modals-->
 
+<modal modalid="mdlSessions">
+                <div class="modal-body">
+                    <select class="form-control"
+                            data-ng-model="program"
+                            data-ng-options="program.name for program in programs"
+                            data-ng-change="loadProgram(program)">
+                        <option value="">-- select program --</option>
+                    </select>
+
+                    <div class="clearfix visible">
+                        <br />
+                    </div>
+
+                    <select class="form-control"
+                            data-ng-model="day"
+                            data-ng-options="day.name for day in days"
+                            data-ng-change="loadDay(day)"
+                            data-ng-show="program">
+                        <option value="">-- select day --</option>
+                    </select>
+
+                    <div class="clearfix visible">
+                        <br />
+                    </div>
+
+                    <select class="form-control"
+                            data-ng-model="exercise"
+                            data-ng-options="exercise.name for exercise in day.exercises"                           
+                            data-ng-show="day">
+                        <option value="">-- select exercise --</option>
+                    </select>
+
+                    <div class="clearfix visible">
+                        <br />
+                    </div>
+
+                    <button type="button" class="btn btn-primary  col-xs-12 " data-ng-click="loadExercise(exercise)" data-ng-show="day" data-dismiss="modal">Show Progress</button>
+                </div>        
+   </modal>
+
+    <!--End Modals-->

@@ -24,9 +24,9 @@
 </nav>-->
 
 <select class="form-control"
-        data-ng-model="selectedExercise"
-        data-ng-options="exerciseInfo.exercise.name for exerciseInfo in day.exercises"
-        data-ng-change="loadExercise(selectedExercise)"></select>
+        data-ng-model="exercise"
+        data-ng-options="exercise.name for exercise in day.exercises"
+        data-ng-change="loadExercise(exercise)"></select>
 
     <!--Header Info-->
 
@@ -34,7 +34,7 @@
     <div class="panel-heading">
         <div class="panel-title">
             <p>
-                <b>{{session.entity.name}} | </b><small><i>{{selectedExercise.exercise.name}}</i></small>
+                <b>{{session.entity.name}} | </b><small><i>{{exercise.name}}</i></small>
            </p>
                    
             <p>
@@ -222,41 +222,34 @@
 
 <!--Modals-->
 
-<div class="modal fade" id="mdlSessions" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-                <h4 class="modal-title">Select Program</h4>
-            </div>
-            <div class="modal-body">
-                <select class="form-control"
-                        data-ng-model="program"
-                        data-ng-options="program.name for program in programs"
-                        data-ng-change="loadProgram(program)">
-                    <option value="">-- select program --</option>
-                </select>
 
-                <div class="clearfix visible">
-                    <br />
-                </div>
+<modal modalid="mdlSessions">
+    <div class="modal-body">
+        <select class="form-control"
+                data-ng-model="program"
+                data-ng-options="program.name for program in programs"
+                data-ng-change="loadProgram(program)">
+            <option value="">-- select program --</option>
+        </select>
 
-                <select class="form-control"
-                        data-ng-model="day"
-                        data-ng-options="day.name for day in days"
-                        data-ng-change="loadDay(day)"
-                        data-ng-show="program">
-                    <option value="">-- select day --</option>
-                </select>
-
-                <div class="clearfix visible">
-                    <br />
-                </div>
-
-                <a class="btn btn-primary  col-xs-12 " data-ng-click="startSession()" data-ng-show="day" data-dismiss="modal">Start Workout</a>
-            </div>
+        <div class="clearfix visible">
+            <br />
         </div>
-    </div>
-</div>
 
-<!--End Modals-->
+        <select class="form-control"
+                data-ng-model="day"
+                data-ng-options="day.name for day in days"
+                data-ng-change="loadDay(day)"
+                data-ng-show="program">
+            <option value="">-- select day --</option>
+        </select>
+
+        <div class="clearfix visible">
+            <br />
+        </div>
+
+        <button type="button" class="btn btn-primary  col-xs-12 " data-ng-click="startSession()" data-ng-show="day" data-dismiss="modal">Start Workout</button>
+    </div>
+</modal>
+
+    <!--End Modals-->

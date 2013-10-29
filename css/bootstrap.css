@@ -2273,8 +2273,8 @@ textarea.input-lg {
 
 .btn-primary {
     color: #ffffff;
-    background-color: #804DEE;
-    border-color: transparent;
+    background-color: #5555E0;
+    border-color: #5555E0;
 }
 
     .btn-primary:hover,
@@ -2283,8 +2283,8 @@ textarea.input-lg {
     .btn-primary.active,
     .open .dropdown-toggle.btn-primary {
         color: #ffffff;
-        background-color: #896756;
-        border-color: #7c5d4e;
+        background-color: #5555E0;
+        border-color: #5555E0;
     }
 
     .btn-primary:active,
@@ -2314,8 +2314,8 @@ textarea.input-lg {
 
 .btn-warning {
     color: #ffffff;
-    background-color: #f0ad4e;
-    border-color: #eea236;
+    background-color: #f09999;
+    border-color: #f09999;
 }
 
     .btn-warning:hover,
@@ -4256,12 +4256,12 @@ textarea.input-group-sm > .input-group-btn > .btn {
     position: relative;
     float: right;
     margin-right: 15px;
-    padding: 9px 10px;
+    padding: 5px 8px;
     margin-top: 8px;
     margin-bottom: 8px;
     background-color: transparent;
     border: 1px solid transparent;
-    border-radius: 4px;
+    border-radius: 25px;
 }
 
     .navbar-toggle .icon-bar {

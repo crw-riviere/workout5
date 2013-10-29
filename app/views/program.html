@@ -1,4 +1,4 @@
-﻿<div id="listPrograms" class="tab-pane">
+﻿<div id="listPrograms" class="">
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="panel-title">
@@ -68,9 +68,8 @@
         <br />
         <p>{{newProgram.error}}</p>
         </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-disabled="!validProgram(newProgram)" data-ng-click="addProgram(newProgram)">Create</button>
+    <div class="modal-footer">       
+        <button type="button" class="btn btn-primary col-xs-12" data-dismiss="modal" data-ng-disabled="!validProgram(newProgram)" data-ng-click="addProgram(newProgram)">Create</button>
     </div>
 </modal>
 

@@ -11,6 +11,8 @@
             if (programs[0]) {
                 $scope.loadProgram(programs[0]);
             }
+
+            $('#mdlSessions').modal('show')
         });
     };
 
@@ -30,15 +32,23 @@
         $scope.day = day;
 
         if (day.exercises[0]) {
-            $scope.loadExercise(day.exercises[0]);
+            $scope.exercise = day.exercises[0];
         }
     };
 
-    $scope.loadExercise = function (exerciseInfo) {
-        $scope.exercise = exerciseInfo;
+    $scope.loadExercise = function (exercise) {
+        $scope.exercise = exercise;
 
-        entityService.getAllMaxSetsByDayExercise($scope.day.id, exerciseInfo.exercise.id).then(function (maxSets) {
-            var data = { sets: maxSets };
+        entityService.getAllMaxSetsByDayExercise($scope.day.id, exercise.id).then(function (maxSets) {
+            var data = { target: exercise.target, sets: [] };
+
+            angular.forEach(maxSets, function (set) {
+                if (set) {
+                    data.sets.push(set);
+                }
+            })
+            $scope.data = data;
+            console.debug(data);
         })
     }
 });

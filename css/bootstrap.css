@@ -2273,8 +2273,8 @@ textarea.input-lg {
 
 .btn-primary {
     color: #ffffff;
-    background-color: #5555E0;
-    border-color: #5555E0;
+    background-color: rgba(21, 21, 226, 0.45);
+    border-color: transparent;
 }
 
     .btn-primary:hover,
@@ -4256,7 +4256,8 @@ textarea.input-group-sm > .input-group-btn > .btn {
     position: relative;
     float: right;
     margin-right: 15px;
-    padding: 5px 8px;
+    padding-top: 4px;
+    /*padding: 5px 8px;*/
     margin-top: 8px;
     margin-bottom: 8px;
     background-color: transparent;
@@ -4479,7 +4480,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
     }
 
     .navbar-default .navbar-toggle {
-        border-color: #e7d4be;
+        border-color: grey;
     }
 
         .navbar-default .navbar-toggle:hover,

@@ -18,6 +18,8 @@
                 .attr("width", w);
 
             scope.render = function (data) {
+                chart.selectAll('*').remove();
+
                 if (!data || data.sets.length <= 0)
                 { return; }
 

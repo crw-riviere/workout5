@@ -2,13 +2,15 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="panel-title">
-
-            <div class="col-xs-10">
-                <p><b>{{program.name}}</b> <b>|</b><small><i>{{day.name}}</i></small><b>|</b><small><i>{{exercise.name}}</i></small></p>
+            <div class="row">
+                <div class="col-xs-10">
+                    <b>{{program.name}}</b> <b>|</b><small><i>{{day.name}}</i></small><b>|</b><small><i>{{exercise.name}}</i></small>
+                </div>
+                <button type="button" class="col-xs-2 btn btn-default" data-toggle="modal" data-target="#mdlSessions">
+                    <span class="glyphicon glyphicon-cog"></span>
+                </button>
             </div>
-            <button type="button" class="col-xs-2 btn btn-default" data-toggle="modal" data-target="#mdlSessions">
-                <span class="glyphicon glyphicon-cog"></span>
-            </button>
+         
         </div>
 
         <div class="clearfix">
@@ -46,6 +48,11 @@
                     <br />
                 </div>
 
+                <div data-ng-show="session.sets.length <= 0">
+                <p class="text-center">There are no sets assigned to this exercise.</p>
+                </div>
+
+                <div data-ng-hide="session.sets.length <= 0">
                 <label>GRAPH</label>
 
                 <session-line-chart data="session.data"></session-line-chart>
@@ -55,17 +62,13 @@
 
                 <label>SETS</label>
                 <ul class="list-group">
-                    <li class="row" data-ng-hide="sets.length <= 0">
+                    <li class="row">
                         <h6 class="col-xs-2 text-right">&nbsp;Set</h6>
                         <h6 class="col-xs-2 text-right">Rep(s)</h6>
                         <h6 class="col-xs-2 text-right">Weight</h6>
                         <h6 class="col-xs-3 text-right">Target %</h6>
                         <h6 class="col-xs-3 text-center">Max %</h6>
-                    </li>
-
-                    <li class="list-group-item" data-ng-show="sets.length <= 0">
-                        <p class="text-center">There are no sets for this exercise.</p>
-                    </li>
+                    </li>                   
 
                     <li data-ng-repeat="set in session.sets" class="list-group-item">
                         <div data-ng-switch on="set.operation">
@@ -91,6 +94,7 @@
 
                     </li>
                 </ul>
+                    </div>
                 <div class="row">
 
                     <p>{{session.error}}</p>
@@ -122,7 +126,7 @@
                 <option value="">-- select program --</option>
             </select>
         </div>
-        
+
 
         <div class="clearfix visible">
             <br />
@@ -131,7 +135,7 @@
         <div class="col-xs-4">
             <label>Day</label>
         </div>
-       
+
         <div class="col-xs-8">
             <select class="form-control"
                     data-ng-model="day"
@@ -141,7 +145,7 @@
                 <option value="">-- select day --</option>
             </select>
         </div>
-       
+
 
         <div class="clearfix visible">
             <br />
@@ -159,18 +163,18 @@
                 <option value="">-- select day --</option>
             </select>
         </div>
-       
+
 
         <div class="clearfix visible">
             <br />
         </div>
+    </div>
 
         <div class="modal-footer">
             <button type="button" class="btn btn-primary col-xs-12" data-ng-click="loadExercise(exercise)" data-ng-show="day" data-dismiss="modal">View Session</button>
 
         </div>
         
-    </div>
 </modal>
 
 <!--End Modals-->

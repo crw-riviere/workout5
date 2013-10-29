@@ -32,7 +32,7 @@
         $scope.day = day;
 
         if (day.exercises[0]) {
-            $scope.exercise = day.exercises[0];
+            $scope.loadExercise(day.exercises[0]);
         }
     };
 

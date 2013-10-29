@@ -1,78 +1,57 @@
-﻿
-<!--<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <ul class="nav nav-pills">
-        <li class="dropdown">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#headerNav" data-target="#ddExercise">EXERCISE <span class="caret"></span>
-            </a>
-        </li>
-    </ul>
-
-    <div class="panel-group" id="headerNav">
-
-        <div class="panel">
-            <div id="ddExercise" class="panel panel-default collapse ">
-
-                <ul class="list-group">
-
-                    <li data-ng-repeat="exerciseInfo in day.exercises" data-ng-click="loadExercise(exercise)" class="list-group-item" data-toggle="collapse" data-target="#ddExercise">
-                        <a data-toggle="tab">{{exerciseInfo.exercise.name}}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</nav>-->
-
-<select class="form-control"
-        data-ng-model="exercise"
-        data-ng-options="exercise.name for exercise in day.exercises"
-        data-ng-change="loadExercise(exercise)"></select>
-
-    <!--Header Info-->
+﻿<!--Header Info-->
 
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="panel-title">
+            <div class="row">
+                <div class="col-xs-10">
+                    <b>{{session.entity.name}} | </b><small><i>{{exercise.name}}</i></small>
+                </div>
+                <button type="button" class="col-xs-2 btn btn-default" data-toggle="modal" data-target="#mdlSessions">
+                    <span class="glyphicon glyphicon-cog"></span>
+                </button>
+            </div>
+
+
             <p>
-                <b>{{session.entity.name}} | </b><small><i>{{exercise.name}}</i></small>
-           </p>
-                   
-            <p>
-                <a class="btn btn-primary" data-ng-click="addSet()">&nbsp;<span class="glyphicon glyphicon-plus">&nbsp;</span>&nbsp;Set&nbsp;</a>
+                <a class="btn btn-primary" data-ng-click="addSet()">&nbsp;<span class="glyphicon glyphicon-plus"></span>&nbsp;Set&nbsp;</a>
             </p>
         </div>
 
         <p><small><i>Use this page to create and edit sets.</i></small></p>
 
         <div class="row">
-            <label class="col-xs-4 accordion-toggle" data-parent="#dtlOptionsMaster" data-target="#dtlConvertWeight" data-toggle="collapse">
-                <span class="caret"></span>&nbsp;<small><small>WEIGHT </small></small>
+            <label class="col-xs-4 accordion-toggle" data-parent="#dtlOptionsMaster" data-target="#dtlExercises" data-toggle="collapse">
+                <span class="caret"></span>&nbsp;<small><small>EXERCISE</small></small>
             </label>
 
             <label class="col-xs-4 accordion-toggle" data-ng-disabled="prevSessionSets.length <= 0" data-parent="#dtlOptionsMaster" data-target="#dtlPrevSets" data-toggle="collapse">
                 <span class="caret"></span>&nbsp;<small><small>PREVIOUS</small></small>
             </label>
 
-            <label class="col-xs-4 accordion-toggle" data-ng-disabled="!maxPerformSet" data-parent="#dtlOptionsMaster" data-target="#dtlMaxPerformSet" data-toggle="collapse">
-                <span class="caret"></span>&nbsp;<small><small>RECORD</small></small>
+            <label class="col-xs-4 accordion-toggle" data-parent="#dtlOptionsMaster" data-target="#dtlConvertWeight" data-toggle="collapse">
+                <span class="caret"></span>&nbsp;<small><small>WEIGHT</small></small>
             </label>
+
         </div>
 
         <div id="dtlOptionsMaster" class="panel-group">
+
             <div class="panel panel-default">
-                <div id="dtlConvertWeight" class="panel-collapse collapse">
-                    <label>Convert to |</label>
-                    <a class="btn btn-sm" data-ng-click="convertToKg()">
-                        <small><i>kilograms</i></small>
-                    </a>
-                    <a class="btn btn-sm" data-ng-click="convertToLbs()">
-                        <small><i>pounds</i></small>
-                    </a>
-                </div>
+                <div id="dtlExercises" class="panel-collapse collapse">
+                    <div class="panel panel-default">
+                        <ul class="list-group">
+                            <li data-toggle="collapse" data-target="#dtlExercises" class="list-group-item" data-ng-repeat="exercise in day.exercises">
+                                <h5 data-ng-click="loadExercise(exercise)">{{exercise.name}}</h5>
+                            </li>
+                        </ul>
+                        </div>
+                    </div>
             </div>
 
             <div class="panel panel-default">
                 <div id="dtlPrevSets" class="panel-collapse collapse">
+                    <small>PREVIOUS SESSION</small>
                     <table class="table table-condensed">
                         <thead>
                             <tr>
@@ -101,10 +80,12 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div id="dtlMaxPerformSet" class="panel-collapse collapse">
+
+                    <div class="clearfix">
+                        <br />
+                    </div>
+
+                    <small>MAX SET</small>
                     <table class="table table-condensed">
                         <thead>
                             <tr>
@@ -128,23 +109,34 @@
                                     {{maxPerformSet.entity.reps}}
                                 </td>
                                 <td>
-                                    {{maxPerformSet.entity.perform}} {{set.entity.measurement}}
+                                    {{maxPerformSet.entity.perform}} {{maxPerformSet.entity.measurement}}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            <div class="panel panel-default">
+                <div id="dtlConvertWeight" class="panel-collapse collapse">
+                    <label>Convert to |</label>
+                    <a class="btn btn-sm" data-ng-click="convertToKg()">
+                        <small><i>kilograms</i></small>
+                    </a>
+                    <a class="btn btn-sm" data-ng-click="convertToLbs()">
+                        <small><i>pounds</i></small>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
     <!--End Header Info-->
-
-    <!--Set Info-->   
+    <!--Set Info-->
 
     <div class="clearfix">
-      
-    </div>  
+
+    </div>
 
     <ul class="list-group">
         <li class="row" data-ng-hide="sets.length <= 0">
@@ -175,12 +167,12 @@
 
 
 
-                    <div class="col-xs-4">                       
+                    <div class="col-xs-4">
                         <input class="form-control" type="number" placeholder="reps" data-ng-model="set.entity.reps" />
                     </div>
 
 
-                    <div class="col-xs-4">                       
+                    <div class="col-xs-4">
                         <input class=" form-control" type="number" placeholder="weight" data-ng-model="set.entity.perform" />
                     </div>
 
@@ -225,24 +217,37 @@
 
 <modal modalid="mdlSessions">
     <div class="modal-body">
-        <select class="form-control"
-                data-ng-model="program"
-                data-ng-options="program.name for program in programs"
-                data-ng-change="loadProgram(program)">
-            <option value="">-- select program --</option>
-        </select>
+
+        <div class="col-xs-4">
+            <label>Program</label>
+        </div>
+
+        <div class="col-xs-8">
+            <select class="form-control"
+                    data-ng-model="program"
+                    data-ng-options="program.name for program in programs"
+                    data-ng-change="loadProgram(program)">
+                <option value="">-- select program --</option>
+            </select>
+        </div>
+
 
         <div class="clearfix visible">
             <br />
         </div>
 
-        <select class="form-control"
-                data-ng-model="day"
-                data-ng-options="day.name for day in days"
-                data-ng-change="loadDay(day)"
-                data-ng-show="program">
-            <option value="">-- select day --</option>
-        </select>
+        <div class="col-xs-4">
+            <label>Day</label>
+        </div>
+        <div class="col-xs-8">
+            <select class="form-control"
+                    data-ng-model="day"
+                    data-ng-options="day.name for day in days"
+                    data-ng-change="loadDay(day)"
+                    data-ng-show="program">
+                <option value="">-- select day --</option>
+            </select>
+        </div>
 
         <div class="clearfix visible">
             <br />
@@ -252,4 +257,4 @@
     </div>
 </modal>
 
-    <!--End Modals-->
+<!--End Modals-->

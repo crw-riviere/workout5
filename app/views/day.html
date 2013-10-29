@@ -101,9 +101,8 @@
         <input class="form-control" data-ng-model="newDay.entity.name" data-ng-change="validDayFeedback(newDay)">
         <p>{{newDay.error}}</p>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-disabled="!validDay(newDay)" data-ng-click="addDay(newDay)">Create</button>
+    <div class="modal-footer">      
+        <button type="button" class="btn btn-primary col-xs-12"  data-dismiss="modal" data-ng-disabled="!validDay(newDay)" data-ng-click="addDay(newDay)">Create</button>
     </div>
 </modal>
 
@@ -132,7 +131,7 @@
 
         <label>Measurement </label>
 
-        <select class="form-control" ng-model="exercise.target.measurement" ng-options="measurement for measurement in measurements"></select>
+        <select class="form-control" ng-model="newTarget.measurement" ng-options="measurement for measurement in measurements"></select>
 
 
         <div class="clearfix">
@@ -146,7 +145,7 @@
                 <p>Reps</p>
             </div>
             <div class="col-xs-6">
-                <input class="form-control input-sm" type="number" data-ng-model="exercise.target.reps">
+                <input class="form-control input-sm" type="number" data-ng-model="newTarget.reps">
             </div>
 
             <div class="clearfix">
@@ -157,7 +156,7 @@
                 <p>Weight</p>
             </div>
             <div class="col-xs-6">
-                <input class="form-control input-sm" type="number" data-ng-model="exercise.target.perform">
+                <input class="form-control input-sm" type="number" data-ng-model="newTarget.perform">
             </div>
 
         </div>

@@ -19,7 +19,9 @@
 
         $scope.newExercise = resourceService.getViewModel({ name: null });
 
-        $scope.exercise = { name: null, target: { reps: 0, perform: 0, measurement: $scope.measurements[0] } };
+        $scope.exercise = { name: null };
+
+        $scope.newTarget = { reps: 0, perform: 0, measurement: $scope.measurements[0] };
     };
 
     $scope.editDay = function (day) {
@@ -75,7 +77,7 @@
     }
 
     $scope.addExercise = function (addedExercise) {
-        $scope.day.entity.exercises.push({ id: addedExercise.id, name: addedExercise.name, target: { reps: addedExercise.target.reps, perform: addedExercise.target.perform, measurement: addedExercise.target.measurement } });
+        $scope.day.entity.exercises.push({ id: addedExercise.id, name: addedExercise.name, target: { reps: $scope.newTarget.reps, perform: $scope.newTarget.perform, measurement: $scope.newTarget.measurement } });
 
         entityService.saveDay($scope.day.entity).then(function (day) {
             $scope.day = resourceService.getViewModel(day);
@@ -85,7 +87,7 @@
     $scope.createExercise = function (newExercise) {
         console.debug(newExercise);
         entityService.addExercise(newExercise.entity).then(function (exercise) {
-            $scope.day.entity.exercises.push({ id: exercise.id, name: exercise.name, target: { reps: $scope.exercise.target.reps, perform: $scope.exercise.target.perform, measurement: $scope.exercise.target.measurement } });
+            $scope.day.entity.exercises.push({ id: exercise.id, name: exercise.name, target: { reps: $scope.newTarget.reps, perform: $scope.newTarget.perform, measurement: $scope.newTarget.measurement } });
 
             entityService.saveDay($scope.day.entity).then(function (day) {
                 $scope.day = resourceService.getViewModel(day);

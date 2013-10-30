@@ -23,7 +23,7 @@
                 if (!data || data.sets.length <= 0)
                 { return; }
 
-                var parseDate = d3.time.format("%d-%m-%y").parse;
+                var parseDate = d3.time.format("%d-%m-%y %H:%M:%S").parse;
 
                 var minDate = parseDate(data.sets[0].date),
                     maxDate = parseDate(data.sets[data.sets.length - 1].date);

@@ -42,7 +42,7 @@
             program: $scope.program.id,
             day: $scope.day.id,
             exercises: $scope.day.exercises,
-            date: getDateString(),
+            date: getDate(),
             prevSession: $scope.sessions.length > 0 ? $scope.sessions[$scope.sessions.length - 1].entity.id : null
         }
 
@@ -134,6 +134,12 @@
         var index = weights.indexOf(set.entity.measurement) + 1 < weights.length ? weights.indexOf(set.entity.measurement) + 1 : 0;
         set.entity.measurement = weights[index];
     }
+
+    function getDate() {
+        var date = resourceService.date();
+
+        return date.day + '-' + date.month + '-' + date.yearShort + ' ' + date.hour + ':' + date.minute + ':' + date.second;
+    };
 
     function getDateString() {
         var date = resourceService.date();

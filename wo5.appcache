@@ -1,5 +1,6 @@
 CACHE MANIFEST
-# 30-10-2013 v:0.1
+# 31-10-2013 v:0.3
+
 /index.html
 
 /app/controllers/dayController.js
@@ -18,16 +19,16 @@ CACHE MANIFEST
 /app/services/entityService.js
 /app/services/resourceService.js
 
-/app/views/directives/modal.js
+/app/views/directives/modal.html
 
-/app/views/day.js
-/app/views/exercise.js
-/app/views/home.js
-/app/views/program.js
-/app/views/progress.js
-/app/views/session.js
-/app/views/settings.js
-/app/views/workout.js
+/app/views/day.html
+/app/views/exercise.html
+/app/views/home.html
+/app/views/program.html
+/app/views/progress.html
+/app/views/session.html
+/app/views/settings.html
+/app/views/workout.html
 
 /app/app.js
 

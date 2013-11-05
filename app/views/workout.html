@@ -158,9 +158,12 @@
                     <h6 class="col-xs-2">{{set.entity.reps}}</h6>
                     <h6 class="col-xs-3">{{set.entity.perform}} {{set.entity.measurement}}</h6>
                     <h6 class="col-xs-3">&nbsp;&nbsp;{{set.performTargetPercent}}</h6>
-                    <a class="btn btn-link btn-default col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                    </a>
+                   
+                        <button type="button" class="btn btn-default col-xs-2" style="margin-top:5px" data-target="#opt{{$index}}" data-toggle="collapse">
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </button>
+                   
+                  
                 </div>
 
                 <div class="row" data-ng-switch-when="update">
@@ -176,12 +179,8 @@
                         <input class=" form-control" type="number" placeholder="weight" data-ng-model="set.entity.perform" />
                     </div>
 
-                    <div class="col-xs-2">
-                        <button type="button" class="btn btn-default" data-ng-click="cycleMeasurement(set)">{{set.entity.measurement}}&nbsp;&olarr;</button>
-                    </div>
-
-                    <div class="col-xs-2">
-                        <button type="button" class="btn btn-default" data-ng-click="saveSet(set)">
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default col-xs-4" data-ng-click="saveSet(set)">
                             <span class="glyphicon glyphicon-ok"></span>
                         </button>
                     </div>
@@ -195,14 +194,16 @@
                 <div class="clearfix">
                     <br />
                 </div>
-                <div class="col-xs-6">
-                    <button type="button" class="btn btn-default" data-ng-click="editSet(set)" data-ng-disabled="set.isEditing"><span class="glyphicon glyphicon-pencil"></span></button>
+                <div class="text-center">
+                    <button type="button" class="btn btn-default col-xs-4" data-ng-click="editSet(set)" data-ng-disabled="set.isEditing"><span class="glyphicon glyphicon-pencil"></span></button>
                 </div>
 
+                <div class="text-center">
+                    <button type="button" class="btn btn-default col-xs-4" data-ng-click="cycleMeasurement(set)">{{set.entity.measurement}}&nbsp;&olarr;</button>
+                </div>
 
-
-                <div class="col-xs-6">
-                    <button type="button" class="btn btn-default" data-ng-click="deleteSet(set)"><span class="glyphicon glyphicon-trash"></span></button>
+                <div class="text-center">
+                    <button type="button" class="btn btn-default col-xs-4" data-ng-click="deleteSet(set)"><span class="glyphicon glyphicon-trash"></span></button>
                 </div>
 
             </div>
@@ -219,7 +220,7 @@
     <div class="modal-body">
 
         <div class="col-xs-4">
-            <label>Program</label>
+            <label>PROGRAM</label>
         </div>
 
         <div class="col-xs-8">
@@ -227,7 +228,7 @@
                     data-ng-model="program"
                     data-ng-options="program.name for program in programs"
                     data-ng-change="loadProgram(program)">
-                <option value="">-- select program --</option>
+                <option value="">select program</option>
             </select>
         </div>
 
@@ -237,7 +238,7 @@
         </div>
 
         <div class="col-xs-4">
-            <label>Day</label>
+            <label>DAY</label>
         </div>
         <div class="col-xs-8">
             <select class="form-control"
@@ -245,7 +246,7 @@
                     data-ng-options="day.name for day in days"
                     data-ng-change="loadDay(day)"
                     data-ng-show="program">
-                <option value="">-- select day --</option>
+                <option value="">select day</option>
             </select>
         </div>
 
@@ -253,7 +254,7 @@
             <br />
         </div>
 
-        <button type="button" class="btn btn-primary  col-xs-12 " data-ng-click="startSession()" data-ng-show="day" data-dismiss="modal">Start Workout</button>
+        <button type="button" class="btn btn-primary btn-lg col-xs-12 " data-ng-click="startSession()" data-ng-show="day" data-dismiss="modal">Start Workout</button>
     </div>
 </modal>
 

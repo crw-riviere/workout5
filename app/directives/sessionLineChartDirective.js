@@ -9,30 +9,51 @@
                 return scope.render(newValue);
             }, true);
 
-            var m = { top: 30, right: 10, bottom: 30, left: 30 };
+            //var m = { top: 30, right: 10, bottom: 30, left: 30 };
+            //var h = 150 - m.top - m.bottom;
+            //var w = d3.select(element[0]).node().offsetWidth - m.left - m.right;
 
+            var m = { top: 30, right: 10, bottom: 30, left: 30 };
             var h = 150 - m.top - m.bottom;
-            var w = 300 - m.left - m.right;
 
             var chart = d3.select(element[0])
-                .append('svg')
-               .attr('width', w + m.left + m.right)
-                .attr('height', h + m.top + m.bottom)
-                .append('g')
-                .attr('transform', 'translate(' + m.left + ',' + m.top + ')');
+             .append('svg')
+             .attr('width', '100%')
+             .attr('height', h + m.top + m.bottom)
+             .append('g')
+             .attr('transform', 'translate(' + m.left + ',' + m.top + ')');
+
+            //   var chart = d3.select(element[0])
+            // .append('svg')
+            //.attr('width', '100%')
+            // //.attr('width', w + m.left + m.right)
+            // .attr('height', h + m.top + m.bottom)
+            // .append('g')
+            // .attr('transform', 'translate(' + m.left + ',' + m.top + ')');
+
+            window.onresize = function () {
+                scope.$apply();
+            };
+
+            scope.$watch(function () {
+                return angular.element(window)[0].innerWidth;
+            }, function () {
+                scope.render(scope.data);
+            });
 
             scope.render = function (data) {
+                chart.selectAll("*").remove();
+
                 if (!data || data.sets.length <= 0)
                 { return; }
+
+                var w = d3.select(element[0]).node().offsetWidth - m.left - m.right;
 
                 var
                     minSet = d3.min(data.sets.map(function (d) { return d.no; }))
                 maxSet = d3.max(data.sets.map(function (d) { return d.no; }))
                 minPerform = d3.min(data.sets.map(function (d) { return d.perform; }))
                 maxPerform = d3.max(data.sets.map(function (d) { return d.perform; }))
-
-                //var x = d3.time.scale.utc().domain([minDate, maxDate])
-                //   .range([50, w - 20]);
 
                 var x = d3.scale.linear().domain([minSet, maxSet])
                 .range([m.left, w]);
@@ -65,13 +86,10 @@
 
                 var yAxis = d3.svg.axis().scale(y).orient('left').ticks(4).tickSize(-w);
 
-
                 chart.append('g')
                     .attr('class', 'y axis')
                     //.attr('transform', 'translate(' + m.left + ',0)')
                     .call(yAxis);
-                
-              
 
                 chart.append('text')
                 .attr('y', h + 10)

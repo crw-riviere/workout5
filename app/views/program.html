@@ -27,8 +27,8 @@
                        
                         <h4 class=""><a class="col-xs-10" data-ng-href="Days/{{program.entity.id}}" data-toggle="tab">{{program.entity.name}}</a></h4>
                       
-                            <h4 class="">
-                                <button type="button" class="btn btn-default" data-target="#opt{{$index}}" data-toggle="collapse"><span class="glyphicon glyphicon-pencil"></span></button>
+                            <h4>
+                                <button type="button" class="btn btn-default col-xs-2" data-target="#opt{{$index}}" data-toggle="collapse"><span class="glyphicon glyphicon-chevron-down"></span></button>
                             </h4>
                         </div>
                     <div class="row" data-ng-switch-when="update">
@@ -36,7 +36,7 @@
                             <input class="form-control" type="text" placeholder="Program Name" data-ng-model="program.entity.name" data-ng-change="validProgramFeedback(program)" />
                         </div>
                         <div class="col-xs-2 text-center">
-                            <button type="button" class="btn btn-large" data-ng-disabled="!validProgram(program)" data-ng-click="saveProgram(program)"><span class="glyphicon glyphicon-ok"></span></button>
+                            <button type="button" class="btn btn-default" data-ng-disabled="!validProgram(program)" data-ng-click="saveProgram(program)"><span class="glyphicon glyphicon-ok"></span></button>
                         </div>
 
                     </div>
@@ -46,12 +46,12 @@
                         <br />
                     </div>
                     <p>{{program.error}}</p>
-                    <div class="col-xs-6 text-center">
-                        <button type="button" class="btn btn-default" data-ng-click="editProgram(program)"><span class="glyphicon glyphicon-pencil"></span></button>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default col-xs-6" data-ng-click="editProgram(program)"><span class="glyphicon glyphicon-pencil"></span></button>
                     </div>
 
-                    <div class="col-xs-6 text-center">
-                        <button type="button" class="btn btn-default" data-ng-click="deleteProgram(program)"><span class="glyphicon glyphicon-trash"></span></button>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default col-xs-6" data-ng-click="deleteProgram(program)"><span class="glyphicon glyphicon-trash"></span></button>
                     </div>
                 </div>
             </li>
@@ -63,13 +63,13 @@
 
 <modal modalid="mdlCreateProgram">
     <div class="modal-body">
-        <p>Please enter a program name.</p>
+        <p>PROGRAM NAME</p>
         <input class="form-control" data-ng-model="newProgram.entity.name" data-ng-change="validProgramFeedback(newProgram)">
         <br />
         <p>{{newProgram.error}}</p>
         </div>
     <div class="modal-footer">       
-        <button type="button" class="btn btn-primary col-xs-12" data-dismiss="modal" data-ng-disabled="!validProgram(newProgram)" data-ng-click="addProgram(newProgram)">Create</button>
+        <button type="button" class="btn btn-primary btn-lg col-xs-12" data-dismiss="modal" data-ng-disabled="!validProgram(newProgram)" data-ng-click="addProgram(newProgram)">Create</button>
     </div>
 </modal>
 

@@ -1,0 +1,15 @@
+{
+  "name": "Workout5",
+  "description": "Fitness journal and logger.",
+  "launch_path": "/",
+  "icons": {
+    "128": "/img/icon-128.png"
+  },
+  "developer": {
+    "name": "Charly Riviere",
+    "url": "http://www.riviere.la"
+  },
+  "default_locale": "en",
+  "appcache_path": "/wo5.appcache",
+  "orientation": ["portrait"]
+}

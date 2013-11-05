@@ -98,8 +98,8 @@
                 <div class="row">
 
                     <p>{{session.error}}</p>
-                    <a class="col-xs-6 btn btn-large" data-ng-click="editSession(session)"><span class="glyphicon glyphicon-pencil"></span></a>
-                    <a class="col-xs-6 btn btn-large" data-ng-click="deleteSession(session)"><span class="glyphicon glyphicon-trash"></span></a>
+                    <button type="button" class="btn btn-default col-xs-6" data-ng-click="editSession(session)"><span class="glyphicon glyphicon-pencil"></span></button>
+                    <button type="button" class="btn btn-default col-xs-6" data-ng-click="deleteSession(session)"><span class="glyphicon glyphicon-trash"></span></button>
                 </div>
                 <!--End Set List-->
             </div>
@@ -114,7 +114,7 @@
     <div class="modal-body">
 
         <div class="col-xs-4">
-            <label>Program</label>
+            <label>PROGRAM</label>
 
         </div>
 
@@ -123,7 +123,7 @@
                     data-ng-model="program"
                     data-ng-options="program.name for program in programs"
                     data-ng-change="loadProgram(program)">
-                <option value="">-- select program --</option>
+                <option value="">select program</option>
             </select>
         </div>
 
@@ -133,7 +133,7 @@
         </div>
 
         <div class="col-xs-4">
-            <label>Day</label>
+            <label>DAY</label>
         </div>
 
         <div class="col-xs-8">
@@ -142,7 +142,7 @@
                     data-ng-options="day.name for day in days"
                     data-ng-change="loadDay(day)"
                     data-ng-show="program">
-                <option value="">-- select day --</option>
+                <option value="">select day</option>
             </select>
         </div>
 
@@ -152,7 +152,7 @@
         </div>
 
         <div class="col-xs-4">
-            <label>Exercise</label>
+            <label>EXERCISE</label>
         </div>
 
         <div class="col-xs-8">
@@ -160,7 +160,7 @@
                     data-ng-model="exercise"
                     data-ng-options="exercise.name for exercise in day.exercises"
                     data-ng-show="day">
-                <option value="">-- select day --</option>
+                <option value="">select day</option>
             </select>
         </div>
 
@@ -171,7 +171,7 @@
     </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-primary col-xs-12" data-ng-click="loadExercise(exercise)" data-ng-show="day" data-dismiss="modal">View Session</button>
+            <button type="button" class="btn btn-primary btn-lg col-xs-12" data-ng-click="loadExercise(exercise)" data-ng-show="day" data-dismiss="modal">View Session</button>
 
         </div>
         

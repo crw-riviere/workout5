@@ -71,16 +71,16 @@
                         <br />
                     </div>
                     <p>{{day.error}}</p>
-                    <div class="col-xs-4 text-center">
-                        <button type="button" class="btn btn-default" data-ng-click="loadDay(day)" data-toggle="modal" data-target="#mdlCreateExercise"><span class="glyphicon glyphicon-plus"></span></button>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default col-xs-4" data-ng-click="loadDay(day)" data-toggle="modal" data-target="#mdlCreateExercise"><span class="glyphicon glyphicon-plus"></span></button>
 
                     </div>
-                    <div class="col-xs-4 text-center">
-                        <button type="button" class="btn btn-default" data-ng-click="editDay(day)"><span class="glyphicon glyphicon-pencil"></span></button>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default col-xs-4" data-ng-click="editDay(day)"><span class="glyphicon glyphicon-pencil"></span></button>
 
                     </div>
-                    <div class="col-xs-4 text-center">
-                        <button type="button" class="btn btn-default" data-ng-click="deleteDay(day)"><span class="glyphicon glyphicon-trash"></span></button>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default col-xs-4 " data-ng-click="deleteDay(day)"><span class="glyphicon glyphicon-trash"></span></button>
 
                     </div>
 
@@ -97,19 +97,20 @@
 
 <modal modalid="mdlCreateDay">
     <div class="modal-body">
-        <p>Please enter a day name.</p>
+        <label>DAY NAME</label>
         <input class="form-control" data-ng-model="newDay.entity.name" data-ng-change="validDayFeedback(newDay)">
+        <br />
         <p>{{newDay.error}}</p>
     </div>
     <div class="modal-footer">      
-        <button type="button" class="btn btn-primary col-xs-12"  data-dismiss="modal" data-ng-disabled="!validDay(newDay)" data-ng-click="addDay(newDay)">Create</button>
+        <button type="button" class="btn btn-primary btn-lg col-xs-12"  data-dismiss="modal" data-ng-disabled="!validDay(newDay)" data-ng-click="addDay(newDay)">Create</button>
     </div>
 </modal>
 
 <modal modalid="mdlCreateExercise">
 
     <div class="modal-body">
-        <label>Please select an exercise </label>
+        <label>EXERCISE </label>
         <select class="form-control" ng-model="exercise" ng-options="exercise.name for exercise in allExercises">
             <option value="">create new exercise</option>
         </select>
@@ -119,7 +120,7 @@
         </div>
 
         <div data-ng-hide="exercise.name">
-            <label>Exercise name </label>
+            <label>NAME </label>
             <input class="form-control" data-ng-model="newExercise.entity.name" data-ng-change="validExerciseFeedback(newExercise)">
             <p>{{newExercise.error}}</p>
         </div>
@@ -129,7 +130,7 @@
         </div>
 
 
-        <label>Measurement </label>
+        <label>MEASUREMENT </label>
 
         <select class="form-control" ng-model="newTarget.measurement" ng-options="measurement for measurement in measurements"></select>
 
@@ -138,7 +139,7 @@
             <br />
         </div>
 
-        <label>Targets <i>(Optional)</i></label>
+        <label>TARGETS <i>(Optional)</i></label>
 
         <div class="row">
             <div class="col-xs-6">
@@ -164,8 +165,8 @@
 
     <div class="modal-footer">
        
-        <button type="button" class="btn btn-primary col-xs-12" data-dismiss="modal" data-ng-show="exercise.name" data-ng-click="addExercise(exercise)">Add</button>
-        <button type="button" class="btn btn-primary col-xs-12" data-dismiss="modal" data-ng-hide="exercise.name" data-ng-disabled="!validExercise(newExercise)" data-ng-click="createExercise(newExercise)">Create</button>
+        <button type="button" class="btn btn-primary btn-lg col-xs-12" data-dismiss="modal" data-ng-show="exercise.name" data-ng-click="addExercise(exercise)">Add</button>
+        <button type="button" class="btn btn-primary btn-lg col-xs-12" data-dismiss="modal" data-ng-hide="exercise.name" data-ng-disabled="!validExercise(newExercise)" data-ng-click="createExercise(newExercise)">Create</button>
 
     </div>
 
@@ -181,7 +182,7 @@
         </div>
 
 
-        <label>Measurement </label>
+        <label>MEASUREMENT </label>
 
         <select class="form-control" ng-model="exercise.target.measurement" ng-options="measurement for measurement in measurements"></select>
 
@@ -189,7 +190,7 @@
             <br />
         </div>
         
-        <p>Targets <i>(Optional)</i></p>
+        <p>TARGETS <i>(Optional)</i></p>
        
 
         <div class="row">
@@ -216,8 +217,8 @@
 
     <div class="modal-footer">
        
-        <button type="button" class="btn btn-warning pull-left col-xs-5" data-dismiss="modal" data-ng-click="deleteExercise(exercise)">Delete</button>
-        <button type="button" class="btn btn-primary pull-right col-xs-5" data-dismiss="modal" data-ng-click="updateExercise(exercise)">Update</button>
+        <button type="button" class="btn btn-warning btn-lg pull-left col-xs-5" data-dismiss="modal" data-ng-click="deleteExercise(exercise)">Delete</button>
+        <button type="button" class="btn btn-primary btn-lg pull-right col-xs-5" data-dismiss="modal" data-ng-click="updateExercise(exercise)">Update</button>
     </div>
 
 </modal>

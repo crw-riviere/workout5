@@ -9,19 +9,36 @@
                 return scope.render(newValue);
             }, true);
 
-            var h = 500;
-            var w = 300;
+            //var h = 500;
+            //var w = 300;
+
+            var m = { top: 30, right: 10, bottom: 100, left: 30 };
+            var h = 500 - m.top - m.bottom;
 
             var chart = d3.select(element[0])
-                .append("svg")
-                .attr("height", h)
-                .attr("width", w);
+           .append('svg')
+           .attr('width', '100%')
+           .attr('height', h + m.top + m.bottom)
+           .append('g')
+           .attr('transform', 'translate(' + m.left + ',' + m.top + ')');
+
+            window.onresize = function () {
+                scope.$apply();
+            };
+
+            scope.$watch(function () {
+                return angular.element(window)[0].innerWidth;
+            }, function () {
+                scope.render(scope.data);
+            });
 
             scope.render = function (data) {
                 chart.selectAll('*').remove();
 
                 if (!data || data.sets.length <= 0)
                 { return; }
+
+                var w = d3.select(element[0]).node().offsetWidth - m.left - m.right;
 
                 var parseDate = d3.time.format("%d-%m-%y %H:%M:%S").parse;
 
@@ -35,11 +52,11 @@
                 }
 
                 var x = d3.time.scale.utc().domain([minDate, maxDate])
-                   .range([50, w - 20]);
+                   .range([m.left, w]);
 
                 var y = d3.scale.linear().domain([minPerform, maxPerform + 10])
                     // bottom / top
-                    .range([h - 60, 10]);
+                    .range([h, 0]);
 
                 function cx(d) {
                     return x(parseDate(d.date));
@@ -57,18 +74,10 @@
                         return y(d.perform);
                     })
 
-                chart.selectAll("circle")
-                     .data(data.sets)
-                     .enter().append("circle")
-                     .attr("fill", "red")
-                     .attr("r", 5)
-                     .attr("cx", cx)
-                     .attr("cy", cy);
-
                 var xAxis = d3.svg.axis().scale(x).tickFormat(d3.time.format("%d-%m-%y"));
                 chart.append('g').call(xAxis)
                     .attr('class', 'x axis')
-                    .attr('transform', 'translate(0,' + 440 + ')')
+                    .attr('transform', 'translate(0,' + (h + 10) + ')')
                 .selectAll("text")
                      .style("text-anchor", "end")
                      .attr("dx", "-0.8em")
@@ -80,10 +89,18 @@
                 var yAxis = d3.svg.axis().scale(y).orient('left').tickSize(-w);
                 chart.append("g")
                     .attr('class', 'y axis')
-                    .attr('transform', 'translate(25,0)')
+                    //.attr('transform', 'translate(25,0)')
                     .call(yAxis);
 
                 chart.append('svg:path').attr('d', line(data.sets));
+
+                chart.selectAll("circle")
+                    .data(data.sets)
+                    .enter().append("circle")
+                    .attr("fill", "red")
+                    .attr("r", 5)
+                    .attr("cx", cx)
+                    .attr("cy", cy);
             }
         }
     }

@@ -4,7 +4,9 @@
   "launch_path": "/",
   "icons": {
 	"30" : "/img/w5icon-30.png",
-    "60": "/img/w5icon-60.png"
+    "60": "/img/w5icon-60.png",
+    "90": "/img/w5icon-90.png",
+    "120": "/img/w5icon-120.png"
   },
   "developer": {
     "name": "Charly Riviere",

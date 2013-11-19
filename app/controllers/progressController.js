@@ -40,15 +40,10 @@
         $scope.exercise = exercise;
 
         entityService.getAllMaxSetsByDayExercise($scope.day.id, exercise.id).then(function (maxSets) {
-            var data = { target: exercise.target, sets: [] };
+            var data = { target: exercise.target, sets: maxSets };
 
-            angular.forEach(maxSets, function (set) {
-                if (set) {
-                    data.sets.push(set);
-                }
-            })
             $scope.data = data;
-            console.debug(data);
+           
         })
     }
 });

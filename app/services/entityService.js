@@ -1,6 +1,11 @@
 ﻿wo5App.service('entityService', function ($rootScope, $q, resourceService, dbService) {
     var self = this;
 
+    //DB Functions
+    self.deleteDB = function () {
+        var deferred = $q.defer();
+    }
+
     //Program Functions
 
     self.getProgram = function (programId) {

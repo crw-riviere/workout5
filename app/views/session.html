@@ -10,7 +10,7 @@
                     <span class="glyphicon glyphicon-cog"></span>
                 </button>
             </div>
-         
+
         </div>
 
         <div class="clearfix">
@@ -49,52 +49,52 @@
                 </div>
 
                 <div data-ng-show="session.sets.length <= 0">
-                <p class="text-center">There are no sets assigned to this exercise.</p>
+                    <p class="text-center">There are no sets assigned to this exercise.</p>
                 </div>
 
                 <div data-ng-hide="session.sets.length <= 0">
-                <label>GRAPH</label>
+                    <label>GRAPH</label>
 
-                <session-line-chart data="session.data"></session-line-chart>
-                <div class="clearfix visible">
-                    <br />
-                </div>
-
-                <label>SETS</label>
-                <ul class="list-group">
-                    <li class="row">
-                        <h6 class="col-xs-2 text-right">&nbsp;Set</h6>
-                        <h6 class="col-xs-2 text-right">Rep(s)</h6>
-                        <h6 class="col-xs-2 text-right">Weight</h6>
-                        <h6 class="col-xs-3 text-right">Target %</h6>
-                        <h6 class="col-xs-3 text-center">Max %</h6>
-                    </li>                   
-
-                    <li data-ng-repeat="set in session.sets" class="list-group-item">
-                        <div data-ng-switch on="set.operation">
-                            <div class="row" data-ng-switch-when="read">
-                                <h6 class="col-xs-2 text-right">{{set.entity.no}}.</h6>
-                                <h6 class="col-xs-2 text-right">{{set.entity.reps}}</h6>
-                                <h6 class="col-xs-2 text-right">{{set.entity.perform}}{{set.entity.measurement}}</h6>
-                                <h6 class="col-xs-3 text-right">{{getExerciseTargetPercentage(set.entity.perform)}}</h6>
-                                <h6 class="col-xs-3 text-right">{{getExerciseMaxPercentage(set.entity.perform)}}</h6>
-                            </div>
-                            <div class="row" data-ng-switch-when="update">
-
-                                <h4 class="col-xs-2">{{set.entity.no}}.</h4>
-
-                                <input class="col-xs-4" type="number"
-                                       data-ng-model="set.entity.reps" />
-
-                                <input class="col-xs-3" type="number"
-                                       data-ng-model="set.entity.perform" />
-                                <label class="col-xs-1">{{set.entity.measurement}}</label>
-                            </div>
-                        </div>
-
-                    </li>
-                </ul>
+                    <session-line-chart data="session.data"></session-line-chart>
+                    <div class="clearfix visible">
+                        <br />
                     </div>
+
+                    <label>SETS</label>
+                    <ul class="list-group">
+                        <li class="row">
+                            <h6 class="col-xs-2 text-right">&nbsp;Set</h6>
+                            <h6 class="col-xs-2 text-right">Rep(s)</h6>
+                            <h6 class="col-xs-2 text-right">Weight</h6>
+                            <h6 class="col-xs-3 text-right">Target %</h6>
+                            <h6 class="col-xs-3 text-center">Max %</h6>
+                        </li>
+
+                        <li data-ng-repeat="set in session.sets" class="list-group-item">
+                            <div data-ng-switch on="set.operation">
+                                <div class="row" data-ng-switch-when="read">
+                                    <h6 class="col-xs-2 text-right">{{set.entity.no}}.</h6>
+                                    <h6 class="col-xs-2 text-right">{{set.entity.reps}}</h6>
+                                    <h6 class="col-xs-2 text-right">{{set.entity.perform}}{{set.entity.measurement}}</h6>
+                                    <h6 class="col-xs-3 text-right">{{getExerciseTargetPercentage(set.entity.perform)}}</h6>
+                                    <h6 class="col-xs-3 text-right">{{getExerciseMaxPercentage(set.entity.perform)}}</h6>
+                                </div>
+                                <div class="row" data-ng-switch-when="update">
+
+                                    <h4 class="col-xs-2">{{set.entity.no}}.</h4>
+
+                                    <input class="col-xs-4" type="number"
+                                           data-ng-model="set.entity.reps" />
+
+                                    <input class="col-xs-3" type="number"
+                                           data-ng-model="set.entity.perform" />
+                                    <label class="col-xs-1">{{set.entity.measurement}}</label>
+                                </div>
+                            </div>
+
+                        </li>
+                    </ul>
+                </div>
                 <div class="row">
 
                     <p>{{session.error}}</p>
@@ -113,68 +113,61 @@
 <modal modalid="mdlSessions">
     <div class="modal-body">
 
-        <div class="col-xs-4">
-            <label>PROGRAM</label>
 
-        </div>
-
-        <div class="col-xs-8">
-            <select class="form-control"
-                    data-ng-model="program"
-                    data-ng-options="program.name for program in programs"
-                    data-ng-change="loadProgram(program)">
-                <option value="">select program</option>
-            </select>
-        </div>
+        <label>PROGRAM</label>
 
 
-        <div class="clearfix visible">
+        <select class="form-control"
+                data-ng-model="program"
+                data-ng-options="program.name for program in programs"
+                data-ng-change="loadProgram(program)">
+            <option value="">select program</option>
+        </select>
+
+
+
+        <div class="clearfix">
             <br />
         </div>
 
-        <div class="col-xs-4">
-            <label>DAY</label>
-        </div>
 
-        <div class="col-xs-8">
-            <select class="form-control"
-                    data-ng-model="day"
-                    data-ng-options="day.name for day in days"
-                    data-ng-change="loadDay(day)"
-                    data-ng-show="program">
-                <option value="">select day</option>
-            </select>
-        </div>
+        <label>DAY</label>
+
+        <select class="form-control"
+                data-ng-model="day"
+                data-ng-options="day.name for day in days"
+                data-ng-change="loadDay(day)"
+                data-ng-show="program">
+            <option value="">select day</option>
+        </select>
 
 
-        <div class="clearfix visible">
+        <div class="clearfix">
             <br />
         </div>
 
-        <div class="col-xs-4">
-            <label>EXERCISE</label>
-        </div>
 
-        <div class="col-xs-8">
-            <select class="form-control"
-                    data-ng-model="exercise"
-                    data-ng-options="exercise.name for exercise in day.exercises"
-                    data-ng-show="day">
-                <option value="">select day</option>
-            </select>
-        </div>
+        <label>EXERCISE</label>
+
+        <select class="form-control"
+                data-ng-model="exercise"
+                data-ng-options="exercise.name for exercise in day.exercises"
+                data-ng-show="day">
+            <option value="">select day</option>
+        </select>
 
 
-        <div class="clearfix visible">
+
+        <div class="clearfix">
             <br />
         </div>
     </div>
 
-        <div class="modal-footer">
-            <button type="button" class="btn btn-primary btn-lg col-xs-12" data-ng-click="loadExercise(exercise)" data-ng-show="day" data-dismiss="modal">View Session</button>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-lg col-xs-12" data-ng-click="loadExercise(exercise)" data-ng-show="day" data-dismiss="modal">View Session</button>
 
-        </div>
-        
+    </div>
+
 </modal>
 
 <!--End Modals-->

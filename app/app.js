@@ -10,10 +10,6 @@ wo5App.config(function ($routeProvider, $locationProvider) {
         templateUrl: 'app/views/journal.html',
         controller: 'JournalController'
     })
-    .when('/Settings', {
-        templateUrl: 'app/views/settings.html',
-        controller: 'SettingsController'
-    })
     .when('/Programs', {
         templateUrl: 'app/views/program.html',
         controller: 'ProgramController'
@@ -38,18 +34,22 @@ wo5App.config(function ($routeProvider, $locationProvider) {
         templateUrl: 'app/views/session.html',
         controller: 'SessionController'
     })
-          .when('/Workout', {
-              templateUrl: 'app/views/workout.html',
-              controller: 'WorkoutController'
-          })
+    .when('/Workout', {
+        templateUrl: 'app/views/workout.html',
+        controller: 'WorkoutController'
+    })
     .when('/Workout/:sessionId', {
         templateUrl: 'app/views/workout.html',
         controller: 'WorkoutController'
     })
-        .when('/Progress', {
-            templateUrl: 'app/views/progress.html',
-            controller: 'ProgressController'
-        })
+    .when('/Progress', {
+        templateUrl: 'app/views/progress.html',
+        controller: 'ProgressController'
+    })
+    .when('/Settings', {
+        templateUrl: 'app/views/settings.html',
+        controller: 'ConfigController'
+    })
     .otherwise({ redirectTo: '/' });
 
     $locationProvider.html5Mode(true);

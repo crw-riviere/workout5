@@ -75,7 +75,7 @@
                     })
 
                 var xAxis = d3.svg.axis().scale(x).tickFormat(d3.time.format("%d-%m-%y"));
-                chart.append('g').call(xAxis)
+                chart.append('g')
                     .attr('class', 'x axis')
                     .attr('transform', 'translate(0,' + (h + 10) + ')')
                 .selectAll("text")
@@ -84,7 +84,8 @@
                      .attr("dy", "-0.4em")
                      .attr("transform", function (d) {
                          return "rotate(-90)"
-                     });
+                     })
+                .call(xAxis);
 
                 var yAxis = d3.svg.axis().scale(y).orient('left').tickSize(-w);
                 chart.append("g")

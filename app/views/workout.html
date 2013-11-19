@@ -5,7 +5,7 @@
         <div class="panel-title">
             <div class="row">
                 <div class="col-xs-10">
-                    <b>{{session.entity.name}} | </b><small><i>{{exercise.name}}</i></small>
+                    <b>{{session.entity.name || 'Workout5'}} | </b><small><i>{{exercise.name || 'Please select a program'}}</i></small>
                 </div>
                 <button type="button" class="col-xs-2 btn btn-default" data-toggle="modal" data-target="#mdlSessions">
                     <span class="glyphicon glyphicon-cog"></span>
@@ -14,7 +14,7 @@
 
 
             <p>
-                <a class="btn btn-primary" data-ng-click="addSet()">&nbsp;<span class="glyphicon glyphicon-plus"></span>&nbsp;Set&nbsp;</a>
+               <!-- <a class="btn btn-primary" data-ng-click="addSet()">&nbsp;<span class="glyphicon glyphicon-plus"></span>&nbsp;Set&nbsp;</a>-->
             </p>
         </div>
 
@@ -147,8 +147,7 @@
         </li>
 
         <li class="list-group-item" data-ng-show="sets.length <= 0">
-            <p class="text-center">You have no sets.</p>
-            <p class="text-center"><a class="btn btn-info" data-ng-click="addSet()">Add Set</a></p>
+            <p class="text-center">You have no sets.</p>           
         </li>
 
         <li data-ng-repeat="set in sets" class="list-group-item">
@@ -209,8 +208,17 @@
             </div>
         </li>
     </ul>
-
+    <div class="clearfix">
+        <br />
+    </div>
+    <div class="">
+        <button type="button" class="btn btn-default col-xs-12" data-ng-disabled="!exercise.name" data-ng-click="addSet()">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+    </div>
     <!--End Set Info-->
+
+   
 </div>
 
 <!--Modals-->
@@ -219,28 +227,22 @@
 <modal modalid="mdlSessions">
     <div class="modal-body">
 
-        <div class="col-xs-4">
             <label>PROGRAM</label>
-        </div>
 
-        <div class="col-xs-8">
             <select class="form-control"
                     data-ng-model="program"
                     data-ng-options="program.name for program in programs"
                     data-ng-change="loadProgram(program)">
                 <option value="">select program</option>
             </select>
-        </div>
 
-
-        <div class="clearfix visible">
+        <div class="clearfix">
             <br />
         </div>
 
-        <div class="col-xs-4">
+        
             <label>DAY</label>
-        </div>
-        <div class="col-xs-8">
+
             <select class="form-control"
                     data-ng-model="day"
                     data-ng-options="day.name for day in days"
@@ -248,9 +250,9 @@
                     data-ng-show="program">
                 <option value="">select day</option>
             </select>
-        </div>
+      
 
-        <div class="clearfix visible">
+        <div class="clearfix">
             <br />
         </div>
 

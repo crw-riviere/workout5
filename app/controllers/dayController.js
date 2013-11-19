@@ -64,7 +64,7 @@
     };
 
     $scope.loadExercise = function (exercise, day) {
-        console.debug(exercise);
+       
         $scope.day = day;
         $scope.exercise = exercise;
 

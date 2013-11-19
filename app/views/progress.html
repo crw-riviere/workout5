@@ -24,7 +24,7 @@
         </p>
     </div>
 
-        <exercise-line-chart data="data" data-ng-hide="!data || data.sets.length <= 0"></exercise-line-chart>
+        <exercise-line-chart data="data"></exercise-line-chart>
 
     </div>
 
@@ -33,28 +33,25 @@
 <modal modalid="mdlSessions">
     <div class="modal-body">
 
-        <div class="col-xs-4">
+      
             <label>PROGRAM</label>
-        </div>
-        <div class="col-xs-8">
+      
             <select class="form-control"
                     data-ng-model="program"
                     data-ng-options="program.name for program in programs"
                     data-ng-change="loadProgram(program)">
                 <option value="">select program</option>
             </select>
-        </div>
+      
 
 
-        <div class="clearfix visible">
+        <div class="clearfix">
             <br />
         </div>
 
-        <div class="col-xs-4">
+       
             <label>DAY</label>
-        </div>
-
-        <div class="col-xs-8">
+       
             <select class="form-control"
                     data-ng-model="day"
                     data-ng-options="day.name for day in days"
@@ -62,28 +59,24 @@
                     data-ng-show="program">
                 <option value="">select day</option>
             </select>
-        </div>
+       
 
 
-        <div class="clearfix visible">
+        <div class="clearfix">
             <br />
         </div>
 
-        <div class="col-xs-4">
+      
             <label>EXERCISE</label>
-        </div>
-
-        <div class="col-xs-8">
+      
             <select class="form-control"
                     data-ng-model="exercise"
                     data-ng-options="exercise.name for exercise in day.exercises"
                     data-ng-show="day">
                 <option value="">select exercise</option>
             </select>
-        </div>
-
-
-        <div class="clearfix visible">
+      
+        <div class="clearfix">
             <br />
         </div>
     </div>

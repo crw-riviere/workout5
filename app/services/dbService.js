@@ -45,7 +45,7 @@
                 console.error('Failed to load database. Ex: ' + event.target.errorCode);
             }
             request.onsuccess = function (event) {
-                console.info('Successfully loaded database.');
+              
                 resourceService.db = request.result;
             }
         } catch (ex) {
@@ -53,9 +53,20 @@
         }
     };
 
-    self.getStore = function (storeName, mode) {
+    self.deleteDB = function (callback) {
         try {
-            console.log('Retrieving store ' + storeName + ' using ' + resourceService.db);
+            var deleteDbRequest = window.indexedDB.deleteDatabase(resourceService.consts.db.wo5);
+
+            deleteDbRequest.onsuccess = function () {
+                callback(true);
+            }
+        } catch (ex) {
+            callback(false);
+        }
+    }
+
+    self.getStore = function (storeName, mode) {
+        try {           
             var tx = resourceService.db.transaction(storeName, mode);
             return tx.objectStore(storeName);
         }
@@ -113,8 +124,7 @@
                 var cursor = event.target.result;
                 if (cursor) {
                     var entity = cursor.value;
-                    entityCollection.push(entity);
-                    console.info('Retrieved ' + cursor.value.name + ' from ' + storeName + '.');
+                    entityCollection.push(entity);                   
                     cursor.continue();
                 }
                 else {
@@ -132,10 +142,10 @@
             var entityCollection = [];
             var range = IDBKeyRange.only(indexValue);
             var store = self.getStore(storeName, resourceService.consts.op.rw);
-            console.log('Retrieved store ' + storeName);
-            console.log('Retrieving index ' + indexName);
+           
+       
             var index = store.index(indexName);
-            console.log('Retrieved index ' + indexName);
+          
             var request = index.openCursor(range);
 
             request.onsuccess = function (event) {
@@ -143,7 +153,7 @@
                 if (cursor) {
                     var entity = cursor.value;
                     entityCollection.push(entity);
-                    console.info('Retrieved ' + cursor.value.name + ' from ' + storeName);
+                 
                     cursor.continue();
                 }
                 else {
@@ -165,10 +175,9 @@
             var entityCollection = [];
             var range = IDBKeyRange.bound(indexValue);
             var store = self.getStore(storeName, resourceService.consts.op.rw);
-            console.log('Retrieved store ' + storeName);
-            console.log('Retrieving index ' + indexName);
+          
             var index = store.index(indexName);
-            console.log('Retrieved index ' + indexName);
+        
             var request = index.openCursor(range);
 
             request.onsuccess = function (event) {
@@ -176,7 +185,7 @@
                 if (cursor) {
                     var entity = cursor.value;
                     entityCollection.push(entity);
-                    console.info('Retrieved ' + cursor.value.name + ' from ' + storeName);
+                   
                     cursor.continue();
                 }
                 else {
@@ -195,13 +204,13 @@
 
     self.putEntity = function (entity, storeName, callback) {
         try {
-            console.log('Putting entity ' + entity.id + ': ' + entity.name + ' into store ' + storeName);
+          
             var store = self.getStore(storeName, resourceService.consts.op.rw);
-            console.log('Retrieved store ' + storeName);
+         
             var request = store.put(entity);
 
             request.onsuccess = function (event) {
-                console.log('Successfully put entity ' + entity.id + ': ' + entity.name + ' into ' + storeName);
+              
                 event.target.transaction.objectStore(storeName).get(event.target.result).onsuccess = function (event) {
                     callback(event.target.result);
                 }
@@ -219,11 +228,11 @@
     self.removeEntity = function (entity, storeName, callback) {
         try {
             var store = self.getStore(storeName, resourceService.consts.op.rw);
-            console.log('Deleting entity: ' + entity.id);
+            
             var request = store.delete(entity.id);
 
             request.onsuccess = function (event) {
-                console.log('Deleted entity: ' + entity);
+              
                 callback();
             }
 
@@ -240,14 +249,14 @@
         try {
             var i = 0;
             var store = self.getStore(storeName, resourceService.consts.op.rw);
-            console.log('Retrieved store ' + storeName);
+            
             var request = index.openCursor();
 
             request.onsuccess = function (event) {
                 var cursor = event.target.result;
                 if (cursor) {
                     var entity = cursor.value;
-                    console.info('Retrieved ' + cursor.value.name + ' from ' + storeName);
+                  
                     cursor.continue();
                 }
                 else {
@@ -269,8 +278,7 @@
             var highestValueEntity;
             var range = IDBKeyRange.only(indexValue);
             var store = self.getStore(storeName, 'readwrite');
-            console.log('Retrieved store ' + storeName);
-            console.log('Retrieving index ' + indexName);
+          
             var index = store.index(indexName);
             var request = index.openCursor(range);
 
@@ -278,7 +286,7 @@
                 var cursor = event.target.result;
                 if (cursor) {
                     var entity = cursor.value;
-                    console.debug('entity:', entity);
+                   
                     if (!highestValueEntity || entity[entityProp] > highestValueEntity[entityProp]) {
                         highestValueEntity = entity;
                     }

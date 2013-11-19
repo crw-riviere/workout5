@@ -10,6 +10,7 @@ CACHE MANIFEST
 /app/controllers/progressController.js
 /app/controllers/sessionController.js
 /app/controllers/workoutController.js
+/app/controllers/configController.js
 
 /app/directives/exerciseLineChartDirective.js
 /app/directives/modalDirective.js
